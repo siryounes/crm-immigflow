@@ -3,66 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Immigration Flow CRM V5 - Cloud Synchronisé</title>
+    <title>Immigration Flow CRM V6</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style> 
+    <style>
         .hidden { display: none; }
-        [dir="rtl"] .text-left { text-align: right; }
-        [dir="rtl"] .text-right { text-align: left; }
         .sync-loader { animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease forwards; }
+        @keyframes pulse2 { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .pdf-loading { animation: pulse2 1s infinite; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen" id="main-body" dir="ltr">
+<body class="bg-gray-100 font-sans min-h-screen" id="main-body">
 
+    <!-- LOADING SCREEN -->
     <div id="cloud-loading-screen" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-[100]">
         <div class="text-4xl mb-4 sync-loader">🔄</div>
         <h2 class="text-lg font-bold tracking-wider uppercase mb-1">Immigration Flow Cloud</h2>
-        <p class="text-xs text-slate-400 animate-pulse">Connexion à la base de données Google Sheets en cours...</p>
+        <p class="text-xs text-slate-400 animate-pulse">Connexion à Google Sheets...</p>
     </div>
 
+    <!-- LOGIN PAGE -->
     <div id="login-page" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-blue-600 hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 text-center">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 text-center fade-in">
             <div class="text-4xl mb-2">✈️</div>
             <h1 class="text-2xl font-bold text-blue-600 mb-1">IMMIGRATION FLOW</h1>
-            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider data-lang" data-fr="Système CRM V5 Évolué" data-ar="نظام إدارة علاقات العملاء المطور V5"></p>
-            
+            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider">Système CRM V6</p>
             <div class="space-y-3 text-left">
                 <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase block mb-1 data-lang" data-fr="Identifiant (Email)" data-ar="البريد الإلكتروني"></label>
-                    <input id="username" type="text" placeholder="siryounes66@gmail.com" class="w-full p-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Email</label>
+                    <input id="username" type="text" placeholder="votre@email.com" class="w-full p-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase block mb-1 data-lang" data-fr="Mot de passe" data-ar="كلمة المرور"></label>
-                    <input id="password" type="password" placeholder="••••••••" class="w-full p-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Mot de passe</label>
+                    <input id="password" type="password" placeholder="flow_101" class="w-full p-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none" onkeydown="if(event.key==='Enter') login()">
                 </div>
             </div>
-            
-            <button onclick="login()" class="w-full bg-blue-600 text-white p-2.5 rounded-xl font-bold mt-6 hover:bg-blue-700 shadow-md hover:shadow-lg transition data-lang" data-fr="Se connecter" data-ar="تسجيل الدخول"></button>
-            <p onclick="openForgotPasswordModal()" class="text-xs text-blue-500 font-semibold mt-4 cursor-pointer hover:underline data-lang" data-fr="Mot de passe oublié ?" data-ar="نسيت كلمة المرور؟"></p>
+            <button onclick="login()" class="w-full bg-blue-600 text-white p-2.5 rounded-xl font-bold mt-6 hover:bg-blue-700 shadow-md transition">Se connecter</button>
+            <p id="login-error" class="text-xs text-red-500 font-semibold mt-3 hidden">Identifiants incorrects.</p>
         </div>
     </div>
 
-    <div id="forgot-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm mx-4">
-            <h3 class="text-lg font-bold text-gray-800 mb-2 data-lang" data-fr="Récupération de compte" data-ar="استعادة الحساب"></h3>
-            <p class="text-xs text-gray-500 mb-4 data-lang" data-fr="Veuillez saisir votre email pour répondre à votre question de sécurité." data-ar="الرجاء إدخال البريد الإلكتروني للإجابة على سؤال الأمان."></p>
-            
-            <div class="space-y-3">
-                <input id="forgot-email" type="text" placeholder="Votre email" class="w-full p-2 border rounded-xl text-sm">
-                <button onclick="verifyForgotEmail()" class="w-full bg-gray-800 text-white p-2 rounded-xl text-xs font-bold data-lang" data-fr="Vérifier l'identifiant" data-ar="التحقق من الهوية"></button>
-                
-                <div id="forgot-question-zone" class="hidden border-t pt-3 mt-3 space-y-2">
-                    <p id="forgot-question-text" class="text-xs font-bold text-blue-600 italic"></p>
-                    <input id="forgot-answer" type="text" placeholder="Votre réponse" class="w-full p-2 border rounded-xl text-sm">
-                    <button onclick="submitSecretAnswer()" class="w-full bg-blue-600 text-white p-2 rounded-xl text-xs font-bold data-lang" data-fr="Valider la réponse" data-ar="تأكيد الإجابة"></button>
-                </div>
-            </div>
-            <button onclick="document.getElementById('forgot-modal').classList.add('hidden')" class="w-full bg-gray-200 text-gray-700 mt-4 p-2 rounded-xl text-xs font-bold data-lang" data-fr="Fermer" data-ar="إغلاق"></button>
-        </div>
-    </div>
-
+    <!-- APP PAGE -->
     <div id="app-page" class="hidden">
         <nav class="bg-gradient-to-r from-blue-700 to-blue-600 text-white p-4 flex justify-between items-center shadow-lg">
             <div class="flex items-center space-x-3">
@@ -70,112 +54,96 @@
                 <div class="flex flex-col">
                     <span class="font-black tracking-wider text-sm md:text-base">IMMIGRATION FLOW</span>
                     <div class="flex items-center space-x-2 mt-0.5">
-                        <span id="user-badge" class="text-[10px] bg-blue-900/50 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold w-max"></span>
+                        <span id="user-badge" class="text-[10px] bg-blue-900/50 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold"></span>
                         <span id="sync-indicator" class="text-[9px] bg-green-900 text-green-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest">☁️ Synced</span>
                     </div>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button onclick="toggleLanguage()" class="bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1 rounded-xl text-xs font-bold transition">🌐 FR / عربي</button>
                 <div class="flex bg-blue-800/40 p-1 rounded-xl space-x-1">
-                    <button onclick="switchTab('dashboard')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition data-lang" data-fr="Dashboard" data-ar="لوحة التحكم"></button>
-                    <button onclick="switchTab('clients')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition data-lang" data-fr="Clients" data-ar="الزبناء"></button>
-                    <button id="nav-team" onclick="switchTab('team')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition hidden data-lang" data-fr="Équipe & Admin" data-ar="الفريق والتحكم"></button>
+                    <button onclick="switchTab('dashboard')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition">Dashboard</button>
+                    <button onclick="switchTab('clients')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition">Clients</button>
+                    <button onclick="switchTab('team')" id="btn-tab-team" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition hidden">Équipe & Admin</button>
                 </div>
-                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-xl text-xs md:text-sm font-bold transition shadow data-lang" data-fr="Déconnexion" data-ar="تسجيل الخروج"></button>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-xl text-xs md:text-sm font-bold transition shadow">Déconnexion</button>
             </div>
         </nav>
 
-        <div id="announcement-bar" class="bg-amber-50 border-l-4 border-amber-500 p-4 m-6 rounded-xl shadow-sm hidden">
-            <div class="flex items-center space-x-2">
-                <span class="text-base">📢</span>
-                <span class="text-amber-800 font-bold text-xs uppercase tracking-wider data-lang" data-fr="Avis important :" data-ar="تنبيه هام :"></span>
-                <span id="announcement-text" class="text-sm text-amber-900 font-semibold italic"></span>
-            </div>
-        </div>
-
         <div class="p-6 max-w-7xl mx-auto">
-            
+
+            <!-- DASHBOARD -->
             <div id="tab-dashboard" class="tab-content">
-                <h2 class="text-xl font-bold mb-6 text-gray-800 data-lang" data-fr="Tableau de bord opérationnel" data-ar="لوحة القيادة التشغيلية"></h2>
-                
+                <h2 class="text-xl font-bold mb-6 text-gray-800">Tableau de bord</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider data-lang" data-fr="Chiffre d'Affaires Encaissé" data-ar="إجمالي الأرباح المحصلة"></p>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Chiffre d'Affaires Encaissé</p>
                             <p id="stat-ca" class="text-2xl font-black text-gray-800 mt-1">0 DH</p>
                         </div>
-                        <div class="text-3xl bg-green-50 p-3 rounded-xl text-green-600">💰</div>
+                        <div class="text-3xl bg-green-50 p-3 rounded-xl">💰</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider data-lang" data-fr="Dossiers Acompte (50%)" data-ar="ملفات قيد المعالجة (50%)"></p>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Dossiers Acompte (50%)</p>
                             <p id="stat-pending" class="text-2xl font-black text-gray-800 mt-1">0</p>
                         </div>
-                        <div class="text-3xl bg-amber-50 p-3 rounded-xl text-amber-600">⏳</div>
+                        <div class="text-3xl bg-amber-50 p-3 rounded-xl">⏳</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider data-lang" data-fr="Dossiers Finalisés (100%)" data-ar="الملفات المكتملة (100%)"></p>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Dossiers Finalisés (100%)</p>
                             <p id="stat-closed" class="text-2xl font-black text-gray-800 mt-1">0</p>
                         </div>
-                        <div class="text-3xl bg-blue-50 p-3 rounded-xl text-blue-600">✅</div>
+                        <div class="text-3xl bg-blue-50 p-3 rounded-xl">✅</div>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-                    <h3 class="text-base font-bold text-gray-800 mb-4 flex items-center space-x-2">
-                        <span>📊</span>
-                        <span class="data-lang" data-fr="Statistiques des Transactions et Revenus" data-ar="إحصائيات المعاملات والإيرادات"></span>
-                    </h3>
-                    
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-base font-bold text-gray-800 mb-4">📊 Statistiques financières</h3>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div class="space-y-4">
-                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider data-lang" data-fr="Répartition et Estimation Budgétaire" data-ar="توزيع وتقدير الميزانية"></h4>
                             <div>
                                 <div class="flex justify-between text-xs font-semibold mb-1">
-                                    <span class="text-green-600 data-lang" data-fr="Revenus Encaissés (Actuels)" data-ar="الإيرادات المحصلة (الحالية)"></span>
+                                    <span class="text-green-600">Revenus Encaissés</span>
                                     <span id="bar-label-encaissed" class="font-mono">0 DH</span>
                                 </div>
                                 <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                    <div id="bar-width-encaissed" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
+                                    <div id="bar-width-encaissed" class="bg-green-500 h-full transition-all duration-500" style="width:0%"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-xs font-semibold mb-1">
-                                    <span class="text-amber-600 data-lang" data-fr="Reste à Recouvrer (Attente 50%)" data-ar="المتبقي للتحصيل (في الانتظار 50%)"></span>
+                                    <span class="text-amber-600">Reste à Recouvrer</span>
                                     <span id="bar-label-remaining" class="font-mono">0 DH</span>
                                 </div>
                                 <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                    <div id="bar-width-remaining" class="bg-amber-500 h-full transition-all duration-500" style="width: 0%"></div>
+                                    <div id="bar-width-remaining" class="bg-amber-500 h-full transition-all duration-500" style="width:0%"></div>
                                 </div>
                             </div>
                             <div class="pt-2 border-t border-gray-100">
                                 <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span class="text-blue-700 data-lang" data-fr="Objectif & Volume d'Affaires Total" data-ar="الهدف وإجمالي حجم الأعمال"></span>
+                                    <span class="text-blue-700">Volume Total</span>
                                     <span id="bar-label-total" class="font-mono">0 DH</span>
                                 </div>
                                 <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                    <div id="bar-width-total" class="bg-blue-600 h-full transition-all duration-500" style="width: 100%"></div>
+                                    <div class="bg-blue-600 h-full w-full"></div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl">
-                            <div class="bg-white p-3 rounded-xl shadow-xs">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider data-lang" data-fr="Panier Moyen Client" data-ar="متوسط سلة العميل"></p>
+                            <div class="bg-white p-3 rounded-xl shadow-sm">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Panier Moyen</p>
                                 <p id="stat-avg-basket" class="text-lg font-black text-blue-600 mt-1 font-mono">0 DH</p>
                             </div>
-                            <div class="bg-white p-3 rounded-xl shadow-xs">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider data-lang" data-fr="Transactions Sans Avance" data-ar="معاملات بدون تسبيق"></p>
+                            <div class="bg-white p-3 rounded-xl shadow-sm">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Non Payés</p>
                                 <p id="stat-unpaid-count" class="text-lg font-black text-red-500 mt-1">0</p>
                             </div>
-                            <div class="bg-white p-3 rounded-xl shadow-xs">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider data-lang" data-fr="Taux de Conversion (Soldé)" data-ar="معدل التحويل الكامل"></p>
+                            <div class="bg-white p-3 rounded-xl shadow-sm">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Taux Conversion</p>
                                 <p id="stat-conversion-rate" class="text-lg font-black text-green-600 mt-1 font-mono">0%</p>
                             </div>
-                            <div class="bg-white p-3 rounded-xl shadow-xs">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider data-lang" data-fr="Volume de Dossiers Total" data-ar="إجمالي حجم الملفات"></p>
+                            <div class="bg-white p-3 rounded-xl shadow-sm">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Dossiers</p>
                                 <p id="stat-total-clients" class="text-lg font-black text-gray-700 mt-1">0</p>
                             </div>
                         </div>
@@ -183,24 +151,25 @@
                 </div>
             </div>
 
+            <!-- CLIENTS -->
             <div id="tab-clients" class="tab-content hidden">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-gray-800 data-lang" data-fr="Gestion des Clients" data-ar="إدارة الزبناء"></h2>
-                    <button onclick="openClientModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-bold text-sm shadow transition data-lang" data-fr="+ Ajouter un Client" data-ar="+ إضافة زبon"></button>
+                    <h2 class="text-xl font-bold text-gray-800">Gestion des Clients</h2>
+                    <button onclick="openClientModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-bold text-sm shadow transition">+ Ajouter un Client</button>
                 </div>
-                
                 <div class="bg-white rounded-2xl shadow overflow-x-auto border border-gray-100">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                <th class="p-4 data-lang" data-fr="Date Ajout" data-ar="تاريخ الإضافة"></th>
-                                <th class="p-4 data-lang" data-fr="Nom" data-ar="الاسم"></th>
-                                <th class="p-4 data-lang" data-fr="Métier & Pays" data-ar="المهنة والبلد"></th>
-                                <th class="p-4 data-lang" data-fr="Téléphone" data-ar="الهاتف"></th>
-                                <th class="p-4 data-lang" data-fr="Affecté à" data-ar="المكلف بالملف"></th>
-                                <th class="p-4 data-lang" data-fr="Observations" data-ar="ملاحظات / تتبع"></th>
-                                <th class="p-4 data-lang" data-fr="Statut & Encaissé" data-ar="الحالة والمبلغ"></th>
-                                <th class="p-4 data-lang" data-fr="Actions" data-ar="الإجراءات"></th>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Nom</th>
+                                <th class="p-4">Métier & Pays</th>
+                                <th class="p-4">Téléphone</th>
+                                <th class="p-4">Affecté à</th>
+                                <th class="p-4">Observations</th>
+                                <th class="p-4">Statut & Montant</th>
+                                <th class="p-4">Documents PDF</th>
+                                <th class="p-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="clients-table-body" class="text-gray-700 text-sm divide-y divide-gray-100"></tbody>
@@ -208,86 +177,763 @@
                 </div>
             </div>
 
+            <!-- TEAM (admin only) -->
             <div id="tab-team" class="tab-content hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6 border border-gray-100">
                         <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-                            <h3 class="text-base font-bold text-gray-800 data-lang" data-fr="Gestion du Personnel (Closers)" data-ar="إدارة الموظفين"></h3>
-                            <button onclick="openAddUserModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-2 rounded-xl font-bold shadow transition data-lang" data-fr="+ Nouveau Collaborateur" data-ar="+ إضافة موظف"></button>
+                            <h3 class="text-base font-bold text-gray-800">Gestion des Collaborateurs</h3>
+                            <button onclick="openAddUserModal()" class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-2 rounded-xl font-bold shadow transition">+ Nouveau Collaborateur</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm">
                                 <thead>
                                     <tr class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase font-bold text-xs tracking-wider">
-                                        <th class="p-3 data-lang" data-fr="Collaborateur & Début" data-ar="الموظف وبداية العمل"></th>
-                                        <th class="p-3 data-lang" data-fr="Contact & Identifiants" data-ar="الاتصال وبيانات الدخول"></th>
-                                        <th class="p-3 text-center data-lang" data-fr="Pièces CIN" data-ar="وثائق الهوية"></th>
-                                        <th class="p-3 text-center data-lang" data-fr="Statut" data-ar="الحالة"></th>
-                                        <th class="p-3 text-right data-lang" data-fr="Actions" data-ar="الإجراءات"></th>
+                                        <th class="p-3">Nom & Prénom</th>
+                                        <th class="p-3">Email (login) & ID (mot de passe)</th>
+                                        <th class="p-3">Téléphone</th>
+                                        <th class="p-3 text-center">Statut</th>
+                                        <th class="p-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="team-table-body" class="divide-y divide-gray-100"></tbody>
                             </table>
                         </div>
                     </div>
-
                     <div class="bg-white rounded-2xl shadow p-6 border border-gray-100 h-max">
-                        <h3 class="text-base font-bold mb-3 text-gray-800 data-lang" data-fr="Envoyer une notification" data-ar="إرسال إشعار موجه"></h3>
+                        <h3 class="text-base font-bold mb-3 text-gray-800">📢 Notification</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 data-lang" data-fr="Destinataire" data-ar="المستلم"></label>
-                                <select id="msg-destinataire" class="w-full p-2.5 border rounded-xl text-sm bg-gray-50 font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-blue-500"></select>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Destinataire</label>
+                                <select id="msg-destinataire" class="w-full p-2.5 border rounded-xl text-sm bg-gray-50 font-semibold text-gray-700 outline-none"></select>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 data-lang" data-fr="Message" data-ar="الرسالة"></label>
-                                <textarea id="msg-text" placeholder="Entrez votre consigne ici..." class="w-full h-24 p-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Message</label>
+                                <textarea id="msg-text" placeholder="Votre consigne ici..." class="w-full h-24 p-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            <button onclick="dispatchMessage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-xl text-sm font-bold shadow transition data-lang" data-fr="Diffuser le Message" data-ar="إرسال الرسالة"></button>
+                            <button onclick="dispatchMessage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-xl text-sm font-bold shadow transition">Diffuser le Message</button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
+    <!-- MODAL: COLLABORATEUR -->
     <div id="user-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
             <h3 id="user-modal-title" class="text-lg font-bold mb-1 text-gray-800"></h3>
-            <p class="text-xs text-blue-600 mb-4 font-mono font-bold" id="generated-id-view"></p>
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
+                <p class="text-xs text-blue-700 font-mono font-bold" id="generated-id-view"></p>
+            </div>
             <input type="hidden" id="u-id-hidden">
-            
             <div class="space-y-3">
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase tracking-wider">Nom</label>
-                        <input id="u-nom" type="text" placeholder="El Alami" class="w-full p-2 border rounded-xl text-sm">
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Nom *</label>
+                        <input id="u-nom" type="text" placeholder="Benali" class="w-full p-2 border rounded-xl text-sm">
                     </div>
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase tracking-wider">Prénom</label>
-                        <input id="u-prenom" type="text" placeholder="Amine" class="w-full p-2 border rounded-xl text-sm">
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Prénom *</label>
+                        <input id="u-prenom" type="text" placeholder="Karim" class="w-full p-2 border rounded-xl text-sm">
                     </div>
                 </div>
                 <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase tracking-wider data-lang" data-fr="Date d'arrivée" data-ar="تاريخ الالتحاق"></label>
-                    <input id="u-date-arrivee" type="date" class="w-full p-2 border rounded-xl text-sm bg-gray-50 font-semibold text-gray-700">
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Email * (identifiant de connexion)</label>
+                    <input id="u-email" type="email" placeholder="karim@gmail.com" class="w-full p-2 border rounded-xl text-sm">
                 </div>
                 <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase tracking-wider">Téléphone</label>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Téléphone</label>
                     <input id="u-tel" type="text" placeholder="0661234567" class="w-full p-2 border rounded-xl text-sm">
                 </div>
                 <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase tracking-wider">Adresse</label>
-                    <input id="u-adresse" type="text" placeholder="Casablanca" class="w-full p-2 border rounded-xl text-sm">
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Date d'arrivée</label>
+                    <input id="u-date-arrivee" type="date" class="w-full p-2 border rounded-xl text-sm bg-gray-50">
                 </div>
                 <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase tracking-wider data-lang" data-fr="Observations / Notes Admin" data-ar="ملاحظات المسؤول"></label>
-                    <textarea id="u-observation" placeholder="Ex: Closer Senior..." class="w-full p-2 border rounded-xl text-sm h-16"></textarea>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Notes Admin</label>
+                    <textarea id="u-observation" placeholder="Closer Senior, spécialisé Canada..." class="w-full p-2 border rounded-xl text-sm h-16"></textarea>
                 </div>
-                <div class="border-t border-gray-100 pt-3 mt-3">
-                    <label class="text-xs font-bold text-red-600 block mb-1">Carte d'identité Face (Recto)</label>
-                    <input id="u-cin-recto" type="file" accept="image/*" class="w-full text-xs p-1.5 border rounded-xl bg-gray-50">
+            </div>
+            <div class="flex justify-end space-x-2 mt-6">
+                <button onclick="document.getElementById('user-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-bold">Annuler</button>
+                <button onclick="saveUser()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CLIENT -->
+    <div id="client-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-lg font-bold mb-4 text-gray-800">Fiche Client</h3>
+            <input type="hidden" id="c-id">
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Nom complet *</label>
+                    <input id="c-name" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Mohamed Alaoui">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-red-600 block mb-1">Carte d'identité Arrière (Verso)</label>
-                    <input id="u-cin-verso" type="file" accept="image/*" class
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Téléphone *</label>
+                    <input id="c-phone" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="+212 6XX XXX XXX">
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Métier / Profession</label>
+                    <input id="c-job" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Ingénieur informatique">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Années d'expérience</label>
+                        <input id="c-experience" type="number" class="w-full p-2.5 border rounded-xl text-sm" placeholder="5">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Formation</label>
+                        <select id="c-formation" class="w-full p-2.5 border rounded-xl text-sm bg-white">
+                            <option value="Bac">Bac</option>
+                            <option value="Bac+2">Bac+2</option>
+                            <option value="Bac+3">Bac+3 (Licence)</option>
+                            <option value="Bac+5" selected>Bac+5 (Master)</option>
+                            <option value="Doctorat">Doctorat</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Pays de destination</label>
+                    <select id="c-country" class="w-full p-2.5 border rounded-xl text-sm bg-white">
+                        <option value="Canada">Canada 🇨🇦</option>
+                        <option value="Allemagne">Allemagne 🇩🇪</option>
+                        <option value="Australie">Australie 🇦🇺</option>
+                        <option value="États-Unis">États-Unis 🇺🇸</option>
+                        <option value="France">France 🇫🇷</option>
+                        <option value="Espagne">Espagne 🇪🇸</option>
+                        <option value="Portugal">Portugal 🇵🇹</option>
+                        <option value="Belgique">Belgique 🇧🇪</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Statut paiement</label>
+                        <select id="c-payment-status" class="w-full p-2.5 border rounded-xl text-sm bg-white">
+                            <option value="Non Payé">Non Payé</option>
+                            <option value="50%">Acompte 50%</option>
+                            <option value="100%">Soldé 100%</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Montant (DH)</label>
+                        <input id="c-payment-amount" type="number" class="w-full p-2.5 border rounded-xl text-sm font-mono" placeholder="900">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Observations</label>
+                    <textarea id="c-observation" class="w-full p-2.5 border rounded-xl text-sm h-20" placeholder="Notes de suivi..."></textarea>
+                </div>
+                <div id="assign-container">
+                    <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">Assigner à un Collaborateur</label>
+                    <select id="c-assign" class="w-full p-2.5 border rounded-xl text-sm bg-white text-gray-700"></select>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2 mt-6">
+                <button onclick="closeClientModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-bold">Annuler</button>
+                <button onclick="saveClient()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PDF -->
+    <div id="pdf-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-lg mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">📄 Génération Documents IA</h3>
+                <button onclick="document.getElementById('pdf-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 text-xl font-bold">✕</button>
+            </div>
+            <div id="pdf-client-info" class="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-5 text-sm"></div>
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <button onclick="generatePDF('cv')" id="btn-cv" class="flex flex-col items-center bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
+                    <span class="text-3xl mb-2">📋</span>
+                    <span class="text-sm">CV</span>
+                    <span class="text-[10px] opacity-75 mt-1">Généré par IA</span>
+                </button>
+                <button onclick="generatePDF('lettre')" id="btn-lettre" class="flex flex-col items-center bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
+                    <span class="text-3xl mb-2">✉️</span>
+                    <span class="text-sm">Lettre</span>
+                    <span class="text-[10px] opacity-75 mt-1">Généré par IA</span>
+                </button>
+                <button onclick="generatePDF('recruteurs')" id="btn-recruteurs" class="flex flex-col items-center bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
+                    <span class="text-3xl mb-2">🏢</span>
+                    <span class="text-sm">Recruteurs</span>
+                    <span class="text-[10px] opacity-75 mt-1">Liste par pays</span>
+                </button>
+            </div>
+            <div id="pdf-status" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+                <span class="pdf-loading text-amber-600">⏳</span>
+                <span id="pdf-status-text" class="text-sm text-amber-800 font-semibold ml-2"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTiZyRoyQmZ3OM0z0G1IsQRu8YupkIaTFrr-jT5c0JAN5WzeUU6LZ9IC89GlANp_zr/exec";
+        const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
+
+        let currentUser = null;
+        let clients = [];
+        let users = [];
+        let activePdfClient = null;
+
+        window.addEventListener('DOMContentLoaded', () => cloudSync('loadAll'));
+
+        // ====== CLOUD SYNC ======
+        async function cloudSync(actionType) {
+            const ind = document.getElementById('sync-indicator');
+            if (ind) { ind.innerText = "🔄 Sync..."; ind.className = "text-[9px] bg-amber-600 text-amber-100 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
+
+            try {
+                if (actionType === 'loadAll') {
+                    const ctrl = new AbortController();
+                    const t = setTimeout(() => ctrl.abort(), 10000);
+                    let response;
+                    try {
+                        response = await fetch(GOOGLE_SCRIPT_URL + "?action=loadAll", { signal: ctrl.signal });
+                        clearTimeout(t);
+                    } catch (e) {
+                        clearTimeout(t);
+                        clients = []; users = [];
+                        showLogin();
+                        if (ind) ind.innerText = "⚠️ Hors-ligne";
+                        return;
+                    }
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        let parsed = { clients: [], users: [] };
+                        try { if (result.data && result.data.trim()) parsed = JSON.parse(result.data); } catch(e) {}
+                        clients = parsed.clients || [];
+                        users = parsed.users || [];
+                        showLogin();
+                        if (ind) { ind.innerText = "☁️ Synced"; ind.className = "text-[9px] bg-green-900 text-green-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
+                    } else throw new Error("Apps Script error");
+                } else if (actionType === 'saveAll') {
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: "POST", mode: "no-cors",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ action: "saveAll", data: JSON.stringify({ clients, users }) })
+                    });
+                    if (ind) { ind.innerText = "☁️ Synced"; ind.className = "text-[9px] bg-green-900 text-green-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
+                }
+            } catch (err) {
+                console.error(err);
+                showLogin();
+                if (ind) { ind.innerText = "❌ Erreur"; ind.className = "text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('cloud-loading-screen').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+        }
+
+        // ====== AUTH ======
+        function login() {
+            const emailIn = document.getElementById('username').value.trim().toLowerCase();
+            const passIn = document.getElementById('password').value.trim();
+            const err = document.getElementById('login-error');
+            err.classList.add('hidden');
+            if (!emailIn || !passIn) return;
+
+            // Admin master
+            if (emailIn === "admin" && passIn === "admin") {
+                currentUser = { id: "admin", nom: "Directeur", prenom: "ImmigFlow", role: "admin", email: "admin" };
+                buildApp(); return;
+            }
+
+            // Collaborateur: login=email, password=son ID (flow_XXX)
+            const found = users.find(u => u.email && u.email.toLowerCase() === emailIn && u.id === passIn);
+            if (found) {
+                if (found.status === "Bloqué") { err.innerText = "Compte suspendu. Contactez l'administrateur."; err.classList.remove('hidden'); return; }
+                currentUser = found;
+                buildApp();
+            } else {
+                err.classList.remove('hidden');
+            }
+        }
+
+        function buildApp() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('app-page').classList.remove('hidden');
+            const isAdmin = currentUser.role === 'admin';
+            document.getElementById('btn-tab-team').classList.toggle('hidden', !isAdmin);
+            document.getElementById('user-badge').innerText = `👤 ${currentUser.prenom.toUpperCase()} [${currentUser.role.toUpperCase()}]`;
+            switchTab('dashboard');
+            initRender();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('app-page').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('username').value = "";
+            document.getElementById('password').value = "";
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${id}`).classList.remove('hidden');
+        }
+
+        // ====== RENDER ======
+        function initRender() {
+            renderDashboard();
+            renderClients();
+            if (currentUser.role === 'admin') { renderTeam(); populateDest(); }
+        }
+
+        function renderDashboard() {
+            const isAdmin = currentUser.role === 'admin';
+            const vis = isAdmin ? clients : clients.filter(c => c.assignedTo === currentUser.id);
+            let ca = 0, acc = 0, sol = 0, unpaid = 0, total = 0;
+            vis.forEach(c => {
+                const amt = parseFloat(c.amount) || 0;
+                if (c.status === "100%") { ca += amt; sol++; }
+                else if (c.status === "50%") { ca += amt; acc++; }
+                else { unpaid++; }
+                total += amt;
+            });
+            const rem = total - ca;
+            const avg = vis.length ? Math.round(total / vis.length) : 0;
+            const conv = vis.length ? Math.round((sol / vis.length) * 100) : 0;
+            const max = total || 1;
+            document.getElementById('stat-ca').innerText = ca + " DH";
+            document.getElementById('stat-pending').innerText = acc;
+            document.getElementById('stat-closed').innerText = sol;
+            document.getElementById('stat-total-clients').innerText = vis.length;
+            document.getElementById('stat-avg-basket').innerText = avg + " DH";
+            document.getElementById('stat-unpaid-count').innerText = unpaid;
+            document.getElementById('stat-conversion-rate').innerText = conv + "%";
+            document.getElementById('bar-label-encaissed').innerText = ca + " DH";
+            document.getElementById('bar-label-remaining').innerText = rem + " DH";
+            document.getElementById('bar-label-total').innerText = total + " DH";
+            document.getElementById('bar-width-encaissed').style.width = Math.round((ca/max)*100) + "%";
+            document.getElementById('bar-width-remaining').style.width = Math.round((rem/max)*100) + "%";
+        }
+
+        function renderClients() {
+            const body = document.getElementById('clients-table-body');
+            body.innerHTML = "";
+            const isAdmin = currentUser.role === 'admin';
+            const vis = isAdmin ? clients : clients.filter(c => c.assignedTo === currentUser.id);
+            if (!vis.length) {
+                body.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-gray-400 text-sm">Aucun client pour le moment.</td></tr>`;
+                return;
+            }
+            vis.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b hover:bg-gray-50 transition";
+                const sc = c.status === '100%' ? 'bg-green-100 text-green-700' : c.status === '50%' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
+                const actionBtn = isAdmin
+                    ? `<button onclick="editClient('${c.id}')" class="text-blue-600 hover:underline font-bold text-xs">Modifier</button>`
+                    : `<span class="text-gray-300 text-xs italic">🔒 Verrouillé</span>`;
+                tr.innerHTML = `
+                    <td class="p-4 text-xs text-gray-500">${c.date||'-'}</td>
+                    <td class="p-4 font-bold text-gray-800">${c.name}</td>
+                    <td class="p-4 text-sm">${c.job||'-'}<br><span class="text-xs text-gray-400">${c.country||''}</span></td>
+                    <td class="p-4 font-mono text-xs">${c.phone}</td>
+                    <td class="p-4 text-xs font-semibold text-blue-600">${c.assignedName||'Non assigné'}</td>
+                    <td class="p-4 text-xs max-w-xs truncate text-gray-500">${c.observation||'-'}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold ${sc}">${c.status} (${c.amount||0} DH)</span></td>
+                    <td class="p-4"><button onclick="openPdfModal('${c.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">📄 Générer</button></td>
+                    <td class="p-4">${actionBtn}</td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        function renderTeam() {
+            const body = document.getElementById('team-table-body');
+            body.innerHTML = "";
+            if (!users.length) {
+                body.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 text-sm">Aucun collaborateur.</td></tr>`;
+                return;
+            }
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b hover:bg-gray-50 text-xs";
+                tr.innerHTML = `
+                    <td class="p-3"><strong class="text-gray-800">${u.nom} ${u.prenom}</strong><br><span class="text-gray-400">Depuis: ${u.dateArrivee||'-'}</span></td>
+                    <td class="p-3">
+                        <span class="text-blue-600 font-semibold block">${u.email||'-'}</span>
+                        <span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 text-[11px]">🔑 ${u.id}</span>
+                    </td>
+                    <td class="p-3 text-gray-600">${u.tel||'-'}</td>
+                    <td class="p-3 text-center">
+                        <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${u.status==='Actif'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${u.status}</span>
+                    </td>
+                    <td class="p-3 text-right space-x-2">
+                        <button onclick="editUser('${u.id}')" class="text-blue-600 hover:underline font-bold">Modifier</button>
+                        <button onclick="toggleStatus('${u.id}')" class="text-amber-600 hover:underline font-bold">Statut</button>
+                    </td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        // ====== CLIENT MODAL ======
+        function openClientModal() {
+            ['c-id','c-name','c-phone','c-job','c-experience','c-payment-amount','c-observation'].forEach(id => document.getElementById(id).value = "");
+            document.getElementById('c-payment-status').value = "Non Payé";
+            document.getElementById('c-formation').value = "Bac+5";
+            document.getElementById('c-country').value = "Canada";
+            const sel = document.getElementById('c-assign');
+            sel.innerHTML = '<option value="">Non assigné</option>';
+            users.filter(u => u.status === 'Actif').forEach(u => sel.innerHTML += `<option value="${u.id}">${u.nom} ${u.prenom}</option>`);
+            if (currentUser.role !== 'admin') {
+                sel.value = currentUser.id;
+                document.getElementById('assign-container').classList.add('hidden');
+            } else {
+                document.getElementById('assign-container').classList.remove('hidden');
+            }
+            document.getElementById('client-modal').classList.remove('hidden');
+        }
+
+        function closeClientModal() { document.getElementById('client-modal').classList.add('hidden'); }
+
+        function saveClient() {
+            const id = document.getElementById('c-id').value;
+            const name = document.getElementById('c-name').value.trim();
+            const phone = document.getElementById('c-phone').value.trim();
+            if (!name || !phone) { alert("Nom et téléphone obligatoires."); return; }
+
+            const job = document.getElementById('c-job').value.trim();
+            const experience = document.getElementById('c-experience').value.trim();
+            const formation = document.getElementById('c-formation').value;
+            const country = document.getElementById('c-country').value;
+            const status = document.getElementById('c-payment-status').value;
+            const amount = document.getElementById('c-payment-amount').value;
+            const observation = document.getElementById('c-observation').value.trim();
+            const assignId = document.getElementById('c-assign').value || (currentUser.role !== 'admin' ? currentUser.id : "");
+
+            let assignedName = "";
+            if (assignId) {
+                if (assignId === currentUser.id) assignedName = `${currentUser.nom} ${currentUser.prenom}`;
+                else { const tu = users.find(u => u.id === assignId); if (tu) assignedName = `${tu.nom} ${tu.prenom}`; }
+            }
+
+            if (!id) {
+                clients.push({ id:"cl_"+Date.now(), date:new Date().toLocaleDateString('fr-FR'), name, phone, job, experience, formation, country, status, amount, observation, assignedTo:assignId, assignedName });
+            } else {
+                if (currentUser.role !== 'admin') return;
+                const t = clients.find(c => c.id === id);
+                if (t) Object.assign(t, { name, phone, job, experience, formation, country, status, amount, observation, assignedTo:assignId, assignedName });
+            }
+            closeClientModal(); initRender(); cloudSync('saveAll');
+        }
+
+        function editClient(id) {
+            if (currentUser.role !== 'admin') return;
+            const c = clients.find(cl => cl.id === id);
+            if (!c) return;
+            openClientModal();
+            document.getElementById('c-id').value = c.id;
+            document.getElementById('c-name').value = c.name;
+            document.getElementById('c-phone').value = c.phone;
+            document.getElementById('c-job').value = c.job||"";
+            document.getElementById('c-experience').value = c.experience||"";
+            document.getElementById('c-formation').value = c.formation||"Bac+5";
+            document.getElementById('c-country').value = c.country||"Canada";
+            document.getElementById('c-payment-status').value = c.status;
+            document.getElementById('c-payment-amount').value = c.amount||"";
+            document.getElementById('c-observation').value = c.observation||"";
+            document.getElementById('c-assign').value = c.assignedTo||"";
+        }
+
+        // ====== USER MODAL ======
+        function openAddUserModal() {
+            document.getElementById('user-modal-title').innerText = "Ajouter un collaborateur";
+            document.getElementById('generated-id-view').innerText = "L'ID (mot de passe) sera généré automatiquement";
+            document.getElementById('u-id-hidden').value = "";
+            ['u-nom','u-prenom','u-email','u-tel','u-observation'].forEach(id => document.getElementById(id).value = "");
+            document.getElementById('u-date-arrivee').value = new Date().toISOString().split('T')[0];
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function editUser(id) {
+            const u = users.find(x => x.id === id);
+            if (!u) return;
+            document.getElementById('user-modal-title').innerText = "Modifier le collaborateur";
+            document.getElementById('generated-id-view').innerText = `📧 Login: ${u.email} | 🔑 Mot de passe: ${u.id}`;
+            document.getElementById('u-id-hidden').value = u.id;
+            document.getElementById('u-nom').value = u.nom;
+            document.getElementById('u-prenom').value = u.prenom;
+            document.getElementById('u-email').value = u.email||"";
+            document.getElementById('u-tel').value = u.tel||"";
+            document.getElementById('u-observation').value = u.observation||"";
+            document.getElementById('u-date-arrivee').value = u.dateArrivee||"";
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function saveUser() {
+            const id = document.getElementById('u-id-hidden').value;
+            const nom = document.getElementById('u-nom').value.trim();
+            const prenom = document.getElementById('u-prenom').value.trim();
+            const email = document.getElementById('u-email').value.trim().toLowerCase();
+            const tel = document.getElementById('u-tel').value.trim();
+            const obs = document.getElementById('u-observation').value.trim();
+            const dateArr = document.getElementById('u-date-arrivee').value;
+            if (!nom || !prenom || !email) { alert("Nom, prénom et email sont obligatoires."); return; }
+
+            if (!id) {
+                const newId = "flow_" + Math.floor(100 + Math.random() * 900);
+                users.push({ id:newId, nom, prenom, email, tel, observation:obs, dateArrivee:dateArr, role:"closer", status:"Actif" });
+                alert(`✅ Collaborateur créé !\n\n📧 Email (login) : ${email}\n🔑 Mot de passe : ${newId}\n\nCommuniquez ces infos au collaborateur.`);
+            } else {
+                const t = users.find(u => u.id === id);
+                if (t) Object.assign(t, { nom, prenom, email, tel, observation:obs, dateArrivee:dateArr });
+            }
+            document.getElementById('user-modal').classList.add('hidden');
+            initRender(); cloudSync('saveAll');
+        }
+
+        function toggleStatus(id) {
+            const u = users.find(x => x.id === id);
+            if (u) { u.status = u.status === "Actif" ? "Bloqué" : "Actif"; renderTeam(); cloudSync('saveAll'); }
+        }
+
+        function populateDest() {
+            const sel = document.getElementById('msg-destinataire');
+            if (!sel) return;
+            sel.innerHTML = '<option value="all">Tout le monde</option>';
+            users.forEach(u => sel.innerHTML += `<option value="${u.id}">${u.nom} ${u.prenom}</option>`);
+        }
+
+        function dispatchMessage() {
+            if (!document.getElementById('msg-text').value.trim()) return;
+            alert("✅ Notification diffusée !"); document.getElementById('msg-text').value = "";
+        }
+
+        // ====== PDF GENERATION ======
+        function openPdfModal(clientId) {
+            const c = clients.find(cl => cl.id === clientId);
+            if (!c) return;
+            activePdfClient = c;
+            document.getElementById('pdf-client-info').innerHTML = `
+                <strong class="text-blue-800 text-base">👤 ${c.name}</strong><br>
+                <span class="text-gray-600">${c.job||'Métier non précisé'} — ${c.country}</span><br>
+                <span class="text-gray-400 text-xs">${c.formation||''} ${c.experience ? '• ' + c.experience + " ans d'expérience" : ''}</span>
+            `;
+            document.getElementById('pdf-status').classList.add('hidden');
+            ['btn-cv','btn-lettre','btn-recruteurs'].forEach(id => {
+                document.getElementById(id).disabled = false;
+                document.getElementById(id).classList.remove('opacity-50','cursor-not-allowed');
+            });
+            document.getElementById('pdf-modal').classList.remove('hidden');
+        }
+
+        async function generatePDF(type) {
+            if (!activePdfClient) return;
+            const c = activePdfClient;
+            const statusEl = document.getElementById('pdf-status');
+            const statusText = document.getElementById('pdf-status-text');
+            statusEl.classList.remove('hidden');
+            const btn = document.getElementById('btn-'+type);
+            btn.disabled = true; btn.classList.add('opacity-50','cursor-not-allowed');
+
+            let html = "";
+            if (type === 'cv') {
+                statusText.innerText = "Claude génère votre CV... (30 secondes)";
+                html = await genCV(c);
+            } else if (type === 'lettre') {
+                statusText.innerText = "Claude rédige la lettre de motivation...";
+                html = await genLettre(c);
+            } else {
+                statusText.innerText = "Compilation liste recruteurs...";
+                html = genRecruteurs(c);
+            }
+
+            if (html) {
+                statusText.innerText = "Téléchargement en cours...";
+                await downloadPDF(html, `${type}_${c.name.replace(/\s+/g,'_')}.pdf`);
+                statusEl.classList.add('hidden');
+            }
+            btn.disabled = false; btn.classList.remove('opacity-50','cursor-not-allowed');
+        }
+
+        async function callClaude(prompt) {
+            try {
+                const res = await fetch(CLAUDE_API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{role:"user",content:prompt}] })
+                });
+                const data = await res.json();
+                return data.content?.[0]?.text || null;
+            } catch(e) { console.error("Claude API:", e); return null; }
+        }
+
+        async function genCV(c) {
+            const prompt = `Tu es un expert en rédaction de CV pour l'immigration internationale.
+Génère un CV professionnel complet en français pour :
+- Nom : ${c.name}
+- Métier : ${c.job||'Non précisé'}
+- Formation : ${c.formation||'Non précisé'}
+- Expérience : ${c.experience||'Non précisé'} ans
+- Pays cible : ${c.country}
+- Notes : ${c.observation||'Aucune'}
+
+Génère un CV en HTML avec CSS inline uniquement. Style moderne, professionnel, bien structuré.
+Sections : En-tête (nom + contact fictif), Profil professionnel, Expériences, Formations, Compétences, Langues, Objectif immigration.
+Adapte le contenu au pays de destination.
+RÉPONDS UNIQUEMENT AVEC LE HTML, rien d'autre.`;
+            const result = await callClaude(prompt);
+            return wrapPDF(result || fallbackCV(c), `CV - ${c.name}`);
+        }
+
+        async function genLettre(c) {
+            const prompt = `Tu es un expert en immigration et lettres de motivation.
+Rédige une lettre de motivation professionnelle pour :
+- Nom : ${c.name}
+- Métier : ${c.job||'Professionnel qualifié'}
+- Formation : ${c.formation||'Non précisé'}
+- Expérience : ${c.experience||'plusieurs'} ans
+- Pays cible : ${c.country}
+- Notes : ${c.observation||'Candidature immigration professionnelle'}
+
+La lettre doit être formelle, convaincante, 3-4 paragraphes, adaptée au pays.
+Génère en HTML avec CSS inline élégant. Inclure date, formule intro/conclusion.
+RÉPONDS UNIQUEMENT AVEC LE HTML, rien d'autre.`;
+            const result = await callClaude(prompt);
+            return wrapPDF(result || fallbackLettre(c), `Lettre - ${c.name}`);
+        }
+
+        function genRecruteurs(c) {
+            const db = {
+                "Canada": [
+                    {nom:"Job Bank Canada",secteur:"Gouvernement",site:"jobbank.gc.ca",conseil:"Portail officiel, indispensable"},
+                    {nom:"Workopolis",secteur:"Général",site:"workopolis.com",conseil:"N°1 au Canada"},
+                    {nom:"LinkedIn Canada",secteur:"Tous secteurs",site:"linkedin.com",conseil:"Profil complet obligatoire"},
+                    {nom:"Hays Canada",secteur:"IT / Ingénierie",site:"hays.ca",conseil:"Contact direct recruteurs"},
+                    {nom:"Robert Half Canada",secteur:"Finance",site:"roberthalf.ca",conseil:"Profils qualifiés très recherchés"},
+                    {nom:"Indeed Canada",secteur:"Général",site:"ca.indeed.com",conseil:"Activez les alertes"},
+                    {nom:"Randstad Canada",secteur:"Technique",site:"randstad.ca",conseil:"Candidature spontanée efficace"},
+                    {nom:"Adecco Canada",secteur:"Industrie",site:"adecco.ca",conseil:"Opportunités secteur industriel"}
+                ],
+                "Allemagne": [
+                    {nom:"Make it in Germany",secteur:"Gouvernement",site:"make-it-in-germany.com",conseil:"Portail officiel immigrants qualifiés"},
+                    {nom:"Bundesagentur für Arbeit",secteur:"Général",site:"arbeitsagentur.de",conseil:"Agence nationale emploi"},
+                    {nom:"StepStone",secteur:"Général",site:"stepstone.de",conseil:"N°1 en Allemagne"},
+                    {nom:"XING",secteur:"Tous secteurs",site:"xing.com",conseil:"Équivalent LinkedIn allemand"},
+                    {nom:"Hays Germany",secteur:"IT / Ingénierie",site:"hays.de",conseil:"Profils techniques"},
+                    {nom:"Experteer",secteur:"Cadres",site:"experteer.de",conseil:"Profils seniors et management"},
+                    {nom:"Monster Germany",secteur:"Multi",site:"monster.de",conseil:"Bon volume offres"},
+                    {nom:"Manpower Germany",secteur:"Industrie",site:"manpower.de",conseil:"Fort secteur industriel"}
+                ],
+                "Australie": [
+                    {nom:"SEEK",secteur:"Général",site:"seek.com.au",conseil:"N°1 en Australie"},
+                    {nom:"LinkedIn Australia",secteur:"Tous",site:"linkedin.com",conseil:"Profil anglais obligatoire"},
+                    {nom:"Indeed Australia",secteur:"Général",site:"au.indeed.com",conseil:"Bon volume"},
+                    {nom:"Hays Australia",secteur:"Ingénierie",site:"hays.com.au",conseil:"Leaders recrutement"},
+                    {nom:"Michael Page",secteur:"Finance",site:"michaelpage.com.au",conseil:"Profils qualifiés"},
+                    {nom:"Adecco Australia",secteur:"Industrie",site:"adecco.com.au",conseil:"Missions temporaires"},
+                    {nom:"CareerOne",secteur:"Multi",site:"careerone.com.au",conseil:"Alertes emploi"},
+                    {nom:"Jora",secteur:"Général",site:"jora.com",conseil:"Agrégateur complet"}
+                ],
+                "France": [
+                    {nom:"Pôle Emploi",secteur:"Gouvernement",site:"pole-emploi.fr",conseil:"Inscription dès arrivée"},
+                    {nom:"Indeed France",secteur:"Général",site:"fr.indeed.com",conseil:"Très utilisé"},
+                    {nom:"LinkedIn France",secteur:"Tous",site:"linkedin.fr",conseil:"Réseau essentiel"},
+                    {nom:"Cadremploi",secteur:"Cadres",site:"cadremploi.fr",conseil:"Bac+3 et plus"},
+                    {nom:"Apec",secteur:"Cadres",site:"apec.fr",conseil:"Association cadres"},
+                    {nom:"Monster France",secteur:"Multi",site:"monster.fr",conseil:"Bon volume"},
+                    {nom:"Hays France",secteur:"IT/Finance",site:"hays.fr",conseil:"Recrutement spécialisé"},
+                    {nom:"Michael Page France",secteur:"Finance",site:"michaelpage.fr",conseil:"Profils qualifiés"}
+                ],
+                "États-Unis": [
+                    {nom:"LinkedIn USA",secteur:"Tous",site:"linkedin.com",conseil:"Réseau N°1"},
+                    {nom:"Indeed USA",secteur:"Général",site:"indeed.com",conseil:"Volume très élevé"},
+                    {nom:"Glassdoor",secteur:"Tous",site:"glassdoor.com",conseil:"Vérifiez les avis entreprise"},
+                    {nom:"ZipRecruiter",secteur:"Multi",site:"ziprecruiter.com",conseil:"Algorithme matching efficace"},
+                    {nom:"Monster USA",secteur:"Général",site:"monster.com",conseil:"Pionnier recrutement"},
+                    {nom:"Robert Half",secteur:"Finance/Admin",site:"roberthalf.com",conseil:"Leader spécialisé"},
+                    {nom:"Dice",secteur:"IT",site:"dice.com",conseil:"Spécialisé tech"},
+                    {nom:"CareerBuilder",secteur:"Général",site:"careerbuilder.com",conseil:"Grande base CV"}
+                ]
+            };
+
+            const list = db[c.country] || db["Canada"];
+            const rows = list.map((r,i) => `
+                <tr style="background:${i%2===0?'#fff':'#f8fafc'};border-bottom:1px solid #e5e7eb;">
+                    <td style="padding:10px 14px;font-weight:700;color:#1e40af;">${r.nom}</td>
+                    <td style="padding:10px 14px;color:#374151;">${r.secteur}</td>
+                    <td style="padding:10px 14px;color:#2563eb;font-size:12px;">${r.site}</td>
+                    <td style="padding:10px 14px;color:#059669;font-size:12px;">💡 ${r.conseil}</td>
+                </tr>`).join('');
+
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Arial,sans-serif;margin:0;padding:30px;background:#fff;">
+                <div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:white;padding:28px 30px;border-radius:14px;margin-bottom:28px;">
+                    <h1 style="margin:0 0 6px;font-size:22px;letter-spacing:-0.5px;">🏢 Liste des Recruteurs — ${c.country}</h1>
+                    <p style="margin:0;opacity:0.9;font-size:14px;">Candidat : <strong>${c.name}</strong> | Métier : ${c.job||'Non précisé'}</p>
+                    <p style="margin:6px 0 0;opacity:0.7;font-size:11px;">Généré par Immigration Flow CRM • ${new Date().toLocaleDateString('fr-FR')}</p>
+                </div>
+                <table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+                    <thead>
+                        <tr style="background:#1e40af;color:white;">
+                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Entreprise</th>
+                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Secteur</th>
+                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Site Web</th>
+                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Conseil</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                <p style="margin-top:24px;font-size:11px;color:#9ca3af;text-align:center;">Immigration Flow CRM — Document confidentiel client</p>
+            </body></html>`;
+        }
+
+        function wrapPDF(content, title) {
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>body{margin:0;padding:0;font-family:Arial,sans-serif;}</style></head><body>${content}</body></html>`;
+        }
+
+        function fallbackCV(c) {
+            return `<div style="font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;">
+                <div style="border-left:4px solid #3b82f6;padding-left:20px;margin-bottom:30px;">
+                    <h1 style="margin:0;color:#1e3a8a;font-size:28px;">${c.name}</h1>
+                    <p style="color:#6b7280;margin:4px 0;">${c.job||'Professionnel qualifié'} | ${c.country}</p>
+                </div>
+                <h2 style="color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:6px;">Formation</h2>
+                <p>${c.formation||'Non précisé'}</p>
+                <h2 style="color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:6px;">Expérience</h2>
+                <p>${c.experience?c.experience+" ans d'expérience professionnelle":'Expérience significative'}</p>
+                <h2 style="color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:6px;">Objectif d'immigration</h2>
+                <p>S'établir professionnellement en ${c.country} et contribuer activement au marché du travail local.</p>
+                <p style="color:#9ca3af;font-size:11px;margin-top:50px;text-align:center;">Immigration Flow CRM • ${new Date().toLocaleDateString('fr-FR')}</p>
+            </div>`;
+        }
+
+        function fallbackLettre(c) {
+            const d = new Date().toLocaleDateString('fr-FR');
+            return `<div style="font-family:Arial,sans-serif;padding:50px;max-width:700px;margin:0 auto;line-height:1.8;color:#1f2937;">
+                <p style="text-align:right;color:#6b7280;">${d}</p><br>
+                <p>Madame, Monsieur,</p>
+                <p>Je me permets de vous adresser ma candidature en tant que <strong>${c.job||'professionnel qualifié'}</strong>. Fort(e) de ${c.experience||'plusieurs'} années d'expérience et d'une formation de niveau ${c.formation||'supérieur'}, je souhaite m'établir en <strong>${c.country}</strong> et contribuer activement à votre organisation.</p>
+                <p>Mon parcours professionnel m'a permis de développer des compétences solides et une vision internationale du métier. Je suis convaincu(e) que mon profil correspond à vos attentes et aux besoins du marché local.</p>
+                <p>Je reste disponible pour un entretien à votre convenance et vous remercie de l'attention portée à ma candidature.</p><br>
+                <p>Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p><br>
+                <p><strong>${c.name}</strong></p>
+                <p style="color:#9ca3af;font-size:11px;margin-top:50px;text-align:center;">Immigration Flow CRM • ${d}</p>
+            </div>`;
+        }
+
+        async function downloadPDF(html, filename) {
+            const el = document.createElement('div');
+            el.innerHTML = html;
+            el.style.cssText = 'position:absolute;left:-9999px;top:0;width:800px;';
+            document.body.appendChild(el);
+            await html2pdf().set({
+                margin:10, filename,
+                image:{type:'jpeg',quality:0.98},
+                html2canvas:{scale:2,useCORS:true},
+                jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+            }).from(el).save();
+            document.body.removeChild(el);
+        }
+    </script>
+</body>
+</html>
