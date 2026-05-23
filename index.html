@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Immigration Flow CRM V6</title>
+    <title>Immigration Flow CRM V7</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         .hidden { display: none; }
         .sync-loader { animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.3s ease forwards; }
-        @keyframes pulse2 { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes pulse2 { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
         .pdf-loading { animation: pulse2 1s infinite; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen" id="main-body">
 
-    <!-- LOADING SCREEN -->
+    <!-- LOADING -->
     <div id="cloud-loading-screen" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-[100]">
         <div class="text-4xl mb-4 sync-loader">🔄</div>
         <h2 class="text-lg font-bold tracking-wider uppercase mb-1">Immigration Flow Cloud</h2>
         <p class="text-xs text-slate-400 animate-pulse">Connexion à Google Sheets...</p>
     </div>
 
-    <!-- LOGIN PAGE -->
+    <!-- LOGIN -->
     <div id="login-page" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-blue-600 hidden">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 text-center fade-in">
             <div class="text-4xl mb-2">✈️</div>
             <h1 class="text-2xl font-bold text-blue-600 mb-1">IMMIGRATION FLOW</h1>
-            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider">Système CRM V6</p>
+            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider">Système CRM V7</p>
             <div class="space-y-3 text-left">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Email</label>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <!-- APP PAGE -->
+    <!-- APP -->
     <div id="app-page" class="hidden">
         <nav class="bg-gradient-to-r from-blue-700 to-blue-600 text-white p-4 flex justify-between items-center shadow-lg">
             <div class="flex items-center space-x-3">
@@ -77,28 +77,57 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Chiffre d'Affaires Encaissé</p>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Chiffre d'Affaires</p>
                             <p id="stat-ca" class="text-2xl font-black text-gray-800 mt-1">0 DH</p>
                         </div>
                         <div class="text-3xl bg-green-50 p-3 rounded-xl">💰</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Dossiers Acompte (50%)</p>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Acompte (50%)</p>
                             <p id="stat-pending" class="text-2xl font-black text-gray-800 mt-1">0</p>
                         </div>
                         <div class="text-3xl bg-amber-50 p-3 rounded-xl">⏳</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Dossiers Finalisés (100%)</p>
+                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Dossiers Finalisés</p>
                             <p id="stat-closed" class="text-2xl font-black text-gray-800 mt-1">0</p>
                         </div>
                         <div class="text-3xl bg-blue-50 p-3 rounded-xl">✅</div>
                     </div>
                 </div>
+
+                <!-- Offre tarifaire -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                    <h3 class="text-base font-bold text-gray-800 mb-4">💼 Offre de Service</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="font-black text-blue-800 text-base">Pack Basic</h4>
+                                <span class="bg-blue-600 text-white text-sm font-black px-3 py-1 rounded-xl">900 DH</span>
+                            </div>
+                            <ul class="space-y-1.5 text-sm text-blue-900">
+                                <li class="flex items-center space-x-2"><span>📋</span><span>CV format pays cible</span></li>
+                                <li class="flex items-center space-x-2"><span>✉️</span><span>Lettre de motivation</span></li>
+                                <li class="flex items-center space-x-2"><span>🏢</span><span>20 recruteurs ciblés</span></li>
+                                <li class="flex items-center space-x-2"><span>🎁</span><span><strong>Guide LinkedIn (cadeau)</strong></span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
+                            <h4 class="font-black text-gray-700 text-base mb-3">Options à la carte</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex justify-between"><span>📋 CV existant ou nouveau</span><span class="font-bold text-blue-700">350 MAD</span></li>
+                                <li class="flex justify-between"><span>✉️ Lettre supplémentaire</span><span class="font-bold text-blue-700">200 MAD</span></li>
+                                <li class="flex justify-between"><span>💼 LinkedIn optimisé</span><span class="font-bold text-blue-700">450 MAD</span></li>
+                                <li class="flex justify-between"><span>🔍 10 offres ciblées</span><span class="font-bold text-blue-700">200 MAD</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-base font-bold text-gray-800 mb-4">📊 Statistiques financières</h3>
+                    <h3 class="text-base font-bold text-gray-800 mb-4">📊 Statistiques</h3>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div class="space-y-4">
                             <div>
@@ -165,8 +194,7 @@
                                 <th class="p-4">Nom</th>
                                 <th class="p-4">Métier & Pays</th>
                                 <th class="p-4">Téléphone</th>
-                                <th class="p-4">Affecté à</th>
-                                <th class="p-4">Observations</th>
+                                <th class="p-4">Options</th>
                                 <th class="p-4">Statut & Montant</th>
                                 <th class="p-4">Documents PDF</th>
                                 <th class="p-4">Actions</th>
@@ -177,7 +205,7 @@
                 </div>
             </div>
 
-            <!-- TEAM (admin only) -->
+            <!-- TEAM -->
             <div id="tab-team" class="tab-content hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6 border border-gray-100">
@@ -190,7 +218,7 @@
                                 <thead>
                                     <tr class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase font-bold text-xs tracking-wider">
                                         <th class="p-3">Nom & Prénom</th>
-                                        <th class="p-3">Email (login) & ID (mot de passe)</th>
+                                        <th class="p-3">Email & ID</th>
                                         <th class="p-3">Téléphone</th>
                                         <th class="p-3 text-center">Statut</th>
                                         <th class="p-3 text-right">Actions</th>
@@ -219,7 +247,7 @@
         </div>
     </div>
 
-    <!-- MODAL: COLLABORATEUR -->
+    <!-- MODAL COLLABORATEUR -->
     <div id="user-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
             <h3 id="user-modal-title" class="text-lg font-bold mb-1 text-gray-800"></h3>
@@ -239,7 +267,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Email * (identifiant de connexion)</label>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Email * (login)</label>
                     <input id="u-email" type="email" placeholder="karim@gmail.com" class="w-full p-2 border rounded-xl text-sm">
                 </div>
                 <div>
@@ -252,7 +280,7 @@
                 </div>
                 <div>
                     <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Notes Admin</label>
-                    <textarea id="u-observation" placeholder="Closer Senior, spécialisé Canada..." class="w-full p-2 border rounded-xl text-sm h-16"></textarea>
+                    <textarea id="u-observation" placeholder="Closer Senior..." class="w-full p-2 border rounded-xl text-sm h-16"></textarea>
                 </div>
             </div>
             <div class="flex justify-end space-x-2 mt-6">
@@ -262,29 +290,33 @@
         </div>
     </div>
 
-    <!-- MODAL: CLIENT -->
+    <!-- MODAL CLIENT -->
     <div id="client-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
             <h3 class="text-lg font-bold mb-4 text-gray-800">Fiche Client</h3>
             <input type="hidden" id="c-id">
             <div class="space-y-3">
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Nom complet *</label>
-                    <input id="c-name" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Mohamed Alaoui">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Téléphone *</label>
-                    <input id="c-phone" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="+212 6XX XXX XXX">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Métier / Profession</label>
-                    <input id="c-job" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Ingénieur informatique">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Années d'expérience</label>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Nom complet *</label>
+                        <input id="c-name" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Mohamed Alaoui">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Téléphone *</label>
+                        <input id="c-phone" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="+212 6XX XXX XXX">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Métier</label>
+                        <input id="c-job" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Ingénieur informatique">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Expérience (ans)</label>
                         <input id="c-experience" type="number" class="w-full p-2.5 border rounded-xl text-sm" placeholder="5">
                     </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Formation</label>
                         <select id="c-formation" class="w-full p-2.5 border rounded-xl text-sm bg-white">
@@ -295,21 +327,49 @@
                             <option value="Doctorat">Doctorat</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Pays cible</label>
+                        <select id="c-country" class="w-full p-2.5 border rounded-xl text-sm bg-white">
+                            <option value="Canada">Canada 🇨🇦</option>
+                            <option value="Allemagne">Allemagne 🇩🇪</option>
+                            <option value="Australie">Australie 🇦🇺</option>
+                            <option value="États-Unis">États-Unis 🇺🇸</option>
+                            <option value="France">France 🇫🇷</option>
+                            <option value="Espagne">Espagne 🇪🇸</option>
+                            <option value="Portugal">Portugal 🇵🇹</option>
+                            <option value="Belgique">Belgique 🇧🇪</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Pays de destination</label>
-                    <select id="c-country" class="w-full p-2.5 border rounded-xl text-sm bg-white">
-                        <option value="Canada">Canada 🇨🇦</option>
-                        <option value="Allemagne">Allemagne 🇩🇪</option>
-                        <option value="Australie">Australie 🇦🇺</option>
-                        <option value="États-Unis">États-Unis 🇺🇸</option>
-                        <option value="France">France 🇫🇷</option>
-                        <option value="Espagne">Espagne 🇪🇸</option>
-                        <option value="Portugal">Portugal 🇵🇹</option>
-                        <option value="Belgique">Belgique 🇧🇪</option>
-                    </select>
+
+                <!-- OPTIONS À LA CARTE -->
+                <div class="border border-blue-100 bg-blue-50 rounded-xl p-4">
+                    <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-3">✅ Pack Basic (900 DH) + Options à la carte</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
+                            <input type="checkbox" id="opt-cv-update" class="rounded text-blue-600">
+                            <span class="text-xs font-semibold text-gray-700">CV existant <span class="text-blue-600 font-bold">+350 MAD</span></span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
+                            <input type="checkbox" id="opt-lettre-supp" class="rounded text-blue-600">
+                            <span class="text-xs font-semibold text-gray-700">Lettre supp. <span class="text-blue-600 font-bold">+200 MAD</span></span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
+                            <input type="checkbox" id="opt-linkedin" class="rounded text-blue-600">
+                            <span class="text-xs font-semibold text-gray-700">LinkedIn <span class="text-blue-600 font-bold">+450 MAD</span></span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
+                            <input type="checkbox" id="opt-offres" class="rounded text-blue-600">
+                            <span class="text-xs font-semibold text-gray-700">10 offres <span class="text-blue-600 font-bold">+200 MAD</span></span>
+                        </label>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-blue-200 flex justify-between items-center">
+                        <span class="text-xs font-bold text-blue-800">Total calculé :</span>
+                        <span id="total-price" class="text-base font-black text-blue-700">900 MAD</span>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Statut paiement</label>
                         <select id="c-payment-status" class="w-full p-2.5 border rounded-xl text-sm bg-white">
@@ -319,13 +379,13 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Montant (DH)</label>
+                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Montant encaissé (DH)</label>
                         <input id="c-payment-amount" type="number" class="w-full p-2.5 border rounded-xl text-sm font-mono" placeholder="900">
                     </div>
                 </div>
                 <div>
                     <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Observations</label>
-                    <textarea id="c-observation" class="w-full p-2.5 border rounded-xl text-sm h-20" placeholder="Notes de suivi..."></textarea>
+                    <textarea id="c-observation" class="w-full p-2.5 border rounded-xl text-sm h-16" placeholder="Notes de suivi..."></textarea>
                 </div>
                 <div id="assign-container">
                     <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">Assigner à un Collaborateur</label>
@@ -339,33 +399,40 @@
         </div>
     </div>
 
-    <!-- MODAL: PDF -->
+    <!-- MODAL PDF -->
     <div id="pdf-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-lg mx-4">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-800">📄 Génération Documents IA</h3>
+                <h3 class="text-lg font-bold text-gray-800">📄 Génération Documents</h3>
                 <button onclick="document.getElementById('pdf-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 text-xl font-bold">✕</button>
             </div>
             <div id="pdf-client-info" class="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-5 text-sm"></div>
-            <div class="grid grid-cols-3 gap-3 mb-4">
+            <div class="grid grid-cols-2 gap-3 mb-3">
                 <button onclick="generatePDF('cv')" id="btn-cv" class="flex flex-col items-center bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
                     <span class="text-3xl mb-2">📋</span>
                     <span class="text-sm">CV</span>
-                    <span class="text-[10px] opacity-75 mt-1">Généré par IA</span>
+                    <span class="text-[10px] opacity-75 mt-1">Professionnel</span>
                 </button>
                 <button onclick="generatePDF('lettre')" id="btn-lettre" class="flex flex-col items-center bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
                     <span class="text-3xl mb-2">✉️</span>
                     <span class="text-sm">Lettre</span>
-                    <span class="text-[10px] opacity-75 mt-1">Généré par IA</span>
+                    <span class="text-[10px] opacity-75 mt-1">Motivation</span>
                 </button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-4">
                 <button onclick="generatePDF('recruteurs')" id="btn-recruteurs" class="flex flex-col items-center bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
                     <span class="text-3xl mb-2">🏢</span>
                     <span class="text-sm">Recruteurs</span>
-                    <span class="text-[10px] opacity-75 mt-1">Liste par pays</span>
+                    <span class="text-[10px] opacity-75 mt-1">20 par pays</span>
+                </button>
+                <button onclick="generatePDF('linkedin')" id="btn-linkedin" class="flex flex-col items-center bg-sky-500 hover:bg-sky-600 text-white p-4 rounded-xl font-bold text-xs transition shadow">
+                    <span class="text-3xl mb-2">🎁</span>
+                    <span class="text-sm">LinkedIn</span>
+                    <span class="text-[10px] opacity-75 mt-1">Guide cadeau</span>
                 </button>
             </div>
             <div id="pdf-status" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
-                <span class="pdf-loading text-amber-600">⏳</span>
+                <span class="pdf-loading text-amber-600 text-lg">⏳</span>
                 <span id="pdf-status-text" class="text-sm text-amber-800 font-semibold ml-2"></span>
             </div>
         </div>
@@ -373,20 +440,44 @@
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTiZyRoyQmZ3OM0z0G1IsQRu8YupkIaTFrr-jT5c0JAN5WzeUU6LZ9IC89GlANp_zr/exec";
-        const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
 
         let currentUser = null;
         let clients = [];
         let users = [];
         let activePdfClient = null;
 
-        window.addEventListener('DOMContentLoaded', () => cloudSync('loadAll'));
+        const PACK_BASE = 900;
+        const OPTIONS = {
+            'opt-cv-update': 350,
+            'opt-lettre-supp': 200,
+            'opt-linkedin': 450,
+            'opt-offres': 200
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupPriceCalculator();
+            cloudSync('loadAll');
+        });
+
+        function setupPriceCalculator() {
+            Object.keys(OPTIONS).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', updateTotalPrice);
+            });
+        }
+
+        function updateTotalPrice() {
+            let total = PACK_BASE;
+            Object.entries(OPTIONS).forEach(([id, price]) => {
+                if (document.getElementById(id)?.checked) total += price;
+            });
+            document.getElementById('total-price').innerText = total + ' MAD';
+        }
 
         // ====== CLOUD SYNC ======
         async function cloudSync(actionType) {
             const ind = document.getElementById('sync-indicator');
             if (ind) { ind.innerText = "🔄 Sync..."; ind.className = "text-[9px] bg-amber-600 text-amber-100 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
-
             try {
                 if (actionType === 'loadAll') {
                     const ctrl = new AbortController();
@@ -399,7 +490,7 @@
                         clearTimeout(t);
                         clients = []; users = [];
                         showLogin();
-                        if (ind) ind.innerText = "⚠️ Hors-ligne";
+                        if (ind) { ind.innerText = "⚠️ Hors-ligne"; ind.className = "text-[9px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
                         return;
                     }
                     const result = await response.json();
@@ -438,22 +529,15 @@
             const err = document.getElementById('login-error');
             err.classList.add('hidden');
             if (!emailIn || !passIn) return;
-
-            // Admin master
             if (emailIn === "admin" && passIn === "admin") {
                 currentUser = { id: "admin", nom: "Directeur", prenom: "ImmigFlow", role: "admin", email: "admin" };
                 buildApp(); return;
             }
-
-            // Collaborateur: login=email, password=son ID (flow_XXX)
             const found = users.find(u => u.email && u.email.toLowerCase() === emailIn && u.id === passIn);
             if (found) {
-                if (found.status === "Bloqué") { err.innerText = "Compte suspendu. Contactez l'administrateur."; err.classList.remove('hidden'); return; }
-                currentUser = found;
-                buildApp();
-            } else {
-                err.classList.remove('hidden');
-            }
+                if (found.status === "Bloqué") { err.innerText = "Compte suspendu."; err.classList.remove('hidden'); return; }
+                currentUser = found; buildApp();
+            } else { err.classList.remove('hidden'); }
         }
 
         function buildApp() {
@@ -493,12 +577,13 @@
             let ca = 0, acc = 0, sol = 0, unpaid = 0, total = 0;
             vis.forEach(c => {
                 const amt = parseFloat(c.amount) || 0;
+                const tot = parseFloat(c.totalPrice) || 0;
                 if (c.status === "100%") { ca += amt; sol++; }
                 else if (c.status === "50%") { ca += amt; acc++; }
                 else { unpaid++; }
-                total += amt;
+                total += tot || amt;
             });
-            const rem = total - ca;
+            const rem = Math.max(0, total - ca);
             const avg = vis.length ? Math.round(total / vis.length) : 0;
             const conv = vis.length ? Math.round((sol / vis.length) * 100) : 0;
             const max = total || 1;
@@ -516,30 +601,40 @@
             document.getElementById('bar-width-remaining').style.width = Math.round((rem/max)*100) + "%";
         }
 
+        function getOptionsLabel(c) {
+            const opts = [];
+            if (c.optCvUpdate) opts.push('CV+350');
+            if (c.optLettreSupp) opts.push('Lettre+200');
+            if (c.optLinkedin) opts.push('LinkedIn+450');
+            if (c.optOffres) opts.push('10offres+200');
+            return opts.length ? opts.join(', ') : 'Basic';
+        }
+
         function renderClients() {
             const body = document.getElementById('clients-table-body');
             body.innerHTML = "";
             const isAdmin = currentUser.role === 'admin';
             const vis = isAdmin ? clients : clients.filter(c => c.assignedTo === currentUser.id);
             if (!vis.length) {
-                body.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-gray-400 text-sm">Aucun client pour le moment.</td></tr>`;
+                body.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-gray-400 text-sm">Aucun client pour le moment.</td></tr>`;
                 return;
             }
             vis.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b hover:bg-gray-50 transition";
                 const sc = c.status === '100%' ? 'bg-green-100 text-green-700' : c.status === '50%' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
+                const amt = parseFloat(c.amount) || 0;
+                const totalP = parseFloat(c.totalPrice) || PACK_BASE;
                 const actionBtn = isAdmin
                     ? `<button onclick="editClient('${c.id}')" class="text-blue-600 hover:underline font-bold text-xs">Modifier</button>`
                     : `<span class="text-gray-300 text-xs italic">🔒 Verrouillé</span>`;
                 tr.innerHTML = `
-                    <td class="p-4 text-xs text-gray-500">${c.date||'-'}</td>
-                    <td class="p-4 font-bold text-gray-800">${c.name}</td>
+                    <td class="p-4 text-xs text-gray-500 whitespace-nowrap">${c.date||'-'}</td>
+                    <td class="p-4 font-bold text-gray-800">${c.name}<br><span class="text-xs font-normal text-blue-500">${c.assignedName||'Non assigné'}</span></td>
                     <td class="p-4 text-sm">${c.job||'-'}<br><span class="text-xs text-gray-400">${c.country||''}</span></td>
                     <td class="p-4 font-mono text-xs">${c.phone}</td>
-                    <td class="p-4 text-xs font-semibold text-blue-600">${c.assignedName||'Non assigné'}</td>
-                    <td class="p-4 text-xs max-w-xs truncate text-gray-500">${c.observation||'-'}</td>
-                    <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold ${sc}">${c.status} (${c.amount||0} DH)</span></td>
+                    <td class="p-4 text-xs text-gray-500">${getOptionsLabel(c)}<br><span class="font-bold text-blue-700">${totalP} MAD</span></td>
+                    <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold ${sc}">${c.status||'Non Payé'} (${amt} DH)</span></td>
                     <td class="p-4"><button onclick="openPdfModal('${c.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">📄 Générer</button></td>
                     <td class="p-4">${actionBtn}</td>
                 `;
@@ -550,28 +645,19 @@
         function renderTeam() {
             const body = document.getElementById('team-table-body');
             body.innerHTML = "";
-            if (!users.length) {
-                body.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 text-sm">Aucun collaborateur.</td></tr>`;
-                return;
-            }
+            if (!users.length) { body.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 text-sm">Aucun collaborateur.</td></tr>`; return; }
             users.forEach(u => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b hover:bg-gray-50 text-xs";
                 tr.innerHTML = `
                     <td class="p-3"><strong class="text-gray-800">${u.nom} ${u.prenom}</strong><br><span class="text-gray-400">Depuis: ${u.dateArrivee||'-'}</span></td>
-                    <td class="p-3">
-                        <span class="text-blue-600 font-semibold block">${u.email||'-'}</span>
-                        <span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 text-[11px]">🔑 ${u.id}</span>
-                    </td>
+                    <td class="p-3"><span class="text-blue-600 font-semibold block">${u.email||'-'}</span><span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 text-[11px]">🔑 ${u.id}</span></td>
                     <td class="p-3 text-gray-600">${u.tel||'-'}</td>
-                    <td class="p-3 text-center">
-                        <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${u.status==='Actif'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${u.status}</span>
-                    </td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${u.status==='Actif'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${u.status}</span></td>
                     <td class="p-3 text-right space-x-2">
                         <button onclick="editUser('${u.id}')" class="text-blue-600 hover:underline font-bold">Modifier</button>
                         <button onclick="toggleStatus('${u.id}')" class="text-amber-600 hover:underline font-bold">Statut</button>
-                    </td>
-                `;
+                    </td>`;
                 body.appendChild(tr);
             });
         }
@@ -582,15 +668,15 @@
             document.getElementById('c-payment-status').value = "Non Payé";
             document.getElementById('c-formation').value = "Bac+5";
             document.getElementById('c-country').value = "Canada";
+            Object.keys(OPTIONS).forEach(id => document.getElementById(id).checked = false);
+            updateTotalPrice();
             const sel = document.getElementById('c-assign');
             sel.innerHTML = '<option value="">Non assigné</option>';
             users.filter(u => u.status === 'Actif').forEach(u => sel.innerHTML += `<option value="${u.id}">${u.nom} ${u.prenom}</option>`);
             if (currentUser.role !== 'admin') {
                 sel.value = currentUser.id;
                 document.getElementById('assign-container').classList.add('hidden');
-            } else {
-                document.getElementById('assign-container').classList.remove('hidden');
-            }
+            } else { document.getElementById('assign-container').classList.remove('hidden'); }
             document.getElementById('client-modal').classList.remove('hidden');
         }
 
@@ -607,9 +693,20 @@
             const formation = document.getElementById('c-formation').value;
             const country = document.getElementById('c-country').value;
             const status = document.getElementById('c-payment-status').value;
-            const amount = document.getElementById('c-payment-amount').value;
+            const amount = document.getElementById('c-payment-amount').value || "0";
             const observation = document.getElementById('c-observation').value.trim();
             const assignId = document.getElementById('c-assign').value || (currentUser.role !== 'admin' ? currentUser.id : "");
+
+            const optCvUpdate = document.getElementById('opt-cv-update').checked;
+            const optLettreSupp = document.getElementById('opt-lettre-supp').checked;
+            const optLinkedin = document.getElementById('opt-linkedin').checked;
+            const optOffres = document.getElementById('opt-offres').checked;
+
+            let totalPrice = PACK_BASE;
+            if (optCvUpdate) totalPrice += 350;
+            if (optLettreSupp) totalPrice += 200;
+            if (optLinkedin) totalPrice += 450;
+            if (optOffres) totalPrice += 200;
 
             let assignedName = "";
             if (assignId) {
@@ -617,12 +714,14 @@
                 else { const tu = users.find(u => u.id === assignId); if (tu) assignedName = `${tu.nom} ${tu.prenom}`; }
             }
 
+            const clientData = { name, phone, job, experience, formation, country, status, amount, observation, assignedTo: assignId, assignedName, optCvUpdate, optLettreSupp, optLinkedin, optOffres, totalPrice };
+
             if (!id) {
-                clients.push({ id:"cl_"+Date.now(), date:new Date().toLocaleDateString('fr-FR'), name, phone, job, experience, formation, country, status, amount, observation, assignedTo:assignId, assignedName });
+                clients.push({ id: "cl_" + Date.now(), date: new Date().toLocaleDateString('fr-FR'), ...clientData });
             } else {
                 if (currentUser.role !== 'admin') return;
                 const t = clients.find(c => c.id === id);
-                if (t) Object.assign(t, { name, phone, job, experience, formation, country, status, amount, observation, assignedTo:assignId, assignedName });
+                if (t) Object.assign(t, clientData);
             }
             closeClientModal(); initRender(); cloudSync('saveAll');
         }
@@ -639,10 +738,15 @@
             document.getElementById('c-experience').value = c.experience||"";
             document.getElementById('c-formation').value = c.formation||"Bac+5";
             document.getElementById('c-country').value = c.country||"Canada";
-            document.getElementById('c-payment-status').value = c.status;
+            document.getElementById('c-payment-status').value = c.status||"Non Payé";
             document.getElementById('c-payment-amount').value = c.amount||"";
             document.getElementById('c-observation').value = c.observation||"";
             document.getElementById('c-assign').value = c.assignedTo||"";
+            document.getElementById('opt-cv-update').checked = !!c.optCvUpdate;
+            document.getElementById('opt-lettre-supp').checked = !!c.optLettreSupp;
+            document.getElementById('opt-linkedin').checked = !!c.optLinkedin;
+            document.getElementById('opt-offres').checked = !!c.optOffres;
+            updateTotalPrice();
         }
 
         // ====== USER MODAL ======
@@ -659,7 +763,7 @@
             const u = users.find(x => x.id === id);
             if (!u) return;
             document.getElementById('user-modal-title').innerText = "Modifier le collaborateur";
-            document.getElementById('generated-id-view').innerText = `📧 Login: ${u.email} | 🔑 Mot de passe: ${u.id}`;
+            document.getElementById('generated-id-view').innerText = `📧 ${u.email} | 🔑 Mot de passe: ${u.id}`;
             document.getElementById('u-id-hidden').value = u.id;
             document.getElementById('u-nom').value = u.nom;
             document.getElementById('u-prenom').value = u.prenom;
@@ -678,15 +782,14 @@
             const tel = document.getElementById('u-tel').value.trim();
             const obs = document.getElementById('u-observation').value.trim();
             const dateArr = document.getElementById('u-date-arrivee').value;
-            if (!nom || !prenom || !email) { alert("Nom, prénom et email sont obligatoires."); return; }
-
+            if (!nom || !prenom || !email) { alert("Nom, prénom et email obligatoires."); return; }
             if (!id) {
                 const newId = "flow_" + Math.floor(100 + Math.random() * 900);
-                users.push({ id:newId, nom, prenom, email, tel, observation:obs, dateArrivee:dateArr, role:"closer", status:"Actif" });
+                users.push({ id: newId, nom, prenom, email, tel, observation: obs, dateArrivee: dateArr, role: "closer", status: "Actif" });
                 alert(`✅ Collaborateur créé !\n\n📧 Email (login) : ${email}\n🔑 Mot de passe : ${newId}\n\nCommuniquez ces infos au collaborateur.`);
             } else {
                 const t = users.find(u => u.id === id);
-                if (t) Object.assign(t, { nom, prenom, email, tel, observation:obs, dateArrivee:dateArr });
+                if (t) Object.assign(t, { nom, prenom, email, tel, observation: obs, dateArrivee: dateArr });
             }
             document.getElementById('user-modal').classList.add('hidden');
             initRender(); cloudSync('saveAll');
@@ -709,18 +812,19 @@
             alert("✅ Notification diffusée !"); document.getElementById('msg-text').value = "";
         }
 
-        // ====== PDF GENERATION ======
+        // ====== PDF GENERATION (100% LOCAL - pas d'API) ======
         function openPdfModal(clientId) {
             const c = clients.find(cl => cl.id === clientId);
             if (!c) return;
             activePdfClient = c;
+            const totalP = c.totalPrice || PACK_BASE;
             document.getElementById('pdf-client-info').innerHTML = `
                 <strong class="text-blue-800 text-base">👤 ${c.name}</strong><br>
-                <span class="text-gray-600">${c.job||'Métier non précisé'} — ${c.country}</span><br>
-                <span class="text-gray-400 text-xs">${c.formation||''} ${c.experience ? '• ' + c.experience + " ans d'expérience" : ''}</span>
+                <span class="text-gray-600">${c.job||'Métier non précisé'} — ${c.country||'Canada'}</span><br>
+                <span class="text-gray-400 text-xs">${c.formation||'Bac+5'} ${c.experience ? '• ' + c.experience + " ans d'expérience" : ''} • Pack: ${totalP} MAD</span>
             `;
             document.getElementById('pdf-status').classList.add('hidden');
-            ['btn-cv','btn-lettre','btn-recruteurs'].forEach(id => {
+            ['btn-cv','btn-lettre','btn-recruteurs','btn-linkedin'].forEach(id => {
                 document.getElementById(id).disabled = false;
                 document.getElementById(id).classList.remove('opacity-50','cursor-not-allowed');
             });
@@ -733,204 +837,480 @@
             const statusEl = document.getElementById('pdf-status');
             const statusText = document.getElementById('pdf-status-text');
             statusEl.classList.remove('hidden');
-            const btn = document.getElementById('btn-'+type);
+            const btn = document.getElementById('btn-' + type);
             btn.disabled = true; btn.classList.add('opacity-50','cursor-not-allowed');
 
+            const labels = { cv: 'Génération du CV...', lettre: 'Rédaction de la lettre...', recruteurs: 'Compilation des recruteurs...', linkedin: 'Préparation du guide LinkedIn...' };
+            statusText.innerText = labels[type] || 'Génération...';
+
             let html = "";
-            if (type === 'cv') {
-                statusText.innerText = "Claude génère votre CV... (30 secondes)";
-                html = await genCV(c);
-            } else if (type === 'lettre') {
-                statusText.innerText = "Claude rédige la lettre de motivation...";
-                html = await genLettre(c);
-            } else {
-                statusText.innerText = "Compilation liste recruteurs...";
-                html = genRecruteurs(c);
-            }
+            if (type === 'cv') html = buildCV(c);
+            else if (type === 'lettre') html = buildLettre(c);
+            else if (type === 'recruteurs') html = buildRecruteurs(c);
+            else if (type === 'linkedin') html = buildLinkedin(c);
 
             if (html) {
                 statusText.innerText = "Téléchargement en cours...";
-                await downloadPDF(html, `${type}_${c.name.replace(/\s+/g,'_')}.pdf`);
+                await downloadPDF(html, `${type}_${c.name.replace(/\s+/g,'_')}_ImmigFlow.pdf`);
                 statusEl.classList.add('hidden');
             }
             btn.disabled = false; btn.classList.remove('opacity-50','cursor-not-allowed');
         }
 
-        async function callClaude(prompt) {
-            try {
-                const res = await fetch(CLAUDE_API_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{role:"user",content:prompt}] })
-                });
-                const data = await res.json();
-                return data.content?.[0]?.text || null;
-            } catch(e) { console.error("Claude API:", e); return null; }
-        }
-
-        async function genCV(c) {
-            const prompt = `Tu es un expert en rédaction de CV pour l'immigration internationale.
-Génère un CV professionnel complet en français pour :
-- Nom : ${c.name}
-- Métier : ${c.job||'Non précisé'}
-- Formation : ${c.formation||'Non précisé'}
-- Expérience : ${c.experience||'Non précisé'} ans
-- Pays cible : ${c.country}
-- Notes : ${c.observation||'Aucune'}
-
-Génère un CV en HTML avec CSS inline uniquement. Style moderne, professionnel, bien structuré.
-Sections : En-tête (nom + contact fictif), Profil professionnel, Expériences, Formations, Compétences, Langues, Objectif immigration.
-Adapte le contenu au pays de destination.
-RÉPONDS UNIQUEMENT AVEC LE HTML, rien d'autre.`;
-            const result = await callClaude(prompt);
-            return wrapPDF(result || fallbackCV(c), `CV - ${c.name}`);
-        }
-
-        async function genLettre(c) {
-            const prompt = `Tu es un expert en immigration et lettres de motivation.
-Rédige une lettre de motivation professionnelle pour :
-- Nom : ${c.name}
-- Métier : ${c.job||'Professionnel qualifié'}
-- Formation : ${c.formation||'Non précisé'}
-- Expérience : ${c.experience||'plusieurs'} ans
-- Pays cible : ${c.country}
-- Notes : ${c.observation||'Candidature immigration professionnelle'}
-
-La lettre doit être formelle, convaincante, 3-4 paragraphes, adaptée au pays.
-Génère en HTML avec CSS inline élégant. Inclure date, formule intro/conclusion.
-RÉPONDS UNIQUEMENT AVEC LE HTML, rien d'autre.`;
-            const result = await callClaude(prompt);
-            return wrapPDF(result || fallbackLettre(c), `Lettre - ${c.name}`);
-        }
-
-        function genRecruteurs(c) {
-            const db = {
-                "Canada": [
-                    {nom:"Job Bank Canada",secteur:"Gouvernement",site:"jobbank.gc.ca",conseil:"Portail officiel, indispensable"},
-                    {nom:"Workopolis",secteur:"Général",site:"workopolis.com",conseil:"N°1 au Canada"},
-                    {nom:"LinkedIn Canada",secteur:"Tous secteurs",site:"linkedin.com",conseil:"Profil complet obligatoire"},
-                    {nom:"Hays Canada",secteur:"IT / Ingénierie",site:"hays.ca",conseil:"Contact direct recruteurs"},
-                    {nom:"Robert Half Canada",secteur:"Finance",site:"roberthalf.ca",conseil:"Profils qualifiés très recherchés"},
-                    {nom:"Indeed Canada",secteur:"Général",site:"ca.indeed.com",conseil:"Activez les alertes"},
-                    {nom:"Randstad Canada",secteur:"Technique",site:"randstad.ca",conseil:"Candidature spontanée efficace"},
-                    {nom:"Adecco Canada",secteur:"Industrie",site:"adecco.ca",conseil:"Opportunités secteur industriel"}
-                ],
-                "Allemagne": [
-                    {nom:"Make it in Germany",secteur:"Gouvernement",site:"make-it-in-germany.com",conseil:"Portail officiel immigrants qualifiés"},
-                    {nom:"Bundesagentur für Arbeit",secteur:"Général",site:"arbeitsagentur.de",conseil:"Agence nationale emploi"},
-                    {nom:"StepStone",secteur:"Général",site:"stepstone.de",conseil:"N°1 en Allemagne"},
-                    {nom:"XING",secteur:"Tous secteurs",site:"xing.com",conseil:"Équivalent LinkedIn allemand"},
-                    {nom:"Hays Germany",secteur:"IT / Ingénierie",site:"hays.de",conseil:"Profils techniques"},
-                    {nom:"Experteer",secteur:"Cadres",site:"experteer.de",conseil:"Profils seniors et management"},
-                    {nom:"Monster Germany",secteur:"Multi",site:"monster.de",conseil:"Bon volume offres"},
-                    {nom:"Manpower Germany",secteur:"Industrie",site:"manpower.de",conseil:"Fort secteur industriel"}
-                ],
-                "Australie": [
-                    {nom:"SEEK",secteur:"Général",site:"seek.com.au",conseil:"N°1 en Australie"},
-                    {nom:"LinkedIn Australia",secteur:"Tous",site:"linkedin.com",conseil:"Profil anglais obligatoire"},
-                    {nom:"Indeed Australia",secteur:"Général",site:"au.indeed.com",conseil:"Bon volume"},
-                    {nom:"Hays Australia",secteur:"Ingénierie",site:"hays.com.au",conseil:"Leaders recrutement"},
-                    {nom:"Michael Page",secteur:"Finance",site:"michaelpage.com.au",conseil:"Profils qualifiés"},
-                    {nom:"Adecco Australia",secteur:"Industrie",site:"adecco.com.au",conseil:"Missions temporaires"},
-                    {nom:"CareerOne",secteur:"Multi",site:"careerone.com.au",conseil:"Alertes emploi"},
-                    {nom:"Jora",secteur:"Général",site:"jora.com",conseil:"Agrégateur complet"}
-                ],
-                "France": [
-                    {nom:"Pôle Emploi",secteur:"Gouvernement",site:"pole-emploi.fr",conseil:"Inscription dès arrivée"},
-                    {nom:"Indeed France",secteur:"Général",site:"fr.indeed.com",conseil:"Très utilisé"},
-                    {nom:"LinkedIn France",secteur:"Tous",site:"linkedin.fr",conseil:"Réseau essentiel"},
-                    {nom:"Cadremploi",secteur:"Cadres",site:"cadremploi.fr",conseil:"Bac+3 et plus"},
-                    {nom:"Apec",secteur:"Cadres",site:"apec.fr",conseil:"Association cadres"},
-                    {nom:"Monster France",secteur:"Multi",site:"monster.fr",conseil:"Bon volume"},
-                    {nom:"Hays France",secteur:"IT/Finance",site:"hays.fr",conseil:"Recrutement spécialisé"},
-                    {nom:"Michael Page France",secteur:"Finance",site:"michaelpage.fr",conseil:"Profils qualifiés"}
-                ],
-                "États-Unis": [
-                    {nom:"LinkedIn USA",secteur:"Tous",site:"linkedin.com",conseil:"Réseau N°1"},
-                    {nom:"Indeed USA",secteur:"Général",site:"indeed.com",conseil:"Volume très élevé"},
-                    {nom:"Glassdoor",secteur:"Tous",site:"glassdoor.com",conseil:"Vérifiez les avis entreprise"},
-                    {nom:"ZipRecruiter",secteur:"Multi",site:"ziprecruiter.com",conseil:"Algorithme matching efficace"},
-                    {nom:"Monster USA",secteur:"Général",site:"monster.com",conseil:"Pionnier recrutement"},
-                    {nom:"Robert Half",secteur:"Finance/Admin",site:"roberthalf.com",conseil:"Leader spécialisé"},
-                    {nom:"Dice",secteur:"IT",site:"dice.com",conseil:"Spécialisé tech"},
-                    {nom:"CareerBuilder",secteur:"Général",site:"careerbuilder.com",conseil:"Grande base CV"}
-                ]
-            };
-
-            const list = db[c.country] || db["Canada"];
-            const rows = list.map((r,i) => `
-                <tr style="background:${i%2===0?'#fff':'#f8fafc'};border-bottom:1px solid #e5e7eb;">
-                    <td style="padding:10px 14px;font-weight:700;color:#1e40af;">${r.nom}</td>
-                    <td style="padding:10px 14px;color:#374151;">${r.secteur}</td>
-                    <td style="padding:10px 14px;color:#2563eb;font-size:12px;">${r.site}</td>
-                    <td style="padding:10px 14px;color:#059669;font-size:12px;">💡 ${r.conseil}</td>
-                </tr>`).join('');
-
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Arial,sans-serif;margin:0;padding:30px;background:#fff;">
-                <div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:white;padding:28px 30px;border-radius:14px;margin-bottom:28px;">
-                    <h1 style="margin:0 0 6px;font-size:22px;letter-spacing:-0.5px;">🏢 Liste des Recruteurs — ${c.country}</h1>
-                    <p style="margin:0;opacity:0.9;font-size:14px;">Candidat : <strong>${c.name}</strong> | Métier : ${c.job||'Non précisé'}</p>
-                    <p style="margin:6px 0 0;opacity:0.7;font-size:11px;">Généré par Immigration Flow CRM • ${new Date().toLocaleDateString('fr-FR')}</p>
+        function buildCV(c) {
+            const pays = c.country || 'Canada';
+            const date = new Date().toLocaleDateString('fr-FR');
+            const competences = getCompetencesByJob(c.job);
+            const langues = getLanguesByCountry(pays);
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+                *{margin:0;padding:0;box-sizing:border-box;}
+                body{font-family:'Arial',sans-serif;color:#1f2937;background:#fff;}
+                .header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;padding:35px 40px;}
+                .header h1{font-size:26px;font-weight:900;letter-spacing:-0.5px;}
+                .header p{font-size:13px;opacity:0.85;margin-top:4px;}
+                .header .contact{margin-top:12px;font-size:12px;opacity:0.9;display:flex;gap:20px;}
+                .body{padding:30px 40px;}
+                .section{margin-bottom:22px;}
+                .section-title{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#1e3a8a;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin-bottom:12px;}
+                .profil{background:#eff6ff;border-left:4px solid #3b82f6;padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.7;color:#1e40af;}
+                .exp-item{margin-bottom:14px;}
+                .exp-titre{font-weight:700;font-size:13px;color:#111827;}
+                .exp-detail{font-size:12px;color:#6b7280;margin-top:2px;}
+                .exp-desc{font-size:12px;color:#374151;margin-top:6px;line-height:1.6;}
+                .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+                .tag{background:#dbeafe;color:#1e40af;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+                .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:30px;padding-top:15px;border-top:1px solid #e5e7eb;}
+                .deux-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+                .langue-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:12px;}
+                .niveau{background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+            </style></head><body>
+            <div class="header">
+                <h1>${c.name}</h1>
+                <p>${c.job || 'Professionnel qualifié'} • Candidature pour ${pays}</p>
+                <div class="contact">
+                    <span>📱 ${c.phone}</span>
+                    <span>📍 Maroc</span>
+                    <span>🎯 Objectif : ${pays}</span>
                 </div>
-                <table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-                    <thead>
-                        <tr style="background:#1e40af;color:white;">
-                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Entreprise</th>
-                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Secteur</th>
-                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Site Web</th>
-                            <th style="padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Conseil</th>
-                        </tr>
-                    </thead>
-                    <tbody>${rows}</tbody>
-                </table>
-                <p style="margin-top:24px;font-size:11px;color:#9ca3af;text-align:center;">Immigration Flow CRM — Document confidentiel client</p>
+            </div>
+            <div class="body">
+                <div class="section">
+                    <div class="section-title">Profil professionnel</div>
+                    <div class="profil">
+                        Professionnel motivé avec ${c.experience || 'plusieurs'} années d'expérience en tant que ${c.job || 'professionnel qualifié'}, 
+                        titulaire d'un diplôme de niveau ${c.formation || 'Bac+5'}. 
+                        Je recherche une opportunité professionnelle au ${pays} pour contribuer activement à votre organisation 
+                        tout en m'intégrant dans un environnement de travail international et dynamique.
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Expériences professionnelles</div>
+                    <div class="exp-item">
+                        <div class="exp-titre">${c.job || 'Professionnel qualifié'}</div>
+                        <div class="exp-detail">Maroc • ${c.experience || '5'} ans d'expérience</div>
+                        <div class="exp-desc">
+                            • Gestion et coordination des activités liées au poste<br>
+                            • Collaboration avec les équipes pluridisciplinaires<br>
+                            • Amélioration continue des processus et des performances<br>
+                            • Respect des délais et des normes de qualité
+                        </div>
+                    </div>
+                </div>
+                <div class="deux-col">
+                    <div>
+                        <div class="section">
+                            <div class="section-title">Formation</div>
+                            <div class="exp-item">
+                                <div class="exp-titre">${c.formation || 'Bac+5'}</div>
+                                <div class="exp-detail">Domaine : ${c.job || 'Spécialité professionnelle'}</div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <div class="section-title">Compétences</div>
+                            <div class="tags">
+                                ${competences.map(s => `<span class="tag">${s}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section">
+                            <div class="section-title">Langues</div>
+                            ${langues.map(l => `<div class="langue-item"><span>${l.langue}</span><span class="niveau">${l.niveau}</span></div>`).join('')}
+                        </div>
+                        <div class="section">
+                            <div class="section-title">Objectif immigration</div>
+                            <div class="exp-desc" style="font-size:12px;line-height:1.7;color:#374151;">
+                                Obtenir un contrat de travail qualifié au ${pays} afin d'immigrer légalement et de m'intégrer durablement dans le marché du travail local.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">CV généré par Immigration Flow CRM • ${date} • Document confidentiel</div>
             </body></html>`;
         }
 
-        function wrapPDF(content, title) {
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>body{margin:0;padding:0;font-family:Arial,sans-serif;}</style></head><body>${content}</body></html>`;
-        }
-
-        function fallbackCV(c) {
-            return `<div style="font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;">
-                <div style="border-left:4px solid #3b82f6;padding-left:20px;margin-bottom:30px;">
-                    <h1 style="margin:0;color:#1e3a8a;font-size:28px;">${c.name}</h1>
-                    <p style="color:#6b7280;margin:4px 0;">${c.job||'Professionnel qualifié'} | ${c.country}</p>
+        function buildLettre(c) {
+            const pays = c.country || 'Canada';
+            const date = new Date().toLocaleDateString('fr-FR');
+            const intro = getIntroByCountry(pays);
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+                body{font-family:'Georgia',serif;color:#1f2937;max-width:780px;margin:0 auto;padding:50px 60px;line-height:1.8;font-size:13px;}
+                .entete{display:flex;justify-content:space-between;margin-bottom:40px;}
+                .expediteur{font-size:12px;color:#374151;}
+                .expediteur strong{font-size:15px;color:#1e3a8a;font-family:Arial;}
+                .date{text-align:right;font-size:12px;color:#6b7280;}
+                .objet{font-weight:700;margin-bottom:30px;color:#1e3a8a;font-size:13px;}
+                .corps p{margin-bottom:16px;text-align:justify;}
+                .signature{margin-top:40px;}
+                .signature strong{font-size:15px;color:#1e3a8a;}
+                .footer{margin-top:50px;font-size:10px;color:#9ca3af;border-top:1px solid #e5e7eb;padding-top:10px;text-align:center;}
+                h1{font-family:Arial;color:#1e3a8a;font-size:18px;margin-bottom:5px;}
+            </style></head><body>
+            <div class="entete">
+                <div class="expediteur">
+                    <strong>${c.name}</strong><br>
+                    ${c.job || 'Professionnel qualifié'}<br>
+                    Maroc • ${c.phone}
                 </div>
-                <h2 style="color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:6px;">Formation</h2>
-                <p>${c.formation||'Non précisé'}</p>
-                <h2 style="color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:6px;">Expérience</h2>
-                <p>${c.experience?c.experience+" ans d'expérience professionnelle":'Expérience significative'}</p>
-                <h2 style="color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:6px;">Objectif d'immigration</h2>
-                <p>S'établir professionnellement en ${c.country} et contribuer activement au marché du travail local.</p>
-                <p style="color:#9ca3af;font-size:11px;margin-top:50px;text-align:center;">Immigration Flow CRM • ${new Date().toLocaleDateString('fr-FR')}</p>
-            </div>`;
+                <div class="date">
+                    Le ${date}
+                </div>
+            </div>
+            <div class="objet">Objet : Candidature au poste de ${c.job || 'professionnel qualifié'} — ${pays}</div>
+            <div class="corps">
+                <p>Madame, Monsieur,</p>
+                <p>${intro}</p>
+                <p>Fort(e) de <strong>${c.experience || 'plusieurs'} années d'expérience</strong> en tant que <strong>${c.job || 'professionnel qualifié'}</strong> 
+                et titulaire d'un diplôme de niveau <strong>${c.formation || 'Bac+5'}</strong>, j'ai développé des compétences solides 
+                et une expertise reconnue dans mon domaine. Mon parcours professionnel m'a permis de maîtriser 
+                les aspects techniques et humains du métier, tout en cultivant une capacité d'adaptation 
+                face aux défis du monde professionnel moderne.</p>
+                <p>Le ${pays} représente pour moi bien plus qu'une destination — c'est un choix de vie réfléchi et un projet professionnel 
+                structuré. J'ai étudié le marché du travail local, les standards professionnels et les attentes 
+                des employeurs dans votre pays. Je suis convaincu(e) que mon profil correspond aux besoins 
+                de votre marché et que je pourrai apporter une réelle valeur ajoutée à votre organisation.</p>
+                <p>Sérieux(se), organisé(e) et déterminé(e), je m'engage à m'intégrer rapidement et efficacement 
+                dans mon nouvel environnement professionnel et culturel. Je suis disponible pour tout entretien 
+                à votre convenance, en présentiel ou en visioconférence.</p>
+                <p>Dans l'attente de votre retour, je vous adresse mes cordiales salutations.</p>
+            </div>
+            <div class="signature">
+                <strong>${c.name}</strong><br>
+                <span style="font-size:12px;color:#6b7280;">${c.job || 'Professionnel qualifié'} • ${c.phone}</span>
+            </div>
+            <div class="footer">Lettre générée par Immigration Flow CRM • ${date} • Document confidentiel</div>
+            </body></html>`;
         }
 
-        function fallbackLettre(c) {
-            const d = new Date().toLocaleDateString('fr-FR');
-            return `<div style="font-family:Arial,sans-serif;padding:50px;max-width:700px;margin:0 auto;line-height:1.8;color:#1f2937;">
-                <p style="text-align:right;color:#6b7280;">${d}</p><br>
-                <p>Madame, Monsieur,</p>
-                <p>Je me permets de vous adresser ma candidature en tant que <strong>${c.job||'professionnel qualifié'}</strong>. Fort(e) de ${c.experience||'plusieurs'} années d'expérience et d'une formation de niveau ${c.formation||'supérieur'}, je souhaite m'établir en <strong>${c.country}</strong> et contribuer activement à votre organisation.</p>
-                <p>Mon parcours professionnel m'a permis de développer des compétences solides et une vision internationale du métier. Je suis convaincu(e) que mon profil correspond à vos attentes et aux besoins du marché local.</p>
-                <p>Je reste disponible pour un entretien à votre convenance et vous remercie de l'attention portée à ma candidature.</p><br>
-                <p>Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p><br>
-                <p><strong>${c.name}</strong></p>
-                <p style="color:#9ca3af;font-size:11px;margin-top:50px;text-align:center;">Immigration Flow CRM • ${d}</p>
-            </div>`;
+        function buildRecruteurs(c) {
+            const pays = c.country || 'Canada';
+            const date = new Date().toLocaleDateString('fr-FR');
+            const list = getRecruteurs(pays);
+            const rows = list.map((r, i) => `
+                <tr style="background:${i%2===0?'#fff':'#f8fafc'};">
+                    <td style="padding:10px 14px;font-weight:700;color:#1e40af;font-size:12px;">${r.nom}</td>
+                    <td style="padding:10px 14px;color:#374151;font-size:12px;">${r.secteur}</td>
+                    <td style="padding:10px 14px;font-size:11px;"><a href="https://${r.site}" style="color:#2563eb;">${r.site}</a></td>
+                    <td style="padding:10px 14px;color:#059669;font-size:11px;">💡 ${r.conseil}</td>
+                </tr>`).join('');
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+                body{font-family:Arial,sans-serif;margin:0;padding:30px;background:#fff;}
+                table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;}
+                th{background:#1e40af;color:white;padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;}
+                tr{border-bottom:1px solid #e5e7eb;}
+                .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:20px;}
+            </style></head><body>
+            <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;padding:28px 30px;border-radius:14px;margin-bottom:25px;">
+                <h1 style="margin:0 0 6px;font-size:20px;">🏢 Liste des 20 Recruteurs — ${pays}</h1>
+                <p style="margin:0;opacity:0.9;font-size:13px;">Candidat : <strong>${c.name}</strong> | Métier visé : ${c.job||'Non précisé'}</p>
+                <p style="margin:5px 0 0;opacity:0.7;font-size:11px;">Pack Basic Immigration Flow • ${date}</p>
+            </div>
+            <table>
+                <thead><tr><th>Entreprise / Plateforme</th><th>Secteur</th><th>Site Web</th><th>Conseil</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <div class="footer">Immigration Flow CRM • Document confidentiel client • ${date}</div>
+            </body></html>`;
+        }
+
+        function buildLinkedin(c) {
+            const pays = c.country || 'Canada';
+            const date = new Date().toLocaleDateString('fr-FR');
+            const conseils = getLinkedinConseilsByCountry(pays);
+            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+                body{font-family:Arial,sans-serif;color:#1f2937;margin:0;padding:0;background:#fff;}
+                .header{background:linear-gradient(135deg,#0077b5,#00a0dc);color:white;padding:30px 40px;}
+                .header h1{font-size:22px;font-weight:900;margin:0 0 4px;}
+                .header p{font-size:13px;opacity:0.9;margin:0;}
+                .cadeau{background:#fef9c3;border:2px dashed #f59e0b;padding:12px 20px;margin:20px 40px;border-radius:10px;font-size:13px;color:#92400e;font-weight:600;text-align:center;}
+                .body{padding:20px 40px;}
+                .section{margin-bottom:25px;}
+                .section-title{font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#0077b5;border-bottom:2px solid #0077b5;padding-bottom:6px;margin-bottom:14px;}
+                .tip{background:#f0f9ff;border-left:4px solid #0077b5;padding:10px 14px;margin-bottom:10px;border-radius:0 8px 8px 0;font-size:12px;line-height:1.6;}
+                .tip strong{color:#0077b5;}
+                .exemple{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:12px;color:#374151;font-style:italic;margin-top:8px;}
+                .pays-conseil{background:#dcfce7;border-left:4px solid #16a34a;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;}
+                .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:30px;padding:15px 40px;border-top:1px solid #e5e7eb;}
+                .badge{display:inline-block;background:#dbeafe;color:#1e40af;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px;}
+            </style></head><body>
+            <div class="header">
+                <h1>💼 Guide LinkedIn Personnalisé</h1>
+                <p>Optimisation pour ${pays} • Préparé pour : ${c.name}</p>
+            </div>
+            <div class="cadeau">🎁 Document OFFERT avec votre Pack Basic Immigration Flow — Valeur : 450 MAD</div>
+            <div class="body">
+                <div class="section">
+                    <div class="section-title">1. Titre de profil (Headline)</div>
+                    <div class="tip">Le titre est la première chose que voient les recruteurs. Il doit être <strong>percutant et contenir des mots-clés</strong> de votre métier.</div>
+                    <div class="exemple">
+                        ✅ Bon exemple :<br>
+                        "<strong>${c.job || 'Professionnel qualifié'} | ${c.experience || '5'}+ ans d'expérience | Ouvert aux opportunités au ${pays}</strong>"
+                    </div>
+                    <div class="exemple" style="background:#fef2f2;border-color:#fee2e2;">
+                        ❌ À éviter :<br>
+                        "En recherche d'emploi" ou juste votre titre de poste sans plus
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">2. Photo de profil</div>
+                    <div class="tip">
+                        • <strong>Photo professionnelle obligatoire</strong> — fond neutre (blanc, gris ou bleu clair)<br>
+                        • Visage bien visible, sourire naturel, tenue professionnelle<br>
+                        • Évitez les selfies, photos de vacances ou photos floues<br>
+                        • Les profils avec photo reçoivent <strong>21x plus de vues</strong>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">3. Résumé / À propos (About)</div>
+                    <div class="tip">Rédigez un résumé en <strong>3-4 paragraphes</strong> qui raconte votre histoire professionnelle.</div>
+                    <div class="exemple">
+                        Professionnel avec ${c.experience || 'plusieurs'} années d'expérience en ${c.job || 'mon domaine'}, 
+                        diplômé(e) niveau ${c.formation || 'Bac+5'}. J'ai développé une expertise solide dans [vos spécialités].
+                        <br><br>
+                        Actuellement en projet d'immigration au ${pays}, je recherche une opportunité qui me permettra 
+                        de contribuer à [secteur/type d'entreprise] tout en m'intégrant dans le marché local.
+                        <br><br>
+                        N'hésitez pas à me contacter pour toute opportunité ou collaboration.
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">4. Compétences (Skills)</div>
+                    <div class="tip">Ajoutez minimum <strong>10-15 compétences</strong> pertinentes. Demandez des validations à vos anciens collègues.</div>
+                    <div style="margin-top:8px;">
+                        ${getCompetencesByJob(c.job).map(s => `<span class="badge">${s}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">5. Conseils spécifiques pour ${pays}</div>
+                    ${conseils.map(c => `<div class="pays-conseil">✅ ${c}</div>`).join('')}
+                </div>
+                <div class="section">
+                    <div class="section-title">6. Actions immédiates à faire</div>
+                    <div class="tip">
+                        <strong>Cette semaine :</strong><br>
+                        ☐ Mettre à jour votre titre avec mots-clés métier<br>
+                        ☐ Ajouter une photo professionnelle<br>
+                        ☐ Rédiger votre résumé (copiez l'exemple ci-dessus et adaptez)<br>
+                        ☐ Ajouter vos compétences listées<br>
+                        ☐ Activer "Open to Work" en mode visible aux recruteurs seulement<br>
+                        ☐ Suivre 10 entreprises dans votre secteur au ${pays}
+                    </div>
+                </div>
+            </div>
+            <div class="footer">🎁 Guide LinkedIn offert par Immigration Flow CRM • ${date} • Document confidentiel — ${c.name}</div>
+            </body></html>`;
+        }
+
+        // ====== DATA HELPERS ======
+        function getCompetencesByJob(job) {
+            const j = (job || '').toLowerCase();
+            if (j.includes('info') || j.includes('dev') || j.includes('tech')) return ['JavaScript','Python','SQL','React','Node.js','Git','Agile/Scrum','API REST','Cloud AWS','Docker','Résolution problèmes','Travail en équipe'];
+            if (j.includes('compt') || j.includes('financ')) return ['Comptabilité générale','Bilan financier','Excel avancé','SAP','Audit','Fiscalité','Reporting','Analyse financière','Trésorerie','Normes IFRS'];
+            if (j.includes('market') || j.includes('comm')) return ['Marketing digital','SEO/SEA','Réseaux sociaux','Content marketing','Google Ads','CRM','Analyse données','Rédaction','E-commerce','Stratégie'];
+            if (j.includes('ingé') || j.includes('technic')) return ['Gestion de projet','AutoCAD','SolidWorks','Lean Manufacturing','Qualité ISO','Mécanique','Électronique','Maintenance','Bureau d\'études','Contrôle qualité'];
+            return ['Gestion de projet','Communication','Travail en équipe','Résolution de problèmes','Organisation','Leadership','Adaptabilité','Microsoft Office','Rigueur professionnelle','Initiative'];
+        }
+
+        function getLanguesByCountry(pays) {
+            const base = [{langue:'Arabe',niveau:'Langue maternelle'},{langue:'Français',niveau:'Courant'}];
+            if (pays === 'Canada') return [...base,{langue:'Anglais',niveau:'Intermédiaire à courant'},{langue:'Berbère',niveau:'Notions'}];
+            if (pays === 'Allemagne') return [...base,{langue:'Allemand',niveau:'Notions (en apprentissage)'},{langue:'Anglais',niveau:'Intermédiaire'}];
+            if (pays === 'Australie' || pays === 'États-Unis') return [...base,{langue:'Anglais',niveau:'Courant à bilingue'}];
+            return [...base,{langue:'Anglais',niveau:'Intermédiaire'},{langue:'Espagnol',niveau:'Notions'}];
+        }
+
+        function getIntroByCountry(pays) {
+            const intros = {
+                'Canada': "C'est avec un grand intérêt que je me permets de vous adresser ma candidature au poste de professionnel qualifié au Canada. Après mûre réflexion et une étude approfondie du marché canadien, je suis convaincu(e) que le Canada représente l'environnement idéal pour poursuivre mon développement professionnel et personnel.",
+                'Allemagne': "Je me permets de vous soumettre ma candidature dans le cadre de mon projet d'installation professionnelle en Allemagne. Pays reconnu pour son excellence industrielle et sa stabilité économique, l'Allemagne correspond parfaitement à mes aspirations professionnelles et à mon projet de vie.",
+                'France': "Permettez-moi de vous présenter ma candidature pour une opportunité professionnelle en France. Pays de culture et d'excellence, la France représente pour moi une destination de choix pour développer ma carrière dans un environnement stimulant et international.",
+                'Australie': "I am pleased to submit my application for a professional position in Australia. With its dynamic economy and welcoming environment for qualified professionals, Australia represents an ideal destination for my career development project.",
+                'États-Unis': "Je vous soumets ma candidature pour une opportunité professionnelle aux États-Unis, pays qui incarne l'excellence et l'innovation dans de nombreux secteurs d'activité."
+            };
+            return intros[pays] || `C'est avec un grand intérêt que je me permets de vous adresser ma candidature dans le cadre de mon projet d'immigration professionnelle en ${pays}. Ce pays représente pour moi une opportunité unique de développer mes compétences dans un environnement international et dynamique.`;
+        }
+
+        function getLinkedinConseilsByCountry(pays) {
+            const conseils = {
+                'Canada': [
+                    'Activez "Open to Work" visible par les recruteurs (pas par votre réseau)',
+                    'Rejoignez des groupes LinkedIn canadiens de votre secteur',
+                    'Mentionnez votre visa/statut dans les messages aux recruteurs',
+                    'Suivez les pages LinkedIn de Job Bank Canada et des grandes entreprises canadiennes',
+                    'Rédigez votre résumé en français ET en anglais (Canada bilingue)'
+                ],
+                'Allemagne': [
+                    'Inscrivez-vous aussi sur XING (l\'équivalent LinkedIn allemand)',
+                    'Mentionnez votre niveau d\'allemand et votre volonté d\'apprendre',
+                    'Suivez les pages des grandes entreprises allemandes (SAP, Bosch, Siemens)',
+                    'Rejoignez des groupes d\'expatriés francophones en Allemagne',
+                    'Précisez si vous avez un visa de recherche d\'emploi allemand'
+                ],
+                'France': [
+                    'Utilisez LinkedIn ET le site Pôle Emploi pour maximiser la visibilité',
+                    'Rejoignez des groupes de votre secteur en français',
+                    'Mentionnez votre titre de séjour ou autorisation de travail si applicable',
+                    'Connectez-vous avec des Marocains installés en France dans votre domaine',
+                    'Suivez les entreprises du CAC40 et les PME de votre secteur'
+                ]
+            };
+            return conseils[pays] || [
+                'Complétez votre profil à 100% (score "All-star")',
+                'Connectez-vous avec des professionnels de votre secteur dans ce pays',
+                'Publiez régulièrement du contenu lié à votre métier',
+                'Demandez des recommandations à vos anciens managers/collègues',
+                'Envoyez des messages personnalisés (pas de messages génériques)'
+            ];
+        }
+
+        function getRecruteurs(pays) {
+            const db = {
+                'Canada': [
+                    {nom:'Job Bank Canada',secteur:'Gouvernement',site:'jobbank.gc.ca',conseil:'Portail officiel — indispensable'},
+                    {nom:'Workopolis',secteur:'Général',site:'workopolis.com',conseil:'N°1 au Canada pour les offres'},
+                    {nom:'LinkedIn Canada',secteur:'Tous secteurs',site:'linkedin.com/jobs',conseil:'Profil complet avec photo pro'},
+                    {nom:'Indeed Canada',secteur:'Général',site:'ca.indeed.com',conseil:'Activez les alertes par métier'},
+                    {nom:'Hays Canada',secteur:'IT / Ingénierie',site:'hays.ca',conseil:'Contact direct avec recruteurs'},
+                    {nom:'Robert Half Canada',secteur:'Finance / Compta',site:'roberthalf.ca',conseil:'Excellent pour profils qualifiés'},
+                    {nom:'Randstad Canada',secteur:'Technique / Admin',site:'randstad.ca',conseil:'Candidature spontanée très efficace'},
+                    {nom:'Adecco Canada',secteur:'Industrie / Multi',site:'adecco.ca',conseil:'Bonne présence secteur industriel'},
+                    {nom:'Manpower Canada',secteur:'Multi-secteurs',site:'manpowergroup.ca',conseil:'Réseau international solide'},
+                    {nom:'Michael Page Canada',secteur:'Cadres / Finance',site:'michaelpage.ca',conseil:'Top pour profils seniors'},
+                    {nom:'Korn Ferry Canada',secteur:'Direction / Cadres',site:'kornferry.com',conseil:'Recrutement executive'},
+                    {nom:'Futurpreneur Canada',secteur:'Entrepreneuriat',site:'futurpreneur.ca',conseil:'Si projet entrepreneurial'},
+                    {nom:'Eluta.ca',secteur:'Général',site:'eluta.ca',conseil:'Moteur recherche emploi canadien'},
+                    {nom:'CareerBeacon',secteur:'Est du Canada',site:'careerbeacon.com',conseil:'Fort pour provinces atlantiques'},
+                    {nom:'BCJobs.ca',secteur:'Colombie-Britannique',site:'bcjobs.ca',conseil:'Spécialisé Colombie-Britannique'},
+                    {nom:'Jobboom',secteur:'Québec',site:'jobboom.com',conseil:'N°1 au Québec francophone'},
+                    {nom:'Emploi-Québec',secteur:'Québec gouvernement',site:'emploiquebec.gouv.qc.ca',conseil:'Officiel province du Québec'},
+                    {nom:'Talent.com Canada',secteur:'Agrégateur',site:'talent.com',conseil:'Regroupe offres de 100+ sources'},
+                    {nom:'Glassdoor Canada',secteur:'Tous',site:'glassdoor.ca',conseil:'Vérifiez les avis sur l\'entreprise'},
+                    {nom:'Monster Canada',secteur:'Général',site:'monster.ca',conseil:'Base CV très consultée par recruteurs'}
+                ],
+                'Allemagne': [
+                    {nom:'Make it in Germany',secteur:'Gouvernement',site:'make-it-in-germany.com',conseil:'Portail officiel immigrants qualifiés'},
+                    {nom:'Bundesagentur für Arbeit',secteur:'Gouvernement',site:'arbeitsagentur.de',conseil:'Agence nationale de l\'emploi'},
+                    {nom:'StepStone',secteur:'Général',site:'stepstone.de',conseil:'N°1 en Allemagne'},
+                    {nom:'XING',secteur:'Réseau pro',site:'xing.com',conseil:'LinkedIn allemand — indispensable'},
+                    {nom:'Indeed Allemagne',secteur:'Général',site:'de.indeed.com',conseil:'Activez alertes emploi'},
+                    {nom:'Hays Germany',secteur:'IT / Ingénierie',site:'hays.de',conseil:'Profils techniques très recherchés'},
+                    {nom:'Experteer',secteur:'Cadres / Direction',site:'experteer.de',conseil:'Pour profils seniors +'},
+                    {nom:'Monster Germany',secteur:'Multi',site:'monster.de',conseil:'Bon volume d\'offres'},
+                    {nom:'Manpower Germany',secteur:'Industrie',site:'manpower.de',conseil:'Fort secteur industriel'},
+                    {nom:'Randstad Germany',secteur:'Multi',site:'randstad.de',conseil:'Nombreuses missions'},
+                    {nom:'Adecco Germany',secteur:'Multi',site:'adecco.de',conseil:'Présence nationale'},
+                    {nom:'Michael Page Germany',secteur:'Finance / IT',site:'michaelpage.de',conseil:'Profils qualifiés'},
+                    {nom:'Gulp.de',secteur:'IT / Freelance',site:'gulp.de',conseil:'Spécialisé IT et ingénierie'},
+                    {nom:'Kimeta.de',secteur:'Agrégateur',site:'kimeta.de',conseil:'Regroupe toutes les offres'},
+                    {nom:'Jobware',secteur:'Général',site:'jobware.de',conseil:'Bonne base de données'},
+                    {nom:'Stellenanzeigen.de',secteur:'Général',site:'stellenanzeigen.de',conseil:'Portail emploi reconnu'},
+                    {nom:'Yourfirm.de',secteur:'PME',site:'yourfirm.de',conseil:'Spécialisé PME allemandes'},
+                    {nom:'Absolventa',secteur:'Jeunes diplômés',site:'absolventa.de',conseil:'Pour premiers postes'},
+                    {nom:'Jobmensa',secteur:'Étudiants/Jeunes',site:'jobmensa.de',conseil:'Postes juniors'},
+                    {nom:'Kalaydo',secteur:'Région Rhénanie',site:'kalaydo.de',conseil:'Fort en Rhénanie-Westphalie'}
+                ],
+                'France': [
+                    {nom:'Pôle Emploi',secteur:'Gouvernement',site:'pole-emploi.fr',conseil:'Inscription dès l\'arrivée obligatoire'},
+                    {nom:'Indeed France',secteur:'Général',site:'fr.indeed.com',conseil:'N°1 en France pour volume'},
+                    {nom:'LinkedIn France',secteur:'Tous',site:'linkedin.fr',conseil:'Réseau professionnel essentiel'},
+                    {nom:'Cadremploi',secteur:'Cadres Bac+3',site:'cadremploi.fr',conseil:'Spécialisé profils qualifiés'},
+                    {nom:'Apec',secteur:'Cadres',site:'apec.fr',conseil:'Association pour l\'emploi des cadres'},
+                    {nom:'Monster France',secteur:'Général',site:'monster.fr',conseil:'Bon volume d\'offres'},
+                    {nom:'Hays France',secteur:'IT / Finance / Ingé',site:'hays.fr',conseil:'Recrutement spécialisé efficace'},
+                    {nom:'Michael Page France',secteur:'Finance / Compta',site:'michaelpage.fr',conseil:'Top profils qualifiés'},
+                    {nom:'Adecco France',secteur:'Multi',site:'adecco.fr',conseil:'Présence nationale forte'},
+                    {nom:'Randstad France',secteur:'Technique / Industrie',site:'randstad.fr',conseil:'Missions nombreuses'},
+                    {nom:'Manpower France',secteur:'Multi',site:'manpower.fr',conseil:'Réseau agences solide'},
+                    {nom:'Jobijoba',secteur:'Agrégateur',site:'jobijoba.com',conseil:'Regroupe 100+ sources'},
+                    {nom:'RegionsJob',secteur:'Régional',site:'regionsjob.com',conseil:'Fort en régions françaises'},
+                    {nom:'Meteojob',secteur:'Matching IA',site:'meteojob.com',conseil:'Algorithme matching performant'},
+                    {nom:'Welcome to the Jungle',secteur:'Startups / Tech',site:'welcometothejungle.com',conseil:'Top pour entreprises innovantes'},
+                    {nom:'Talent.io',secteur:'IT / Tech',site:'talent.io',conseil:'Spécialisé profils tech premium'},
+                    {nom:'Glassdoor France',secteur:'Tous',site:'glassdoor.fr',conseil:'Vérifiez les avis avant de postuler'},
+                    {nom:'Les Echos Emploi',secteur:'Finance / Stratégie',site:'lesechos-emploi.fr',conseil:'Profils hauts de gamme'},
+                    {nom:'Figaro Emploi',secteur:'Général',site:'figaro-emploi.com',conseil:'Bon trafic candidats qualifiés'},
+                    {nom:'EURES',secteur:'Europe',site:'ec.europa.eu/eures',conseil:'Mobilité professionnelle Europe'}
+                ],
+                'Australie': [
+                    {nom:'SEEK',secteur:'Général',site:'seek.com.au',conseil:'N°1 en Australie — indispensable'},
+                    {nom:'LinkedIn Australia',secteur:'Tous',site:'linkedin.com',conseil:'Profil en anglais obligatoire'},
+                    {nom:'Indeed Australia',secteur:'Général',site:'au.indeed.com',conseil:'Bon volume d\'offres'},
+                    {nom:'Hays Australia',secteur:'Ingénierie / IT',site:'hays.com.au',conseil:'Leaders recrutement spécialisé'},
+                    {nom:'Michael Page Australia',secteur:'Finance / Commerce',site:'michaelpage.com.au',conseil:'Profils qualifiés très demandés'},
+                    {nom:'Adecco Australia',secteur:'Industrie',site:'adecco.com.au',conseil:'Nombreuses missions temporaires'},
+                    {nom:'CareerOne',secteur:'Multi',site:'careerone.com.au',conseil:'Alertes emploi personnalisées'},
+                    {nom:'Jora Australia',secteur:'Agrégateur',site:'au.jora.com',conseil:'Agrégateur très complet'},
+                    {nom:'Adzuna Australia',secteur:'Agrégateur',site:'adzuna.com.au',conseil:'Bonne couverture du marché'},
+                    {nom:'Gumtree Jobs',secteur:'Local / Multi',site:'gumtree.com.au/jobs',conseil:'Offres locales et PME'},
+                    {nom:'Ethical Jobs',secteur:'ONG / Social',site:'ethicaljobs.com.au',conseil:'Secteur associatif et social'},
+                    {nom:'Workforce Guardian',secteur:'RH / Compliance',site:'workforceguardian.com.au',conseil:'Ressources humaines'},
+                    {nom:'Randstad Australia',secteur:'Multi',site:'randstad.com.au',conseil:'Agence internationale'},
+                    {nom:'Robert Half Australia',secteur:'Finance / Compta',site:'roberthalf.com.au',conseil:'Profils finance reconnu'},
+                    {nom:'Manpower Australia',secteur:'Multi',site:'manpower.com.au',conseil:'Présence nationale'},
+                    {nom:'Hudson Australia',secteur:'Cadres',site:'au.hudson.com',conseil:'Recrutement cadres supérieurs'},
+                    {nom:'Dixon Appointments',secteur:'Admin / Office',site:'dixon.com.au',conseil:'Spécialisé postes administratifs'},
+                    {nom:'DFP Recruitment',secteur:'Multi',site:'dfprecruitment.com.au',conseil:'Agence australienne reconnue'},
+                    {nom:'TMS Consulting',secteur:'IT',site:'tmsconsulting.com.au',conseil:'Tech et consulting IT'},
+                    {nom:'Aurec',secteur:'Finance',site:'aurec.com.au',conseil:'Finance et comptabilité'}
+                ],
+                'États-Unis': [
+                    {nom:'LinkedIn USA',secteur:'Tous',site:'linkedin.com',conseil:'Réseau N°1 USA — obligatoire'},
+                    {nom:'Indeed USA',secteur:'Général',site:'indeed.com',conseil:'Volume d\'offres très élevé'},
+                    {nom:'Glassdoor',secteur:'Tous',site:'glassdoor.com',conseil:'Vérifiez culture entreprise'},
+                    {nom:'ZipRecruiter',secteur:'Multi',site:'ziprecruiter.com',conseil:'Algorithme matching efficace'},
+                    {nom:'Monster USA',secteur:'Général',site:'monster.com',conseil:'Base CV très consultée'},
+                    {nom:'Robert Half USA',secteur:'Finance / Admin',site:'roberthalf.com',conseil:'Leader recrutement spécialisé'},
+                    {nom:'Dice',secteur:'IT / Tech',site:'dice.com',conseil:'Spécialisé profils tech'},
+                    {nom:'CareerBuilder',secteur:'Général',site:'careerbuilder.com',conseil:'Grande base données CV'},
+                    {nom:'Hired',secteur:'Tech / Startups',site:'hired.com',conseil:'Tech companies & startups'},
+                    {nom:'AngelList Talent',secteur:'Startups',site:'angel.co/jobs',conseil:'Startups et scale-ups'},
+                    {nom:'Ladders',secteur:'Cadres 100k+',site:'theladders.com',conseil:'Postes salaires élevés'},
+                    {nom:'Idealist',secteur:'Non-profit',site:'idealist.org',conseil:'Secteur associatif'},
+                    {nom:'Flexjobs',secteur:'Télétravail',site:'flexjobs.com',conseil:'Remote & flexible jobs'},
+                    {nom:'We Work Remotely',secteur:'Télétravail',site:'weworkremotely.com',conseil:'100% remote positions'},
+                    {nom:'Korn Ferry',secteur:'Direction',site:'kornferry.com',conseil:'Executive search'},
+                    {nom:'Spencer Stuart',secteur:'C-Level',site:'spencerstuart.com',conseil:'Postes direction générale'},
+                    {nom:'Heidrick & Struggles',secteur:'Leadership',site:'heidrick.com',conseil:'Leadership recrutement'},
+                    {nom:'Toptal',secteur:'Freelance Tech',site:'toptal.com',conseil:'Top 3% freelancers tech'},
+                    {nom:'Upwork',secteur:'Freelance',site:'upwork.com',conseil:'Freelance international'},
+                    {nom:'SimplyHired',secteur:'Agrégateur',site:'simplyhired.com',conseil:'Regroupe toutes les offres'}
+                ]
+            };
+            return db[pays] || db['Canada'];
         }
 
         async function downloadPDF(html, filename) {
             const el = document.createElement('div');
             el.innerHTML = html;
-            el.style.cssText = 'position:absolute;left:-9999px;top:0;width:800px;';
+            el.style.cssText = 'position:absolute;left:-9999px;top:0;width:820px;background:white;';
             document.body.appendChild(el);
             await html2pdf().set({
-                margin:10, filename,
-                image:{type:'jpeg',quality:0.98},
-                html2canvas:{scale:2,useCORS:true},
-                jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+                margin: 8,
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).from(el).save();
             document.body.removeChild(el);
         }
