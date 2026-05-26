@@ -3,1317 +3,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Immigration Flow CRM V7</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>Vizago — Votre candidature Canada, préparée comme un pro.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        .hidden { display: none; }
-        .sync-loader { animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.3s ease forwards; }
-        @keyframes pulse2 { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .pdf-loading { animation: pulse2 1s infinite; }
+        :root {
+            --bleu: #2563EB;
+            --bleu-dark: #1D4ED8;
+            --bleu-clair: #EFF6FF;
+            --noir: #0F172A;
+            --blanc: #FAFAF9;
+            --gris: #64748B;
+            --gris-clair: #F1F5F9;
+            --whatsapp: #25D366;
+            --whatsapp-dark: #1fb855;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--blanc);
+            color: var(--noir);
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(250,250,249,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15,23,42,0.06);
+            padding: 0 5%; height: 68px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: 1.5rem; letter-spacing: -0.02em; color: var(--noir);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .logo-dot { width: 10px; height: 10px; background: var(--bleu); border-radius: 50%; display: inline-block; }
+        .btn-header {
+            background: var(--bleu); color: white;
+            font-family: 'Syne', sans-serif; font-weight: 700;
+            font-size: 0.82rem; letter-spacing: 0.05em; text-transform: uppercase;
+            padding: 10px 22px; border-radius: 100px; text-decoration: none; transition: all 0.2s;
+        }
+        .btn-header:hover { background: var(--bleu-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.25); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 92vh; display: grid; grid-template-columns: 1fr 1fr;
+            align-items: center; padding: 0 5%; gap: 60px;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -200px; right: -200px;
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.15);
+            color: var(--bleu); font-size: 0.78rem; font-weight: 600;
+            padding: 6px 14px; border-radius: 100px; margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            line-height: 1.15; letter-spacing: -0.03em;
+            color: var(--noir); margin-bottom: 24px;
+        }
+        .hero h1 em { font-style: normal; color: var(--bleu); }
+        .hero-sub {
+            font-size: 1.05rem; color: var(--gris); line-height: 1.7;
+            max-width: 460px; margin-bottom: 36px;
+        }
+        .hero-checks { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
+        .check-item { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; }
+        .check-icon {
+            width: 22px; height: 22px; background: var(--bleu); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; color: white; font-size: 0.6rem;
+        }
+        .hero-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--bleu); color: white;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+            padding: 16px 32px; border-radius: 12px; text-decoration: none;
+            transition: all 0.25s; box-shadow: 0 4px 20px rgba(37,99,235,0.2);
+        }
+        .btn-primary:hover { background: var(--bleu-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,99,235,0.3); }
+        .btn-whatsapp {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--whatsapp); color: white;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+            padding: 16px 28px; border-radius: 12px; text-decoration: none; transition: all 0.25s;
+        }
+        .btn-whatsapp:hover { background: var(--whatsapp-dark); transform: translateY(-2px); }
+
+        /* Hero Card */
+        .hero-card {
+            background: white; border-radius: 24px; padding: 40px;
+            box-shadow: 0 20px 80px rgba(15,23,42,0.08);
+            border: 1px solid rgba(15,23,42,0.04); position: relative;
+        }
+        .hero-card::before { content: '🇨🇦'; position: absolute; top: -20px; right: 30px; font-size: 2.5rem; }
+        .card-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--noir); margin-bottom: 6px; }
+        .card-sub { font-size: 0.85rem; color: var(--gris); margin-bottom: 28px; }
+        .offer-items { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+        .offer-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; background: var(--gris-clair); border-radius: 12px; }
+        .offer-icon { font-size: 1.4rem; flex-shrink: 0; }
+        .offer-item-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--noir); }
+        .offer-item-desc { font-size: 0.8rem; color: var(--gris); margin-top: 2px; }
+        .offer-bonus {
+            display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px;
+            background: rgba(37,99,235,0.05); border: 1px dashed rgba(37,99,235,0.25);
+            border-radius: 12px; margin-bottom: 28px;
+        }
+        .price-block { text-align: center; padding: 20px; background: var(--bleu); border-radius: 14px; color: white; }
+        .price-label { font-size: 0.8rem; opacity: 0.85; margin-bottom: 4px; }
+        .price-amount { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.8rem; line-height: 1; }
+        .price-note { font-size: 0.78rem; opacity: 0.8; margin-top: 4px; }
+
+        /* ===== TEAM BANNER ===== */
+        .team-banner {
+            background: linear-gradient(135deg, #1e3a5f 0%, #1D4ED8 100%);
+            padding: 28px 5%;
+            display: flex; align-items: center; justify-content: center;
+            gap: 20px; flex-wrap: wrap; text-align: center;
+        }
+        .team-banner-text { color: white; }
+        .team-banner-text p:first-child { font-size: 1rem; font-weight: 500; opacity: 0.95; margin-bottom: 6px; }
+        .team-banner-text p:last-child { font-size: 0.9rem; opacity: 0.75; direction: rtl; font-style: italic; }
+
+        /* ===== SOCIAL PROOF ===== */
+        .social-proof {
+            background: var(--noir); padding: 24px 5%;
+            display: flex; align-items: center; justify-content: center;
+            gap: 48px; flex-wrap: wrap;
+        }
+        .stat-item { text-align: center; }
+        .stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--bleu); }
+        .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+        .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            padding: 80px 5%; display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: start; max-width: 1200px; margin: 0 auto;
+        }
+        .section-tag {
+            display: inline-block; font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--bleu); margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 16px;
+        }
+        .section-desc { color: var(--gris); font-size: 0.95rem; line-height: 1.7; margin-bottom: 32px; }
+
+        /* Disclaimer */
+        .disclaimer-box {
+            background: #FFF7ED; border: 1px solid #FED7AA;
+            border-radius: 14px; padding: 18px 20px; margin-bottom: 24px;
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+        .disclaimer-box p { font-size: 0.82rem; color: #92400E; line-height: 1.6; }
+        .disclaimer-box strong { color: #78350F; }
+
+        /* Trust items */
+        .trust-items { display: flex; flex-direction: column; gap: 16px; }
+        .trust-item {
+            display: flex; gap: 18px; align-items: flex-start;
+            padding: 20px; background: white; border-radius: 16px;
+            border: 1px solid rgba(15,23,42,0.05); transition: transform 0.2s;
+        }
+        .trust-item:hover { transform: translateX(4px); }
+        .trust-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .trust-item-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+        .trust-item-desc { font-size: 0.8rem; color: var(--gris); line-height: 1.6; }
+
+        /* Form Card */
+        .form-card {
+            background: white; border-radius: 24px; padding: 40px;
+            box-shadow: 0 10px 50px rgba(15,23,42,0.07);
+            border: 1px solid rgba(15,23,42,0.04);
+        }
+        .form-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: 6px; }
+        .form-subtitle { font-size: 0.85rem; color: var(--gris); margin-bottom: 24px; }
+
+        .video-wrapper {
+            width: 100%; aspect-ratio: 16/9; background: #000;
+            border-radius: 14px; overflow: hidden; margin-bottom: 24px;
+            border: 1px solid rgba(15,23,42,0.1); position: relative;
+        }
+        .video-wrapper iframe, .video-wrapper video { width: 100%; height: 100%; border: none; }
+        .video-placeholder {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; height: 100%; color: #94A3B8;
+            font-size: 0.85rem; text-align: center; padding: 20px;
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+        label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gris); }
+        input {
+            font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+            padding: 14px; border: 1.5px solid #E2E8F0; border-radius: 12px;
+            background: var(--blanc); color: var(--noir); transition: all 0.2s; outline: none; width: 100%;
+        }
+        input:focus { border-color: var(--bleu); background: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+
+        .btn-submit {
+            width: 100%; background: var(--whatsapp); color: white;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+            padding: 16px; border-radius: 12px; border: none; cursor: pointer;
+            transition: all 0.25s; letter-spacing: 0.02em; margin-top: 8px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-submit:hover { background: var(--whatsapp-dark); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,211,102,0.3); }
+        .btn-submit svg { width: 22px; height: 22px; fill: currentColor; }
+
+        /* ===== POPUP ===== */
+        .popup-overlay {
+            display: none; position: fixed; inset: 0; z-index: 999;
+            background: rgba(15,23,42,0.6); backdrop-filter: blur(4px);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .popup-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+        .popup-box {
+            background: white; border-radius: 24px; padding: 40px 36px;
+            max-width: 440px; width: 100%; text-align: center;
+            box-shadow: 0 30px 80px rgba(15,23,42,0.2);
+            animation: slideUp 0.35s ease;
+            position: relative;
+        }
+        .popup-emoji { font-size: 3rem; margin-bottom: 16px; display: block; }
+        .popup-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--noir); margin-bottom: 12px; }
+        .popup-msg { font-size: 0.95rem; color: var(--gris); line-height: 1.7; margin-bottom: 16px; }
+        .popup-alert {
+            background: #FFF7ED; border: 1px solid #FED7AA;
+            border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+            font-size: 0.88rem; color: #92400E; line-height: 1.6;
+        }
+        .popup-alert strong { color: #78350F; display: block; margin-bottom: 4px; }
+        .popup-arabic {
+            font-size: 0.88rem; color: var(--gris); direction: rtl;
+            font-style: italic; margin-bottom: 20px; line-height: 1.6;
+        }
+        .popup-timer {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 0.8rem; color: var(--gris);
+        }
+        .popup-progress {
+            width: 100%; height: 4px; background: #E2E8F0;
+            border-radius: 100px; margin-top: 16px; overflow: hidden;
+        }
+        .popup-progress-bar {
+            height: 100%; background: var(--bleu); border-radius: 100px;
+            width: 100%; transition: width linear;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Footer */
+        footer { background: var(--noir); color: rgba(255,255,255,0.4); text-align: center; padding: 28px 5%; font-size: 0.82rem; }
+        footer strong { color: white; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; padding-top: 48px; padding-bottom: 48px; min-height: auto; gap: 40px; }
+            .form-section { grid-template-columns: 1fr; }
+            .stat-divider { display: none; }
+            .social-proof { gap: 28px; }
+        }
+        @media (max-width: 600px) {
+            .hero-cta { flex-direction: column; }
+            .btn-primary, .btn-whatsapp { width: 100%; justify-content: center; }
+            .form-card, .hero-card { padding: 24px; }
+        }
+
+        /* Animations */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-content > * { animation: fadeUp 0.6s ease both; }
+        .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+        .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+        .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+        .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+        .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+        .hero-card { animation: fadeUp 0.7s ease 0.3s both; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen" id="main-body">
+<body>
 
-    <!-- LOADING -->
-    <div id="cloud-loading-screen" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-[100]">
-        <div class="text-4xl mb-4 sync-loader">🔄</div>
-        <h2 class="text-lg font-bold tracking-wider uppercase mb-1">Immigration Flow Cloud</h2>
-        <p class="text-xs text-slate-400 animate-pulse">Connexion à Google Sheets...</p>
-    </div>
+    <!-- HEADER -->
+    <header>
+        <div class="logo"><span class="logo-dot"></span>VIZAGO</div>
+        <a href="#formulaire" class="btn-header">Réserver un appel →</a>
+    </header>
 
-    <!-- LOGIN -->
-    <div id="login-page" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-blue-600 hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 text-center fade-in">
-            <div class="text-4xl mb-2">✈️</div>
-            <h1 class="text-2xl font-bold text-blue-600 mb-1">IMMIGRATION FLOW</h1>
-            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider">Système CRM V7</p>
-            <div class="space-y-3 text-left">
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Email</label>
-                    <input id="username" type="text" placeholder="votre@email.com" class="w-full p-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🍁</span> Préparation de dossier Canada — pas un cabinet d'immigration
+            </div>
+            <h1>
+                Votre candidature Canada,<br>
+                <em>préparée comme un pro.</em>
+            </h1>
+            <p class="hero-sub">
+                On ne vous promet pas un visa. On vous prépare un dossier solide — CV canadien, lettre de motivation ciblée, liste de recruteurs actifs — pour que vous postuliez avec les meilleures chances possibles.
+            </p>
+            <div class="hero-checks">
+                <div class="check-item">
+                    <div class="check-icon">✓</div>
+                    <span>Dossier livré sous 48h, adapté à votre métier</span>
                 </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Mot de passe</label>
-                    <input id="password" type="password" placeholder="flow_101" class="w-full p-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none" onkeydown="if(event.key==='Enter') login()">
+                <div class="check-item">
+                    <div class="check-icon">✓</div>
+                    <span>Aucune promesse mensongère — que du concret</span>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon">✓</div>
+                    <span>Suivi WhatsApp avec notre équipe jusqu'à la livraison</span>
                 </div>
             </div>
-            <button onclick="login()" class="w-full bg-blue-600 text-white p-2.5 rounded-xl font-bold mt-6 hover:bg-blue-700 shadow-md transition">Se connecter</button>
-            <p id="login-error" class="text-xs text-red-500 font-semibold mt-3 hidden">Identifiants incorrects.</p>
+            <div class="hero-cta">
+                <a href="#formulaire" class="btn-primary">🚀 Commencer mon dossier</a>
+                <a href="https://wa.me/VOTRENUMERO?text=Bonjour%2C%20je%20veux%20préparer%20mon%20dossier%20Canada" class="btn-whatsapp" target="_blank">💬 WhatsApp</a>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <div class="card-title">Pack Candidature Canada</div>
+            <div class="card-sub">Tout ce dont vous avez besoin pour postuler au Canada</div>
+            <div class="offer-items">
+                <div class="offer-item">
+                    <div class="offer-icon">📄</div>
+                    <div>
+                        <div class="offer-item-title">CV Professionnel</div>
+                        <div class="offer-item-desc">Optimisé pour les recruteurs canadiens, en français ou anglais</div>
+                    </div>
+                </div>
+                <div class="offer-item">
+                    <div class="offer-icon">✉️</div>
+                    <div>
+                        <div class="offer-item-title">Lettre de Motivation</div>
+                        <div class="offer-item-desc">Personnalisée selon votre secteur et votre province visée</div>
+                    </div>
+                </div>
+                <div class="offer-item">
+                    <div class="offer-icon">📋</div>
+                    <div>
+                        <div class="offer-item-title">Liste de Recruteurs</div>
+                        <div class="offer-item-desc">Contacts ciblés au Canada selon votre métier</div>
+                    </div>
+                </div>
+            </div>
+            <div class="offer-bonus">
+                <div class="offer-icon">🎁</div>
+                <div>
+                    <div class="offer-item-title" style="color:#1D4ED8;">BONUS OFFERT</div>
+                    <div class="offer-item-desc">Guide PDF : Utiliser LinkedIn pour trouver un emploi au Canada</div>
+                </div>
+            </div>
+            <div class="price-block">
+                <div class="price-label">Prix tout compris</div>
+                <div class="price-amount">90€</div>
+                <div class="price-note">Paiement sécurisé • Livraison sous 48h</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM BANNER -->
+    <div class="team-banner">
+        <span style="font-size:2rem;">💪</span>
+        <div class="team-banner-text">
+            <p>Notre équipe travaille sans relâche pour que chaque dossier soit livré dans les délais, avec le soin qu'il mérite.</p>
+            <p>فريقنا متاح من الاثنين إلى السبت — اطرح أسئلتك، سنرد عليك.</p>
         </div>
     </div>
 
-    <!-- APP -->
-    <div id="app-page" class="hidden">
-        <nav class="bg-gradient-to-r from-blue-700 to-blue-600 text-white p-4 flex justify-between items-center shadow-lg">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white/20 p-1.5 rounded-lg text-lg">✈️</div>
-                <div class="flex flex-col">
-                    <span class="font-black tracking-wider text-sm md:text-base">IMMIGRATION FLOW</span>
-                    <div class="flex items-center space-x-2 mt-0.5">
-                        <span id="user-badge" class="text-[10px] bg-blue-900/50 text-blue-200 px-1.5 py-0.5 rounded font-mono font-bold"></span>
-                        <span id="sync-indicator" class="text-[9px] bg-green-900 text-green-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest">☁️ Synced</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3">
-                <div class="flex bg-blue-800/40 p-1 rounded-xl space-x-1">
-                    <button onclick="switchTab('dashboard')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition">Dashboard</button>
-                    <button onclick="switchTab('clients')" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition">Clients</button>
-                    <button onclick="switchTab('team')" id="btn-tab-team" class="px-3 py-1 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition hidden">Équipe & Admin</button>
-                </div>
-                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-xl text-xs md:text-sm font-bold transition shadow">Déconnexion</button>
-            </div>
-        </nav>
+    <!-- SOCIAL PROOF -->
+    <div class="social-proof">
+        <div class="stat-item"><div class="stat-num">48h</div><div class="stat-label">Délai de livraison</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Personnalisé</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-num">90€</div><div class="stat-label">Tout inclus</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="stat-num">🍁</div><div class="stat-label">Spécialiste Canada</div></div>
+    </div>
 
-        <div class="p-6 max-w-7xl mx-auto">
+    <!-- FORM SECTION -->
+    <section class="form-section" id="formulaire">
 
-            <!-- DASHBOARD -->
-            <div id="tab-dashboard" class="tab-content">
-                <h2 class="text-xl font-bold mb-6 text-gray-800">Tableau de bord</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Chiffre d'Affaires</p>
-                            <p id="stat-ca" class="text-2xl font-black text-gray-800 mt-1">0 DH</p>
-                        </div>
-                        <div class="text-3xl bg-green-50 p-3 rounded-xl">💰</div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Acompte (50%)</p>
-                            <p id="stat-pending" class="text-2xl font-black text-gray-800 mt-1">0</p>
-                        </div>
-                        <div class="text-3xl bg-amber-50 p-3 rounded-xl">⏳</div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Dossiers Finalisés</p>
-                            <p id="stat-closed" class="text-2xl font-black text-gray-800 mt-1">0</p>
-                        </div>
-                        <div class="text-3xl bg-blue-50 p-3 rounded-xl">✅</div>
-                    </div>
-                </div>
+        <div>
+            <span class="section-tag">Pourquoi Vizago ?</span>
+            <h2 class="section-title">Votre projet mérite un vrai accompagnement</h2>
+            <p class="section-desc">On ne vous vend pas un template générique. Chaque dossier est préparé manuellement, adapté à votre profil et votre secteur.</p>
 
-                <!-- Offre tarifaire -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-                    <h3 class="text-base font-bold text-gray-800 mb-4">💼 Offre de Service</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5">
-                            <div class="flex justify-between items-start mb-3">
-                                <h4 class="font-black text-blue-800 text-base">Pack Basic</h4>
-                                <span class="bg-blue-600 text-white text-sm font-black px-3 py-1 rounded-xl">900 DH</span>
-                            </div>
-                            <ul class="space-y-1.5 text-sm text-blue-900">
-                                <li class="flex items-center space-x-2"><span>📋</span><span>CV format pays cible</span></li>
-                                <li class="flex items-center space-x-2"><span>✉️</span><span>Lettre de motivation</span></li>
-                                <li class="flex items-center space-x-2"><span>🏢</span><span>20 recruteurs ciblés</span></li>
-                                <li class="flex items-center space-x-2"><span>🎁</span><span><strong>Guide LinkedIn (cadeau)</strong></span></li>
-                            </ul>
-                        </div>
-                        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
-                            <h4 class="font-black text-gray-700 text-base mb-3">Options à la carte</h4>
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex justify-between"><span>📋 CV existant ou nouveau</span><span class="font-bold text-blue-700">350 MAD</span></li>
-                                <li class="flex justify-between"><span>✉️ Lettre supplémentaire</span><span class="font-bold text-blue-700">200 MAD</span></li>
-                                <li class="flex justify-between"><span>💼 LinkedIn optimisé</span><span class="font-bold text-blue-700">450 MAD</span></li>
-                                <li class="flex justify-between"><span>🔍 10 offres ciblées</span><span class="font-bold text-blue-700">200 MAD</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-base font-bold text-gray-800 mb-4">📊 Statistiques</h3>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-xs font-semibold mb-1">
-                                    <span class="text-green-600">Revenus Encaissés</span>
-                                    <span id="bar-label-encaissed" class="font-mono">0 DH</span>
-                                </div>
-                                <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                    <div id="bar-width-encaissed" class="bg-green-500 h-full transition-all duration-500" style="width:0%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-semibold mb-1">
-                                    <span class="text-amber-600">Reste à Recouvrer</span>
-                                    <span id="bar-label-remaining" class="font-mono">0 DH</span>
-                                </div>
-                                <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                    <div id="bar-width-remaining" class="bg-amber-500 h-full transition-all duration-500" style="width:0%"></div>
-                                </div>
-                            </div>
-                            <div class="pt-2 border-t border-gray-100">
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span class="text-blue-700">Volume Total</span>
-                                    <span id="bar-label-total" class="font-mono">0 DH</span>
-                                </div>
-                                <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                    <div class="bg-blue-600 h-full w-full"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl">
-                            <div class="bg-white p-3 rounded-xl shadow-sm">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Panier Moyen</p>
-                                <p id="stat-avg-basket" class="text-lg font-black text-blue-600 mt-1 font-mono">0 DH</p>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl shadow-sm">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Non Payés</p>
-                                <p id="stat-unpaid-count" class="text-lg font-black text-red-500 mt-1">0</p>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl shadow-sm">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Taux Conversion</p>
-                                <p id="stat-conversion-rate" class="text-lg font-black text-green-600 mt-1 font-mono">0%</p>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl shadow-sm">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Dossiers</p>
-                                <p id="stat-total-clients" class="text-lg font-black text-gray-700 mt-1">0</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="disclaimer-box">
+                <span style="font-size:1.3rem; flex-shrink:0;">🚫</span>
+                <p><strong>Ce que nous ne faisons PAS</strong><br>
+                Vizago n'est pas un cabinet d'immigration agréé. Nous préparons votre dossier de candidature professionnelle. Vous postulez vous-même, avec des outils de qualité. Méfiez-vous de tout service qui vous "garantit" un visa.</p>
             </div>
 
-            <!-- CLIENTS -->
-            <div id="tab-clients" class="tab-content hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-gray-800">Gestion des Clients</h2>
-                    <button onclick="openClientModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-bold text-sm shadow transition">+ Ajouter un Client</button>
-                </div>
-                <div class="bg-white rounded-2xl shadow overflow-x-auto border border-gray-100">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                <th class="p-4">Date</th>
-                                <th class="p-4">Nom</th>
-                                <th class="p-4">Métier & Pays</th>
-                                <th class="p-4">Téléphone</th>
-                                <th class="p-4">Options</th>
-                                <th class="p-4">Statut & Montant</th>
-                                <th class="p-4">Documents PDF</th>
-                                <th class="p-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="clients-table-body" class="text-gray-700 text-sm divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- TEAM -->
-            <div id="tab-team" class="tab-content hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6 border border-gray-100">
-                        <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-                            <h3 class="text-base font-bold text-gray-800">Gestion des Collaborateurs</h3>
-                            <button onclick="openAddUserModal()" class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-2 rounded-xl font-bold shadow transition">+ Nouveau Collaborateur</button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                    <tr class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase font-bold text-xs tracking-wider">
-                                        <th class="p-3">Nom & Prénom</th>
-                                        <th class="p-3">Email & ID</th>
-                                        <th class="p-3">Téléphone</th>
-                                        <th class="p-3 text-center">Statut</th>
-                                        <th class="p-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="team-table-body" class="divide-y divide-gray-100"></tbody>
-                            </table>
-                        </div>
+            <div class="trust-items">
+                <div class="trust-item">
+                    <div class="trust-icon" style="background:#EFF6FF;">🛡️</div>
+                    <div>
+                        <div class="trust-item-title">Données 100% confidentielles</div>
+                        <div class="trust-item-desc">Vos informations servent uniquement à préparer votre dossier. Jamais partagées, jamais revendues.</div>
                     </div>
-                    <div class="bg-white rounded-2xl shadow p-6 border border-gray-100 h-max">
-                        <h3 class="text-base font-bold mb-3 text-gray-800">📢 Notification</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Destinataire</label>
-                                <select id="msg-destinataire" class="w-full p-2.5 border rounded-xl text-sm bg-gray-50 font-semibold text-gray-700 outline-none"></select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Message</label>
-                                <textarea id="msg-text" placeholder="Votre consigne ici..." class="w-full h-24 p-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                            </div>
-                            <button onclick="dispatchMessage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-xl text-sm font-bold shadow transition">Diffuser le Message</button>
-                        </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon" style="background:#EFF6FF;">⚡</div>
+                    <div>
+                        <div class="trust-item-title">Réponse rapide</div>
+                        <div class="trust-item-desc">Notre équipe analyse votre profil dès réception et vous contacte directement sur WhatsApp.</div>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon" style="background:#EFF6FF;">🎯</div>
+                    <div>
+                        <div class="trust-item-title">Dossier sur mesure</div>
+                        <div class="trust-item-desc">CV, lettre et liste de recruteurs adaptés à votre métier et à la province canadienne visée.</div>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon" style="background:#F0FDF4;">🎁</div>
+                    <div>
+                        <div class="trust-item-title">Guide LinkedIn OFFERT</div>
+                        <div class="trust-item-desc">Un PDF exclusif pour utiliser LinkedIn efficacement et décrocher des entretiens depuis le Maroc.</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- MODAL COLLABORATEUR -->
-    <div id="user-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
-            <h3 id="user-modal-title" class="text-lg font-bold mb-1 text-gray-800"></h3>
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
-                <p class="text-xs text-blue-700 font-mono font-bold" id="generated-id-view"></p>
-            </div>
-            <input type="hidden" id="u-id-hidden">
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Nom *</label>
-                        <input id="u-nom" type="text" placeholder="Benali" class="w-full p-2 border rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Prénom *</label>
-                        <input id="u-prenom" type="text" placeholder="Karim" class="w-full p-2 border rounded-xl text-sm">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Email * (login)</label>
-                    <input id="u-email" type="email" placeholder="karim@gmail.com" class="w-full p-2 border rounded-xl text-sm">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Téléphone</label>
-                    <input id="u-tel" type="text" placeholder="0661234567" class="w-full p-2 border rounded-xl text-sm">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Date d'arrivée</label>
-                    <input id="u-date-arrivee" type="date" class="w-full p-2 border rounded-xl text-sm bg-gray-50">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Notes Admin</label>
-                    <textarea id="u-observation" placeholder="Closer Senior..." class="w-full p-2 border rounded-xl text-sm h-16"></textarea>
+        <!-- FORM -->
+        <div class="form-card" id="form-container">
+            <div class="form-title">Discutons de votre projet</div>
+            <div class="form-subtitle">Regardez la vidéo puis réservez votre appel gratuit.</div>
+
+            <div class="video-wrapper">
+                <!-- REMPLACEZ CE BLOC PAR VOTRE IFRAME VIDÉO -->
+                <div class="video-placeholder">
+                    <span style="font-size:2rem; margin-bottom:8px;">🎬</span>
+                    <strong style="color:#CBD5E1;">Votre vidéo Avatar IA</strong>
+                    <span style="font-size:0.75rem; margin-top:4px; opacity:0.6;">[Insérez votre iframe ici]</span>
                 </div>
             </div>
-            <div class="flex justify-end space-x-2 mt-6">
-                <button onclick="document.getElementById('user-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-bold">Annuler</button>
-                <button onclick="saveUser()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700">Sauvegarder</button>
-            </div>
+
+            <form id="lead-form" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="nom">Nom ou Prénom</label>
+                    <input type="text" id="nom" name="nom" required placeholder="Ex: Amine">
+                </div>
+                <div class="form-group">
+                    <label for="tel">Numéro WhatsApp</label>
+                    <input type="tel" id="tel" name="tel" required placeholder="Ex: +212 661 234567">
+                </div>
+                <button type="submit" class="btn-submit">
+                    <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.966C16.228 1.975 13.763 1.05 11.201 1.05 5.762 1.05 1.34 5.421 1.336 10.85c-.001 1.744.463 3.448 1.343 4.965l-.973 3.55 3.64-.954zm10.954-7.64c-.23-.115-1.363-.674-1.57-.751-.207-.076-.358-.115-.508.114-.15.228-.579.751-.71.901-.13.15-.26.168-.49.053-.23-.115-.97-.358-1.848-1.143-.683-.61-1.144-1.365-1.278-1.6-.134-.23-.014-.354.101-.469.103-.103.23-.269.345-.404.115-.135.153-.23.23-.385.077-.154.039-.289-.02-.404-.057-.115-.508-1.229-.696-1.684-.183-.44-.368-.381-.508-.388-.13-.007-.279-.008-.428-.008-.15 0-.395.056-.602.284-.207.228-.791.773-.791 1.884 0 1.111.808 2.186.919 2.34.111.154 1.59 2.428 3.853 3.404.538.232 1.022.371 1.37.482.54.172 1.03.148 1.417.09.432-.065 1.363-.557 1.557-1.096.194-.539.194-1.002.135-1.095-.058-.094-.207-.154-.437-.27z"/></svg>
+                    Réserver mon appel gratuit
+                </button>
+            </form>
         </div>
-    </div>
 
-    <!-- MODAL CLIENT -->
-    <div id="client-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
-            <h3 class="text-lg font-bold mb-4 text-gray-800">Fiche Client</h3>
-            <input type="hidden" id="c-id">
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Nom complet *</label>
-                        <input id="c-name" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Mohamed Alaoui">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Téléphone *</label>
-                        <input id="c-phone" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="+212 6XX XXX XXX">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Métier</label>
-                        <input id="c-job" type="text" class="w-full p-2.5 border rounded-xl text-sm" placeholder="Ingénieur informatique">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Expérience (ans)</label>
-                        <input id="c-experience" type="number" class="w-full p-2.5 border rounded-xl text-sm" placeholder="5">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Formation</label>
-                        <select id="c-formation" class="w-full p-2.5 border rounded-xl text-sm bg-white">
-                            <option value="Bac">Bac</option>
-                            <option value="Bac+2">Bac+2</option>
-                            <option value="Bac+3">Bac+3 (Licence)</option>
-                            <option value="Bac+5" selected>Bac+5 (Master)</option>
-                            <option value="Doctorat">Doctorat</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Pays cible</label>
-                        <select id="c-country" class="w-full p-2.5 border rounded-xl text-sm bg-white">
-                            <option value="Canada">Canada 🇨🇦</option>
-                            <option value="Allemagne">Allemagne 🇩🇪</option>
-                            <option value="Australie">Australie 🇦🇺</option>
-                            <option value="États-Unis">États-Unis 🇺🇸</option>
-                            <option value="France">France 🇫🇷</option>
-                            <option value="Espagne">Espagne 🇪🇸</option>
-                            <option value="Portugal">Portugal 🇵🇹</option>
-                            <option value="Belgique">Belgique 🇧🇪</option>
-                        </select>
-                    </div>
-                </div>
+    </section>
 
-                <!-- OPTIONS À LA CARTE -->
-                <div class="border border-blue-100 bg-blue-50 rounded-xl p-4">
-                    <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-3">✅ Pack Basic (900 DH) + Options à la carte</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-cv-update" class="rounded text-blue-600">
-                            <span class="text-xs font-semibold text-gray-700">CV existant <span class="text-blue-600 font-bold">+350 MAD</span></span>
-                        </label>
-                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-lettre-supp" class="rounded text-blue-600">
-                            <span class="text-xs font-semibold text-gray-700">Lettre supp. <span class="text-blue-600 font-bold">+200 MAD</span></span>
-                        </label>
-                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-linkedin" class="rounded text-blue-600">
-                            <span class="text-xs font-semibold text-gray-700">LinkedIn <span class="text-blue-600 font-bold">+450 MAD</span></span>
-                        </label>
-                        <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-offres" class="rounded text-blue-600">
-                            <span class="text-xs font-semibold text-gray-700">10 offres <span class="text-blue-600 font-bold">+200 MAD</span></span>
-                        </label>
-                    </div>
-                    <div class="mt-3 pt-3 border-t border-blue-200 flex justify-between items-center">
-                        <span class="text-xs font-bold text-blue-800">Total calculé :</span>
-                        <span id="total-price" class="text-base font-black text-blue-700">900 MAD</span>
-                    </div>
-                </div>
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 <strong>Vizago</strong> — Tous droits réservés. | Préparation de dossier Canada</p>
+    </footer>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Statut paiement</label>
-                        <select id="c-payment-status" class="w-full p-2.5 border rounded-xl text-sm bg-white">
-                            <option value="Non Payé">Non Payé</option>
-                            <option value="50%">Acompte 50%</option>
-                            <option value="100%">Soldé 100%</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Montant encaissé (DH)</label>
-                        <input id="c-payment-amount" type="number" class="w-full p-2.5 border rounded-xl text-sm font-mono" placeholder="900">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400 font-bold block mb-1 uppercase">Observations</label>
-                    <textarea id="c-observation" class="w-full p-2.5 border rounded-xl text-sm h-16" placeholder="Notes de suivi..."></textarea>
-                </div>
-                <div id="assign-container">
-                    <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">Assigner à un Collaborateur</label>
-                    <select id="c-assign" class="w-full p-2.5 border rounded-xl text-sm bg-white text-gray-700"></select>
-                </div>
+    <!-- POPUP -->
+    <div class="popup-overlay" id="popup">
+        <div class="popup-box">
+            <span class="popup-emoji">🎉</span>
+            <div class="popup-title">Demande reçue !</div>
+            <p class="popup-msg">Notre équipe va analyser votre profil et vous contacter sur WhatsApp <strong>dans les plus brefs délais</strong> — parfois dans l'heure !</p>
+            <div class="popup-alert">
+                <strong>⚠️ Restez vigilant !</strong>
+                Gardez votre téléphone à portée et vérifiez vos messages WhatsApp. Ne manquez pas notre appel !
             </div>
-            <div class="flex justify-end space-x-2 mt-6">
-                <button onclick="closeClientModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-bold">Annuler</button>
-                <button onclick="saveClient()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700">Sauvegarder</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL PDF -->
-    <div id="pdf-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-lg mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-800">📄 Génération Documents</h3>
-                <button onclick="document.getElementById('pdf-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 text-xl font-bold">✕</button>
-            </div>
-            <div id="pdf-client-info" class="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-5 text-sm"></div>
-            <div class="grid grid-cols-2 gap-3 mb-3">
-                <button onclick="generatePDF('cv')" id="btn-cv" class="flex flex-col items-center bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
-                    <span class="text-3xl mb-2">📋</span>
-                    <span class="text-sm">CV</span>
-                    <span class="text-[10px] opacity-75 mt-1">Professionnel</span>
-                </button>
-                <button onclick="generatePDF('lettre')" id="btn-lettre" class="flex flex-col items-center bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
-                    <span class="text-3xl mb-2">✉️</span>
-                    <span class="text-sm">Lettre</span>
-                    <span class="text-[10px] opacity-75 mt-1">Motivation</span>
-                </button>
-            </div>
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <button onclick="generatePDF('recruteurs')" id="btn-recruteurs" class="flex flex-col items-center bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
-                    <span class="text-3xl mb-2">🏢</span>
-                    <span class="text-sm">Recruteurs</span>
-                    <span class="text-[10px] opacity-75 mt-1">20 par pays</span>
-                </button>
-                <button onclick="generatePDF('linkedin')" id="btn-linkedin" class="flex flex-col items-center bg-sky-500 hover:bg-sky-600 text-white p-4 rounded-xl font-bold text-xs transition shadow">
-                    <span class="text-3xl mb-2">🎁</span>
-                    <span class="text-sm">LinkedIn</span>
-                    <span class="text-[10px] opacity-75 mt-1">Guide cadeau</span>
-                </button>
-            </div>
-            <div id="pdf-status" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
-                <span class="pdf-loading text-amber-600 text-lg">⏳</span>
-                <span id="pdf-status-text" class="text-sm text-amber-800 font-semibold ml-2"></span>
-            </div>
+            <p class="popup-arabic">فريقنا سيتصل بك في أقرب وقت ممكن — كن جاهزاً على هاتفك !</p>
+            <div class="popup-timer">⏱ Fermeture automatique dans <span id="countdown">6</span>s</div>
+            <div class="popup-progress"><div class="popup-progress-bar" id="progress-bar"></div></div>
         </div>
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTiZyRoyQmZ3OM0z0G1IsQRu8YupkIaTFrr-jT5c0JAN5WzeUU6LZ9IC89GlANp_zr/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTiZyRoyQmZ3OM0z0G1IsQRu8YupkIaTFrr-jT5c0JAN5WzeUU6LZ9IC89GlANp_zr/exec";
 
-        let currentUser = null;
-        let clients = [];
-        let users = [];
-        let activePdfClient = null;
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.btn-submit');
+            btn.innerHTML = `<svg style="animation:spin 1s linear infinite;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Transmission...`;
+            btn.disabled = true;
 
-        const PACK_BASE = 900;
-        const OPTIONS = {
-            'opt-cv-update': 350,
-            'opt-lettre-supp': 200,
-            'opt-linkedin': 450,
-            'opt-offres': 200
-        };
+            const payload = {
+                action: "addClient",
+                name: document.getElementById('nom').value.trim(),
+                phone: document.getElementById('tel').value.trim(),
+                job: "En attente d'appel",
+                country: "Canada 🇨🇦",
+                status: "Non Payé",
+                amount: "0",
+                observation: "Nouveau lead Landing Page Vizago."
+            };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            setupPriceCalculator();
-            cloudSync('loadAll');
-        });
-
-        function setupPriceCalculator() {
-            Object.keys(OPTIONS).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('change', updateTotalPrice);
-            });
-        }
-
-        function updateTotalPrice() {
-            let total = PACK_BASE;
-            Object.entries(OPTIONS).forEach(([id, price]) => {
-                if (document.getElementById(id)?.checked) total += price;
-            });
-            document.getElementById('total-price').innerText = total + ' MAD';
-        }
-
-        // ====== CLOUD SYNC ======
-        async function cloudSync(actionType) {
-            const ind = document.getElementById('sync-indicator');
-            if (ind) { ind.innerText = "🔄 Sync..."; ind.className = "text-[9px] bg-amber-600 text-amber-100 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
             try {
-                if (actionType === 'loadAll') {
-                    const ctrl = new AbortController();
-                    const t = setTimeout(() => ctrl.abort(), 10000);
-                    let response;
-                    try {
-                        response = await fetch(GOOGLE_SCRIPT_URL + "?action=loadAll", { signal: ctrl.signal });
-                        clearTimeout(t);
-                    } catch (e) {
-                        clearTimeout(t);
-                        clients = []; users = [];
-                        showLogin();
-                        if (ind) { ind.innerText = "⚠️ Hors-ligne"; ind.className = "text-[9px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
-                        return;
-                    }
-                    const result = await response.json();
-                    if (result.status === "success") {
-                        let parsed = { clients: [], users: [] };
-                        try { if (result.data && result.data.trim()) parsed = JSON.parse(result.data); } catch(e) {}
-                        clients = parsed.clients || [];
-                        users = parsed.users || [];
-                        showLogin();
-                        if (ind) { ind.innerText = "☁️ Synced"; ind.className = "text-[9px] bg-green-900 text-green-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
-                    } else throw new Error("Apps Script error");
-                } else if (actionType === 'saveAll') {
-                    await fetch(GOOGLE_SCRIPT_URL, {
-                        method: "POST", mode: "no-cors",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ action: "saveAll", data: JSON.stringify({ clients, users }) })
-                    });
-                    if (ind) { ind.innerText = "☁️ Synced"; ind.className = "text-[9px] bg-green-900 text-green-300 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) { console.log('Lead envoyé'); }
+
+            document.getElementById('lead-form').style.display = 'none';
+            showPopup();
+        }
+
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            const bar = document.getElementById('progress-bar');
+            const countEl = document.getElementById('countdown');
+            const duration = 6000;
+
+            popup.classList.add('active');
+            bar.style.transition = `width ${duration}ms linear`;
+            setTimeout(() => bar.style.width = '0%', 50);
+
+            let count = 6;
+            const interval = setInterval(() => {
+                count--;
+                countEl.textContent = count;
+                if (count <= 0) {
+                    clearInterval(interval);
+                    popup.classList.remove('active');
                 }
-            } catch (err) {
-                console.error(err);
-                showLogin();
-                if (ind) { ind.innerText = "❌ Erreur"; ind.className = "text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-widest"; }
-            }
+            }, 1000);
         }
 
-        function showLogin() {
-            document.getElementById('cloud-loading-screen').classList.add('hidden');
-            document.getElementById('login-page').classList.remove('hidden');
-        }
-
-        // ====== AUTH ======
-        function login() {
-            const emailIn = document.getElementById('username').value.trim().toLowerCase();
-            const passIn = document.getElementById('password').value.trim();
-            const err = document.getElementById('login-error');
-            err.classList.add('hidden');
-            if (!emailIn || !passIn) return;
-            if (emailIn === "admin" && passIn === "admin") {
-                currentUser = { id: "admin", nom: "Directeur", prenom: "ImmigFlow", role: "admin", email: "admin" };
-                buildApp(); return;
-            }
-            const found = users.find(u => u.email && u.email.toLowerCase() === emailIn && u.id === passIn);
-            if (found) {
-                if (found.status === "Bloqué") { err.innerText = "Compte suspendu."; err.classList.remove('hidden'); return; }
-                currentUser = found; buildApp();
-            } else { err.classList.remove('hidden'); }
-        }
-
-        function buildApp() {
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('app-page').classList.remove('hidden');
-            const isAdmin = currentUser.role === 'admin';
-            document.getElementById('btn-tab-team').classList.toggle('hidden', !isAdmin);
-            document.getElementById('user-badge').innerText = `👤 ${currentUser.prenom.toUpperCase()} [${currentUser.role.toUpperCase()}]`;
-            switchTab('dashboard');
-            initRender();
-        }
-
-        function logout() {
-            currentUser = null;
-            document.getElementById('app-page').classList.add('hidden');
-            document.getElementById('login-page').classList.remove('hidden');
-            document.getElementById('username').value = "";
-            document.getElementById('password').value = "";
-            document.getElementById('login-error').classList.add('hidden');
-        }
-
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${id}`).classList.remove('hidden');
-        }
-
-        // ====== RENDER ======
-        function initRender() {
-            renderDashboard();
-            renderClients();
-            if (currentUser.role === 'admin') { renderTeam(); populateDest(); }
-        }
-
-        function renderDashboard() {
-            const isAdmin = currentUser.role === 'admin';
-            const vis = isAdmin ? clients : clients.filter(c => c.assignedTo === currentUser.id);
-            let ca = 0, acc = 0, sol = 0, unpaid = 0, total = 0;
-            vis.forEach(c => {
-                const amt = parseFloat(c.amount) || 0;
-                const tot = parseFloat(c.totalPrice) || 0;
-                if (c.status === "100%") { ca += amt; sol++; }
-                else if (c.status === "50%") { ca += amt; acc++; }
-                else { unpaid++; }
-                total += tot || amt;
-            });
-            const rem = Math.max(0, total - ca);
-            const avg = vis.length ? Math.round(total / vis.length) : 0;
-            const conv = vis.length ? Math.round((sol / vis.length) * 100) : 0;
-            const max = total || 1;
-            document.getElementById('stat-ca').innerText = ca + " DH";
-            document.getElementById('stat-pending').innerText = acc;
-            document.getElementById('stat-closed').innerText = sol;
-            document.getElementById('stat-total-clients').innerText = vis.length;
-            document.getElementById('stat-avg-basket').innerText = avg + " DH";
-            document.getElementById('stat-unpaid-count').innerText = unpaid;
-            document.getElementById('stat-conversion-rate').innerText = conv + "%";
-            document.getElementById('bar-label-encaissed').innerText = ca + " DH";
-            document.getElementById('bar-label-remaining').innerText = rem + " DH";
-            document.getElementById('bar-label-total').innerText = total + " DH";
-            document.getElementById('bar-width-encaissed').style.width = Math.round((ca/max)*100) + "%";
-            document.getElementById('bar-width-remaining').style.width = Math.round((rem/max)*100) + "%";
-        }
-
-        function getOptionsLabel(c) {
-            const opts = [];
-            if (c.optCvUpdate) opts.push('CV+350');
-            if (c.optLettreSupp) opts.push('Lettre+200');
-            if (c.optLinkedin) opts.push('LinkedIn+450');
-            if (c.optOffres) opts.push('10offres+200');
-            return opts.length ? opts.join(', ') : 'Basic';
-        }
-
-        function renderClients() {
-            const body = document.getElementById('clients-table-body');
-            body.innerHTML = "";
-            const isAdmin = currentUser.role === 'admin';
-            const vis = isAdmin ? clients : clients.filter(c => c.assignedTo === currentUser.id);
-            if (!vis.length) {
-                body.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-gray-400 text-sm">Aucun client pour le moment.</td></tr>`;
-                return;
-            }
-            vis.forEach(c => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b hover:bg-gray-50 transition";
-                const sc = c.status === '100%' ? 'bg-green-100 text-green-700' : c.status === '50%' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
-                const amt = parseFloat(c.amount) || 0;
-                const totalP = parseFloat(c.totalPrice) || PACK_BASE;
-                const actionBtn = isAdmin
-                    ? `<button onclick="editClient('${c.id}')" class="text-blue-600 hover:underline font-bold text-xs">Modifier</button>`
-                    : `<span class="text-gray-300 text-xs italic">🔒 Verrouillé</span>`;
-                tr.innerHTML = `
-                    <td class="p-4 text-xs text-gray-500 whitespace-nowrap">${c.date||'-'}</td>
-                    <td class="p-4 font-bold text-gray-800">${c.name}<br><span class="text-xs font-normal text-blue-500">${c.assignedName||'Non assigné'}</span></td>
-                    <td class="p-4 text-sm">${c.job||'-'}<br><span class="text-xs text-gray-400">${c.country||''}</span></td>
-                    <td class="p-4 font-mono text-xs">${c.phone}</td>
-                    <td class="p-4 text-xs text-gray-500">${getOptionsLabel(c)}<br><span class="font-bold text-blue-700">${totalP} MAD</span></td>
-                    <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold ${sc}">${c.status||'Non Payé'} (${amt} DH)</span></td>
-                    <td class="p-4"><button onclick="openPdfModal('${c.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">📄 Générer</button></td>
-                    <td class="p-4">${actionBtn}</td>
-                `;
-                body.appendChild(tr);
-            });
-        }
-
-        function renderTeam() {
-            const body = document.getElementById('team-table-body');
-            body.innerHTML = "";
-            if (!users.length) { body.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 text-sm">Aucun collaborateur.</td></tr>`; return; }
-            users.forEach(u => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b hover:bg-gray-50 text-xs";
-                tr.innerHTML = `
-                    <td class="p-3"><strong class="text-gray-800">${u.nom} ${u.prenom}</strong><br><span class="text-gray-400">Depuis: ${u.dateArrivee||'-'}</span></td>
-                    <td class="p-3"><span class="text-blue-600 font-semibold block">${u.email||'-'}</span><span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 text-[11px]">🔑 ${u.id}</span></td>
-                    <td class="p-3 text-gray-600">${u.tel||'-'}</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${u.status==='Actif'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${u.status}</span></td>
-                    <td class="p-3 text-right space-x-2">
-                        <button onclick="editUser('${u.id}')" class="text-blue-600 hover:underline font-bold">Modifier</button>
-                        <button onclick="toggleStatus('${u.id}')" class="text-amber-600 hover:underline font-bold">Statut</button>
-                    </td>`;
-                body.appendChild(tr);
-            });
-        }
-
-        // ====== CLIENT MODAL ======
-        function openClientModal() {
-            ['c-id','c-name','c-phone','c-job','c-experience','c-payment-amount','c-observation'].forEach(id => document.getElementById(id).value = "");
-            document.getElementById('c-payment-status').value = "Non Payé";
-            document.getElementById('c-formation').value = "Bac+5";
-            document.getElementById('c-country').value = "Canada";
-            Object.keys(OPTIONS).forEach(id => document.getElementById(id).checked = false);
-            updateTotalPrice();
-            const sel = document.getElementById('c-assign');
-            sel.innerHTML = '<option value="">Non assigné</option>';
-            users.filter(u => u.status === 'Actif').forEach(u => sel.innerHTML += `<option value="${u.id}">${u.nom} ${u.prenom}</option>`);
-            if (currentUser.role !== 'admin') {
-                sel.value = currentUser.id;
-                document.getElementById('assign-container').classList.add('hidden');
-            } else { document.getElementById('assign-container').classList.remove('hidden'); }
-            document.getElementById('client-modal').classList.remove('hidden');
-        }
-
-        function closeClientModal() { document.getElementById('client-modal').classList.add('hidden'); }
-
-        function saveClient() {
-            const id = document.getElementById('c-id').value;
-            const name = document.getElementById('c-name').value.trim();
-            const phone = document.getElementById('c-phone').value.trim();
-            if (!name || !phone) { alert("Nom et téléphone obligatoires."); return; }
-
-            const job = document.getElementById('c-job').value.trim();
-            const experience = document.getElementById('c-experience').value.trim();
-            const formation = document.getElementById('c-formation').value;
-            const country = document.getElementById('c-country').value;
-            const status = document.getElementById('c-payment-status').value;
-            const amount = document.getElementById('c-payment-amount').value || "0";
-            const observation = document.getElementById('c-observation').value.trim();
-            const assignId = document.getElementById('c-assign').value || (currentUser.role !== 'admin' ? currentUser.id : "");
-
-            const optCvUpdate = document.getElementById('opt-cv-update').checked;
-            const optLettreSupp = document.getElementById('opt-lettre-supp').checked;
-            const optLinkedin = document.getElementById('opt-linkedin').checked;
-            const optOffres = document.getElementById('opt-offres').checked;
-
-            let totalPrice = PACK_BASE;
-            if (optCvUpdate) totalPrice += 350;
-            if (optLettreSupp) totalPrice += 200;
-            if (optLinkedin) totalPrice += 450;
-            if (optOffres) totalPrice += 200;
-
-            let assignedName = "";
-            if (assignId) {
-                if (assignId === currentUser.id) assignedName = `${currentUser.nom} ${currentUser.prenom}`;
-                else { const tu = users.find(u => u.id === assignId); if (tu) assignedName = `${tu.nom} ${tu.prenom}`; }
-            }
-
-            const clientData = { name, phone, job, experience, formation, country, status, amount, observation, assignedTo: assignId, assignedName, optCvUpdate, optLettreSupp, optLinkedin, optOffres, totalPrice };
-
-            if (!id) {
-                clients.push({ id: "cl_" + Date.now(), date: new Date().toLocaleDateString('fr-FR'), ...clientData });
-            } else {
-                if (currentUser.role !== 'admin') return;
-                const t = clients.find(c => c.id === id);
-                if (t) Object.assign(t, clientData);
-            }
-            closeClientModal(); initRender(); cloudSync('saveAll');
-        }
-
-        function editClient(id) {
-            if (currentUser.role !== 'admin') return;
-            const c = clients.find(cl => cl.id === id);
-            if (!c) return;
-            openClientModal();
-            document.getElementById('c-id').value = c.id;
-            document.getElementById('c-name').value = c.name;
-            document.getElementById('c-phone').value = c.phone;
-            document.getElementById('c-job').value = c.job||"";
-            document.getElementById('c-experience').value = c.experience||"";
-            document.getElementById('c-formation').value = c.formation||"Bac+5";
-            document.getElementById('c-country').value = c.country||"Canada";
-            document.getElementById('c-payment-status').value = c.status||"Non Payé";
-            document.getElementById('c-payment-amount').value = c.amount||"";
-            document.getElementById('c-observation').value = c.observation||"";
-            document.getElementById('c-assign').value = c.assignedTo||"";
-            document.getElementById('opt-cv-update').checked = !!c.optCvUpdate;
-            document.getElementById('opt-lettre-supp').checked = !!c.optLettreSupp;
-            document.getElementById('opt-linkedin').checked = !!c.optLinkedin;
-            document.getElementById('opt-offres').checked = !!c.optOffres;
-            updateTotalPrice();
-        }
-
-        // ====== USER MODAL ======
-        function openAddUserModal() {
-            document.getElementById('user-modal-title').innerText = "Ajouter un collaborateur";
-            document.getElementById('generated-id-view').innerText = "L'ID (mot de passe) sera généré automatiquement";
-            document.getElementById('u-id-hidden').value = "";
-            ['u-nom','u-prenom','u-email','u-tel','u-observation'].forEach(id => document.getElementById(id).value = "");
-            document.getElementById('u-date-arrivee').value = new Date().toISOString().split('T')[0];
-            document.getElementById('user-modal').classList.remove('hidden');
-        }
-
-        function editUser(id) {
-            const u = users.find(x => x.id === id);
-            if (!u) return;
-            document.getElementById('user-modal-title').innerText = "Modifier le collaborateur";
-            document.getElementById('generated-id-view').innerText = `📧 ${u.email} | 🔑 Mot de passe: ${u.id}`;
-            document.getElementById('u-id-hidden').value = u.id;
-            document.getElementById('u-nom').value = u.nom;
-            document.getElementById('u-prenom').value = u.prenom;
-            document.getElementById('u-email').value = u.email||"";
-            document.getElementById('u-tel').value = u.tel||"";
-            document.getElementById('u-observation').value = u.observation||"";
-            document.getElementById('u-date-arrivee').value = u.dateArrivee||"";
-            document.getElementById('user-modal').classList.remove('hidden');
-        }
-
-        function saveUser() {
-            const id = document.getElementById('u-id-hidden').value;
-            const nom = document.getElementById('u-nom').value.trim();
-            const prenom = document.getElementById('u-prenom').value.trim();
-            const email = document.getElementById('u-email').value.trim().toLowerCase();
-            const tel = document.getElementById('u-tel').value.trim();
-            const obs = document.getElementById('u-observation').value.trim();
-            const dateArr = document.getElementById('u-date-arrivee').value;
-            if (!nom || !prenom || !email) { alert("Nom, prénom et email obligatoires."); return; }
-            if (!id) {
-                const newId = "flow_" + Math.floor(100 + Math.random() * 900);
-                users.push({ id: newId, nom, prenom, email, tel, observation: obs, dateArrivee: dateArr, role: "closer", status: "Actif" });
-                alert(`✅ Collaborateur créé !\n\n📧 Email (login) : ${email}\n🔑 Mot de passe : ${newId}\n\nCommuniquez ces infos au collaborateur.`);
-            } else {
-                const t = users.find(u => u.id === id);
-                if (t) Object.assign(t, { nom, prenom, email, tel, observation: obs, dateArrivee: dateArr });
-            }
-            document.getElementById('user-modal').classList.add('hidden');
-            initRender(); cloudSync('saveAll');
-        }
-
-        function toggleStatus(id) {
-            const u = users.find(x => x.id === id);
-            if (u) { u.status = u.status === "Actif" ? "Bloqué" : "Actif"; renderTeam(); cloudSync('saveAll'); }
-        }
-
-        function populateDest() {
-            const sel = document.getElementById('msg-destinataire');
-            if (!sel) return;
-            sel.innerHTML = '<option value="all">Tout le monde</option>';
-            users.forEach(u => sel.innerHTML += `<option value="${u.id}">${u.nom} ${u.prenom}</option>`);
-        }
-
-        function dispatchMessage() {
-            if (!document.getElementById('msg-text').value.trim()) return;
-            alert("✅ Notification diffusée !"); document.getElementById('msg-text').value = "";
-        }
-
-        // ====== PDF GENERATION (100% LOCAL - pas d'API) ======
-        function openPdfModal(clientId) {
-            const c = clients.find(cl => cl.id === clientId);
-            if (!c) return;
-            activePdfClient = c;
-            const totalP = c.totalPrice || PACK_BASE;
-            document.getElementById('pdf-client-info').innerHTML = `
-                <strong class="text-blue-800 text-base">👤 ${c.name}</strong><br>
-                <span class="text-gray-600">${c.job||'Métier non précisé'} — ${c.country||'Canada'}</span><br>
-                <span class="text-gray-400 text-xs">${c.formation||'Bac+5'} ${c.experience ? '• ' + c.experience + " ans d'expérience" : ''} • Pack: ${totalP} MAD</span>
-            `;
-            document.getElementById('pdf-status').classList.add('hidden');
-            ['btn-cv','btn-lettre','btn-recruteurs','btn-linkedin'].forEach(id => {
-                document.getElementById(id).disabled = false;
-                document.getElementById(id).classList.remove('opacity-50','cursor-not-allowed');
-            });
-            document.getElementById('pdf-modal').classList.remove('hidden');
-        }
-
-        async function generatePDF(type) {
-            if (!activePdfClient) return;
-            const c = activePdfClient;
-            const statusEl = document.getElementById('pdf-status');
-            const statusText = document.getElementById('pdf-status-text');
-            statusEl.classList.remove('hidden');
-            const btn = document.getElementById('btn-' + type);
-            btn.disabled = true; btn.classList.add('opacity-50','cursor-not-allowed');
-
-            const labels = { cv: 'Génération du CV...', lettre: 'Rédaction de la lettre...', recruteurs: 'Compilation des recruteurs...', linkedin: 'Préparation du guide LinkedIn...' };
-            statusText.innerText = labels[type] || 'Génération...';
-
-            let html = "";
-            if (type === 'cv') html = buildCV(c);
-            else if (type === 'lettre') html = buildLettre(c);
-            else if (type === 'recruteurs') html = buildRecruteurs(c);
-            else if (type === 'linkedin') html = buildLinkedin(c);
-
-            if (html) {
-                statusText.innerText = "Téléchargement en cours...";
-                await downloadPDF(html, `${type}_${c.name.replace(/\s+/g,'_')}_ImmigFlow.pdf`);
-                statusEl.classList.add('hidden');
-            }
-            btn.disabled = false; btn.classList.remove('opacity-50','cursor-not-allowed');
-        }
-
-        function buildCV(c) {
-            const pays = c.country || 'Canada';
-            const date = new Date().toLocaleDateString('fr-FR');
-            const competences = getCompetencesByJob(c.job);
-            const langues = getLanguesByCountry(pays);
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-                *{margin:0;padding:0;box-sizing:border-box;}
-                body{font-family:'Arial',sans-serif;color:#1f2937;background:#fff;}
-                .header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;padding:35px 40px;}
-                .header h1{font-size:26px;font-weight:900;letter-spacing:-0.5px;}
-                .header p{font-size:13px;opacity:0.85;margin-top:4px;}
-                .header .contact{margin-top:12px;font-size:12px;opacity:0.9;display:flex;gap:20px;}
-                .body{padding:30px 40px;}
-                .section{margin-bottom:22px;}
-                .section-title{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#1e3a8a;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin-bottom:12px;}
-                .profil{background:#eff6ff;border-left:4px solid #3b82f6;padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.7;color:#1e40af;}
-                .exp-item{margin-bottom:14px;}
-                .exp-titre{font-weight:700;font-size:13px;color:#111827;}
-                .exp-detail{font-size:12px;color:#6b7280;margin-top:2px;}
-                .exp-desc{font-size:12px;color:#374151;margin-top:6px;line-height:1.6;}
-                .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-                .tag{background:#dbeafe;color:#1e40af;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
-                .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:30px;padding-top:15px;border-top:1px solid #e5e7eb;}
-                .deux-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-                .langue-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:12px;}
-                .niveau{background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
-            </style></head><body>
-            <div class="header">
-                <h1>${c.name}</h1>
-                <p>${c.job || 'Professionnel qualifié'} • Candidature pour ${pays}</p>
-                <div class="contact">
-                    <span>📱 ${c.phone}</span>
-                    <span>📍 Maroc</span>
-                    <span>🎯 Objectif : ${pays}</span>
-                </div>
-            </div>
-            <div class="body">
-                <div class="section">
-                    <div class="section-title">Profil professionnel</div>
-                    <div class="profil">
-                        Professionnel motivé avec ${c.experience || 'plusieurs'} années d'expérience en tant que ${c.job || 'professionnel qualifié'}, 
-                        titulaire d'un diplôme de niveau ${c.formation || 'Bac+5'}. 
-                        Je recherche une opportunité professionnelle au ${pays} pour contribuer activement à votre organisation 
-                        tout en m'intégrant dans un environnement de travail international et dynamique.
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="section-title">Expériences professionnelles</div>
-                    <div class="exp-item">
-                        <div class="exp-titre">${c.job || 'Professionnel qualifié'}</div>
-                        <div class="exp-detail">Maroc • ${c.experience || '5'} ans d'expérience</div>
-                        <div class="exp-desc">
-                            • Gestion et coordination des activités liées au poste<br>
-                            • Collaboration avec les équipes pluridisciplinaires<br>
-                            • Amélioration continue des processus et des performances<br>
-                            • Respect des délais et des normes de qualité
-                        </div>
-                    </div>
-                </div>
-                <div class="deux-col">
-                    <div>
-                        <div class="section">
-                            <div class="section-title">Formation</div>
-                            <div class="exp-item">
-                                <div class="exp-titre">${c.formation || 'Bac+5'}</div>
-                                <div class="exp-detail">Domaine : ${c.job || 'Spécialité professionnelle'}</div>
-                            </div>
-                        </div>
-                        <div class="section">
-                            <div class="section-title">Compétences</div>
-                            <div class="tags">
-                                ${competences.map(s => `<span class="tag">${s}</span>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="section">
-                            <div class="section-title">Langues</div>
-                            ${langues.map(l => `<div class="langue-item"><span>${l.langue}</span><span class="niveau">${l.niveau}</span></div>`).join('')}
-                        </div>
-                        <div class="section">
-                            <div class="section-title">Objectif immigration</div>
-                            <div class="exp-desc" style="font-size:12px;line-height:1.7;color:#374151;">
-                                Obtenir un contrat de travail qualifié au ${pays} afin d'immigrer légalement et de m'intégrer durablement dans le marché du travail local.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">CV généré par Immigration Flow CRM • ${date} • Document confidentiel</div>
-            </body></html>`;
-        }
-
-        function buildLettre(c) {
-            const pays = c.country || 'Canada';
-            const date = new Date().toLocaleDateString('fr-FR');
-            const intro = getIntroByCountry(pays);
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-                body{font-family:'Georgia',serif;color:#1f2937;max-width:780px;margin:0 auto;padding:50px 60px;line-height:1.8;font-size:13px;}
-                .entete{display:flex;justify-content:space-between;margin-bottom:40px;}
-                .expediteur{font-size:12px;color:#374151;}
-                .expediteur strong{font-size:15px;color:#1e3a8a;font-family:Arial;}
-                .date{text-align:right;font-size:12px;color:#6b7280;}
-                .objet{font-weight:700;margin-bottom:30px;color:#1e3a8a;font-size:13px;}
-                .corps p{margin-bottom:16px;text-align:justify;}
-                .signature{margin-top:40px;}
-                .signature strong{font-size:15px;color:#1e3a8a;}
-                .footer{margin-top:50px;font-size:10px;color:#9ca3af;border-top:1px solid #e5e7eb;padding-top:10px;text-align:center;}
-                h1{font-family:Arial;color:#1e3a8a;font-size:18px;margin-bottom:5px;}
-            </style></head><body>
-            <div class="entete">
-                <div class="expediteur">
-                    <strong>${c.name}</strong><br>
-                    ${c.job || 'Professionnel qualifié'}<br>
-                    Maroc • ${c.phone}
-                </div>
-                <div class="date">
-                    Le ${date}
-                </div>
-            </div>
-            <div class="objet">Objet : Candidature au poste de ${c.job || 'professionnel qualifié'} — ${pays}</div>
-            <div class="corps">
-                <p>Madame, Monsieur,</p>
-                <p>${intro}</p>
-                <p>Fort(e) de <strong>${c.experience || 'plusieurs'} années d'expérience</strong> en tant que <strong>${c.job || 'professionnel qualifié'}</strong> 
-                et titulaire d'un diplôme de niveau <strong>${c.formation || 'Bac+5'}</strong>, j'ai développé des compétences solides 
-                et une expertise reconnue dans mon domaine. Mon parcours professionnel m'a permis de maîtriser 
-                les aspects techniques et humains du métier, tout en cultivant une capacité d'adaptation 
-                face aux défis du monde professionnel moderne.</p>
-                <p>Le ${pays} représente pour moi bien plus qu'une destination — c'est un choix de vie réfléchi et un projet professionnel 
-                structuré. J'ai étudié le marché du travail local, les standards professionnels et les attentes 
-                des employeurs dans votre pays. Je suis convaincu(e) que mon profil correspond aux besoins 
-                de votre marché et que je pourrai apporter une réelle valeur ajoutée à votre organisation.</p>
-                <p>Sérieux(se), organisé(e) et déterminé(e), je m'engage à m'intégrer rapidement et efficacement 
-                dans mon nouvel environnement professionnel et culturel. Je suis disponible pour tout entretien 
-                à votre convenance, en présentiel ou en visioconférence.</p>
-                <p>Dans l'attente de votre retour, je vous adresse mes cordiales salutations.</p>
-            </div>
-            <div class="signature">
-                <strong>${c.name}</strong><br>
-                <span style="font-size:12px;color:#6b7280;">${c.job || 'Professionnel qualifié'} • ${c.phone}</span>
-            </div>
-            <div class="footer">Lettre générée par Immigration Flow CRM • ${date} • Document confidentiel</div>
-            </body></html>`;
-        }
-
-        function buildRecruteurs(c) {
-            const pays = c.country || 'Canada';
-            const date = new Date().toLocaleDateString('fr-FR');
-            const list = getRecruteurs(pays);
-            const rows = list.map((r, i) => `
-                <tr style="background:${i%2===0?'#fff':'#f8fafc'};">
-                    <td style="padding:10px 14px;font-weight:700;color:#1e40af;font-size:12px;">${r.nom}</td>
-                    <td style="padding:10px 14px;color:#374151;font-size:12px;">${r.secteur}</td>
-                    <td style="padding:10px 14px;font-size:11px;"><a href="https://${r.site}" style="color:#2563eb;">${r.site}</a></td>
-                    <td style="padding:10px 14px;color:#059669;font-size:11px;">💡 ${r.conseil}</td>
-                </tr>`).join('');
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-                body{font-family:Arial,sans-serif;margin:0;padding:30px;background:#fff;}
-                table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;}
-                th{background:#1e40af;color:white;padding:12px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;}
-                tr{border-bottom:1px solid #e5e7eb;}
-                .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:20px;}
-            </style></head><body>
-            <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;padding:28px 30px;border-radius:14px;margin-bottom:25px;">
-                <h1 style="margin:0 0 6px;font-size:20px;">🏢 Liste des 20 Recruteurs — ${pays}</h1>
-                <p style="margin:0;opacity:0.9;font-size:13px;">Candidat : <strong>${c.name}</strong> | Métier visé : ${c.job||'Non précisé'}</p>
-                <p style="margin:5px 0 0;opacity:0.7;font-size:11px;">Pack Basic Immigration Flow • ${date}</p>
-            </div>
-            <table>
-                <thead><tr><th>Entreprise / Plateforme</th><th>Secteur</th><th>Site Web</th><th>Conseil</th></tr></thead>
-                <tbody>${rows}</tbody>
-            </table>
-            <div class="footer">Immigration Flow CRM • Document confidentiel client • ${date}</div>
-            </body></html>`;
-        }
-
-        function buildLinkedin(c) {
-            const pays = c.country || 'Canada';
-            const date = new Date().toLocaleDateString('fr-FR');
-            const conseils = getLinkedinConseilsByCountry(pays);
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-                body{font-family:Arial,sans-serif;color:#1f2937;margin:0;padding:0;background:#fff;}
-                .header{background:linear-gradient(135deg,#0077b5,#00a0dc);color:white;padding:30px 40px;}
-                .header h1{font-size:22px;font-weight:900;margin:0 0 4px;}
-                .header p{font-size:13px;opacity:0.9;margin:0;}
-                .cadeau{background:#fef9c3;border:2px dashed #f59e0b;padding:12px 20px;margin:20px 40px;border-radius:10px;font-size:13px;color:#92400e;font-weight:600;text-align:center;}
-                .body{padding:20px 40px;}
-                .section{margin-bottom:25px;}
-                .section-title{font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#0077b5;border-bottom:2px solid #0077b5;padding-bottom:6px;margin-bottom:14px;}
-                .tip{background:#f0f9ff;border-left:4px solid #0077b5;padding:10px 14px;margin-bottom:10px;border-radius:0 8px 8px 0;font-size:12px;line-height:1.6;}
-                .tip strong{color:#0077b5;}
-                .exemple{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:12px;color:#374151;font-style:italic;margin-top:8px;}
-                .pays-conseil{background:#dcfce7;border-left:4px solid #16a34a;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;}
-                .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:30px;padding:15px 40px;border-top:1px solid #e5e7eb;}
-                .badge{display:inline-block;background:#dbeafe;color:#1e40af;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px;}
-            </style></head><body>
-            <div class="header">
-                <h1>💼 Guide LinkedIn Personnalisé</h1>
-                <p>Optimisation pour ${pays} • Préparé pour : ${c.name}</p>
-            </div>
-            <div class="cadeau">🎁 Document OFFERT avec votre Pack Basic Immigration Flow — Valeur : 450 MAD</div>
-            <div class="body">
-                <div class="section">
-                    <div class="section-title">1. Titre de profil (Headline)</div>
-                    <div class="tip">Le titre est la première chose que voient les recruteurs. Il doit être <strong>percutant et contenir des mots-clés</strong> de votre métier.</div>
-                    <div class="exemple">
-                        ✅ Bon exemple :<br>
-                        "<strong>${c.job || 'Professionnel qualifié'} | ${c.experience || '5'}+ ans d'expérience | Ouvert aux opportunités au ${pays}</strong>"
-                    </div>
-                    <div class="exemple" style="background:#fef2f2;border-color:#fee2e2;">
-                        ❌ À éviter :<br>
-                        "En recherche d'emploi" ou juste votre titre de poste sans plus
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="section-title">2. Photo de profil</div>
-                    <div class="tip">
-                        • <strong>Photo professionnelle obligatoire</strong> — fond neutre (blanc, gris ou bleu clair)<br>
-                        • Visage bien visible, sourire naturel, tenue professionnelle<br>
-                        • Évitez les selfies, photos de vacances ou photos floues<br>
-                        • Les profils avec photo reçoivent <strong>21x plus de vues</strong>
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="section-title">3. Résumé / À propos (About)</div>
-                    <div class="tip">Rédigez un résumé en <strong>3-4 paragraphes</strong> qui raconte votre histoire professionnelle.</div>
-                    <div class="exemple">
-                        Professionnel avec ${c.experience || 'plusieurs'} années d'expérience en ${c.job || 'mon domaine'}, 
-                        diplômé(e) niveau ${c.formation || 'Bac+5'}. J'ai développé une expertise solide dans [vos spécialités].
-                        <br><br>
-                        Actuellement en projet d'immigration au ${pays}, je recherche une opportunité qui me permettra 
-                        de contribuer à [secteur/type d'entreprise] tout en m'intégrant dans le marché local.
-                        <br><br>
-                        N'hésitez pas à me contacter pour toute opportunité ou collaboration.
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="section-title">4. Compétences (Skills)</div>
-                    <div class="tip">Ajoutez minimum <strong>10-15 compétences</strong> pertinentes. Demandez des validations à vos anciens collègues.</div>
-                    <div style="margin-top:8px;">
-                        ${getCompetencesByJob(c.job).map(s => `<span class="badge">${s}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="section-title">5. Conseils spécifiques pour ${pays}</div>
-                    ${conseils.map(c => `<div class="pays-conseil">✅ ${c}</div>`).join('')}
-                </div>
-                <div class="section">
-                    <div class="section-title">6. Actions immédiates à faire</div>
-                    <div class="tip">
-                        <strong>Cette semaine :</strong><br>
-                        ☐ Mettre à jour votre titre avec mots-clés métier<br>
-                        ☐ Ajouter une photo professionnelle<br>
-                        ☐ Rédiger votre résumé (copiez l'exemple ci-dessus et adaptez)<br>
-                        ☐ Ajouter vos compétences listées<br>
-                        ☐ Activer "Open to Work" en mode visible aux recruteurs seulement<br>
-                        ☐ Suivre 10 entreprises dans votre secteur au ${pays}
-                    </div>
-                </div>
-            </div>
-            <div class="footer">🎁 Guide LinkedIn offert par Immigration Flow CRM • ${date} • Document confidentiel — ${c.name}</div>
-            </body></html>`;
-        }
-
-        // ====== DATA HELPERS ======
-        function getCompetencesByJob(job) {
-            const j = (job || '').toLowerCase();
-            if (j.includes('info') || j.includes('dev') || j.includes('tech')) return ['JavaScript','Python','SQL','React','Node.js','Git','Agile/Scrum','API REST','Cloud AWS','Docker','Résolution problèmes','Travail en équipe'];
-            if (j.includes('compt') || j.includes('financ')) return ['Comptabilité générale','Bilan financier','Excel avancé','SAP','Audit','Fiscalité','Reporting','Analyse financière','Trésorerie','Normes IFRS'];
-            if (j.includes('market') || j.includes('comm')) return ['Marketing digital','SEO/SEA','Réseaux sociaux','Content marketing','Google Ads','CRM','Analyse données','Rédaction','E-commerce','Stratégie'];
-            if (j.includes('ingé') || j.includes('technic')) return ['Gestion de projet','AutoCAD','SolidWorks','Lean Manufacturing','Qualité ISO','Mécanique','Électronique','Maintenance','Bureau d\'études','Contrôle qualité'];
-            return ['Gestion de projet','Communication','Travail en équipe','Résolution de problèmes','Organisation','Leadership','Adaptabilité','Microsoft Office','Rigueur professionnelle','Initiative'];
-        }
-
-        function getLanguesByCountry(pays) {
-            const base = [{langue:'Arabe',niveau:'Langue maternelle'},{langue:'Français',niveau:'Courant'}];
-            if (pays === 'Canada') return [...base,{langue:'Anglais',niveau:'Intermédiaire à courant'},{langue:'Berbère',niveau:'Notions'}];
-            if (pays === 'Allemagne') return [...base,{langue:'Allemand',niveau:'Notions (en apprentissage)'},{langue:'Anglais',niveau:'Intermédiaire'}];
-            if (pays === 'Australie' || pays === 'États-Unis') return [...base,{langue:'Anglais',niveau:'Courant à bilingue'}];
-            return [...base,{langue:'Anglais',niveau:'Intermédiaire'},{langue:'Espagnol',niveau:'Notions'}];
-        }
-
-        function getIntroByCountry(pays) {
-            const intros = {
-                'Canada': "C'est avec un grand intérêt que je me permets de vous adresser ma candidature au poste de professionnel qualifié au Canada. Après mûre réflexion et une étude approfondie du marché canadien, je suis convaincu(e) que le Canada représente l'environnement idéal pour poursuivre mon développement professionnel et personnel.",
-                'Allemagne': "Je me permets de vous soumettre ma candidature dans le cadre de mon projet d'installation professionnelle en Allemagne. Pays reconnu pour son excellence industrielle et sa stabilité économique, l'Allemagne correspond parfaitement à mes aspirations professionnelles et à mon projet de vie.",
-                'France': "Permettez-moi de vous présenter ma candidature pour une opportunité professionnelle en France. Pays de culture et d'excellence, la France représente pour moi une destination de choix pour développer ma carrière dans un environnement stimulant et international.",
-                'Australie': "I am pleased to submit my application for a professional position in Australia. With its dynamic economy and welcoming environment for qualified professionals, Australia represents an ideal destination for my career development project.",
-                'États-Unis': "Je vous soumets ma candidature pour une opportunité professionnelle aux États-Unis, pays qui incarne l'excellence et l'innovation dans de nombreux secteurs d'activité."
-            };
-            return intros[pays] || `C'est avec un grand intérêt que je me permets de vous adresser ma candidature dans le cadre de mon projet d'immigration professionnelle en ${pays}. Ce pays représente pour moi une opportunité unique de développer mes compétences dans un environnement international et dynamique.`;
-        }
-
-        function getLinkedinConseilsByCountry(pays) {
-            const conseils = {
-                'Canada': [
-                    'Activez "Open to Work" visible par les recruteurs (pas par votre réseau)',
-                    'Rejoignez des groupes LinkedIn canadiens de votre secteur',
-                    'Mentionnez votre visa/statut dans les messages aux recruteurs',
-                    'Suivez les pages LinkedIn de Job Bank Canada et des grandes entreprises canadiennes',
-                    'Rédigez votre résumé en français ET en anglais (Canada bilingue)'
-                ],
-                'Allemagne': [
-                    'Inscrivez-vous aussi sur XING (l\'équivalent LinkedIn allemand)',
-                    'Mentionnez votre niveau d\'allemand et votre volonté d\'apprendre',
-                    'Suivez les pages des grandes entreprises allemandes (SAP, Bosch, Siemens)',
-                    'Rejoignez des groupes d\'expatriés francophones en Allemagne',
-                    'Précisez si vous avez un visa de recherche d\'emploi allemand'
-                ],
-                'France': [
-                    'Utilisez LinkedIn ET le site Pôle Emploi pour maximiser la visibilité',
-                    'Rejoignez des groupes de votre secteur en français',
-                    'Mentionnez votre titre de séjour ou autorisation de travail si applicable',
-                    'Connectez-vous avec des Marocains installés en France dans votre domaine',
-                    'Suivez les entreprises du CAC40 et les PME de votre secteur'
-                ]
-            };
-            return conseils[pays] || [
-                'Complétez votre profil à 100% (score "All-star")',
-                'Connectez-vous avec des professionnels de votre secteur dans ce pays',
-                'Publiez régulièrement du contenu lié à votre métier',
-                'Demandez des recommandations à vos anciens managers/collègues',
-                'Envoyez des messages personnalisés (pas de messages génériques)'
-            ];
-        }
-
-        function getRecruteurs(pays) {
-            const db = {
-                'Canada': [
-                    {nom:'Job Bank Canada',secteur:'Gouvernement',site:'jobbank.gc.ca',conseil:'Portail officiel — indispensable'},
-                    {nom:'Workopolis',secteur:'Général',site:'workopolis.com',conseil:'N°1 au Canada pour les offres'},
-                    {nom:'LinkedIn Canada',secteur:'Tous secteurs',site:'linkedin.com/jobs',conseil:'Profil complet avec photo pro'},
-                    {nom:'Indeed Canada',secteur:'Général',site:'ca.indeed.com',conseil:'Activez les alertes par métier'},
-                    {nom:'Hays Canada',secteur:'IT / Ingénierie',site:'hays.ca',conseil:'Contact direct avec recruteurs'},
-                    {nom:'Robert Half Canada',secteur:'Finance / Compta',site:'roberthalf.ca',conseil:'Excellent pour profils qualifiés'},
-                    {nom:'Randstad Canada',secteur:'Technique / Admin',site:'randstad.ca',conseil:'Candidature spontanée très efficace'},
-                    {nom:'Adecco Canada',secteur:'Industrie / Multi',site:'adecco.ca',conseil:'Bonne présence secteur industriel'},
-                    {nom:'Manpower Canada',secteur:'Multi-secteurs',site:'manpowergroup.ca',conseil:'Réseau international solide'},
-                    {nom:'Michael Page Canada',secteur:'Cadres / Finance',site:'michaelpage.ca',conseil:'Top pour profils seniors'},
-                    {nom:'Korn Ferry Canada',secteur:'Direction / Cadres',site:'kornferry.com',conseil:'Recrutement executive'},
-                    {nom:'Futurpreneur Canada',secteur:'Entrepreneuriat',site:'futurpreneur.ca',conseil:'Si projet entrepreneurial'},
-                    {nom:'Eluta.ca',secteur:'Général',site:'eluta.ca',conseil:'Moteur recherche emploi canadien'},
-                    {nom:'CareerBeacon',secteur:'Est du Canada',site:'careerbeacon.com',conseil:'Fort pour provinces atlantiques'},
-                    {nom:'BCJobs.ca',secteur:'Colombie-Britannique',site:'bcjobs.ca',conseil:'Spécialisé Colombie-Britannique'},
-                    {nom:'Jobboom',secteur:'Québec',site:'jobboom.com',conseil:'N°1 au Québec francophone'},
-                    {nom:'Emploi-Québec',secteur:'Québec gouvernement',site:'emploiquebec.gouv.qc.ca',conseil:'Officiel province du Québec'},
-                    {nom:'Talent.com Canada',secteur:'Agrégateur',site:'talent.com',conseil:'Regroupe offres de 100+ sources'},
-                    {nom:'Glassdoor Canada',secteur:'Tous',site:'glassdoor.ca',conseil:'Vérifiez les avis sur l\'entreprise'},
-                    {nom:'Monster Canada',secteur:'Général',site:'monster.ca',conseil:'Base CV très consultée par recruteurs'}
-                ],
-                'Allemagne': [
-                    {nom:'Make it in Germany',secteur:'Gouvernement',site:'make-it-in-germany.com',conseil:'Portail officiel immigrants qualifiés'},
-                    {nom:'Bundesagentur für Arbeit',secteur:'Gouvernement',site:'arbeitsagentur.de',conseil:'Agence nationale de l\'emploi'},
-                    {nom:'StepStone',secteur:'Général',site:'stepstone.de',conseil:'N°1 en Allemagne'},
-                    {nom:'XING',secteur:'Réseau pro',site:'xing.com',conseil:'LinkedIn allemand — indispensable'},
-                    {nom:'Indeed Allemagne',secteur:'Général',site:'de.indeed.com',conseil:'Activez alertes emploi'},
-                    {nom:'Hays Germany',secteur:'IT / Ingénierie',site:'hays.de',conseil:'Profils techniques très recherchés'},
-                    {nom:'Experteer',secteur:'Cadres / Direction',site:'experteer.de',conseil:'Pour profils seniors +'},
-                    {nom:'Monster Germany',secteur:'Multi',site:'monster.de',conseil:'Bon volume d\'offres'},
-                    {nom:'Manpower Germany',secteur:'Industrie',site:'manpower.de',conseil:'Fort secteur industriel'},
-                    {nom:'Randstad Germany',secteur:'Multi',site:'randstad.de',conseil:'Nombreuses missions'},
-                    {nom:'Adecco Germany',secteur:'Multi',site:'adecco.de',conseil:'Présence nationale'},
-                    {nom:'Michael Page Germany',secteur:'Finance / IT',site:'michaelpage.de',conseil:'Profils qualifiés'},
-                    {nom:'Gulp.de',secteur:'IT / Freelance',site:'gulp.de',conseil:'Spécialisé IT et ingénierie'},
-                    {nom:'Kimeta.de',secteur:'Agrégateur',site:'kimeta.de',conseil:'Regroupe toutes les offres'},
-                    {nom:'Jobware',secteur:'Général',site:'jobware.de',conseil:'Bonne base de données'},
-                    {nom:'Stellenanzeigen.de',secteur:'Général',site:'stellenanzeigen.de',conseil:'Portail emploi reconnu'},
-                    {nom:'Yourfirm.de',secteur:'PME',site:'yourfirm.de',conseil:'Spécialisé PME allemandes'},
-                    {nom:'Absolventa',secteur:'Jeunes diplômés',site:'absolventa.de',conseil:'Pour premiers postes'},
-                    {nom:'Jobmensa',secteur:'Étudiants/Jeunes',site:'jobmensa.de',conseil:'Postes juniors'},
-                    {nom:'Kalaydo',secteur:'Région Rhénanie',site:'kalaydo.de',conseil:'Fort en Rhénanie-Westphalie'}
-                ],
-                'France': [
-                    {nom:'Pôle Emploi',secteur:'Gouvernement',site:'pole-emploi.fr',conseil:'Inscription dès l\'arrivée obligatoire'},
-                    {nom:'Indeed France',secteur:'Général',site:'fr.indeed.com',conseil:'N°1 en France pour volume'},
-                    {nom:'LinkedIn France',secteur:'Tous',site:'linkedin.fr',conseil:'Réseau professionnel essentiel'},
-                    {nom:'Cadremploi',secteur:'Cadres Bac+3',site:'cadremploi.fr',conseil:'Spécialisé profils qualifiés'},
-                    {nom:'Apec',secteur:'Cadres',site:'apec.fr',conseil:'Association pour l\'emploi des cadres'},
-                    {nom:'Monster France',secteur:'Général',site:'monster.fr',conseil:'Bon volume d\'offres'},
-                    {nom:'Hays France',secteur:'IT / Finance / Ingé',site:'hays.fr',conseil:'Recrutement spécialisé efficace'},
-                    {nom:'Michael Page France',secteur:'Finance / Compta',site:'michaelpage.fr',conseil:'Top profils qualifiés'},
-                    {nom:'Adecco France',secteur:'Multi',site:'adecco.fr',conseil:'Présence nationale forte'},
-                    {nom:'Randstad France',secteur:'Technique / Industrie',site:'randstad.fr',conseil:'Missions nombreuses'},
-                    {nom:'Manpower France',secteur:'Multi',site:'manpower.fr',conseil:'Réseau agences solide'},
-                    {nom:'Jobijoba',secteur:'Agrégateur',site:'jobijoba.com',conseil:'Regroupe 100+ sources'},
-                    {nom:'RegionsJob',secteur:'Régional',site:'regionsjob.com',conseil:'Fort en régions françaises'},
-                    {nom:'Meteojob',secteur:'Matching IA',site:'meteojob.com',conseil:'Algorithme matching performant'},
-                    {nom:'Welcome to the Jungle',secteur:'Startups / Tech',site:'welcometothejungle.com',conseil:'Top pour entreprises innovantes'},
-                    {nom:'Talent.io',secteur:'IT / Tech',site:'talent.io',conseil:'Spécialisé profils tech premium'},
-                    {nom:'Glassdoor France',secteur:'Tous',site:'glassdoor.fr',conseil:'Vérifiez les avis avant de postuler'},
-                    {nom:'Les Echos Emploi',secteur:'Finance / Stratégie',site:'lesechos-emploi.fr',conseil:'Profils hauts de gamme'},
-                    {nom:'Figaro Emploi',secteur:'Général',site:'figaro-emploi.com',conseil:'Bon trafic candidats qualifiés'},
-                    {nom:'EURES',secteur:'Europe',site:'ec.europa.eu/eures',conseil:'Mobilité professionnelle Europe'}
-                ],
-                'Australie': [
-                    {nom:'SEEK',secteur:'Général',site:'seek.com.au',conseil:'N°1 en Australie — indispensable'},
-                    {nom:'LinkedIn Australia',secteur:'Tous',site:'linkedin.com',conseil:'Profil en anglais obligatoire'},
-                    {nom:'Indeed Australia',secteur:'Général',site:'au.indeed.com',conseil:'Bon volume d\'offres'},
-                    {nom:'Hays Australia',secteur:'Ingénierie / IT',site:'hays.com.au',conseil:'Leaders recrutement spécialisé'},
-                    {nom:'Michael Page Australia',secteur:'Finance / Commerce',site:'michaelpage.com.au',conseil:'Profils qualifiés très demandés'},
-                    {nom:'Adecco Australia',secteur:'Industrie',site:'adecco.com.au',conseil:'Nombreuses missions temporaires'},
-                    {nom:'CareerOne',secteur:'Multi',site:'careerone.com.au',conseil:'Alertes emploi personnalisées'},
-                    {nom:'Jora Australia',secteur:'Agrégateur',site:'au.jora.com',conseil:'Agrégateur très complet'},
-                    {nom:'Adzuna Australia',secteur:'Agrégateur',site:'adzuna.com.au',conseil:'Bonne couverture du marché'},
-                    {nom:'Gumtree Jobs',secteur:'Local / Multi',site:'gumtree.com.au/jobs',conseil:'Offres locales et PME'},
-                    {nom:'Ethical Jobs',secteur:'ONG / Social',site:'ethicaljobs.com.au',conseil:'Secteur associatif et social'},
-                    {nom:'Workforce Guardian',secteur:'RH / Compliance',site:'workforceguardian.com.au',conseil:'Ressources humaines'},
-                    {nom:'Randstad Australia',secteur:'Multi',site:'randstad.com.au',conseil:'Agence internationale'},
-                    {nom:'Robert Half Australia',secteur:'Finance / Compta',site:'roberthalf.com.au',conseil:'Profils finance reconnu'},
-                    {nom:'Manpower Australia',secteur:'Multi',site:'manpower.com.au',conseil:'Présence nationale'},
-                    {nom:'Hudson Australia',secteur:'Cadres',site:'au.hudson.com',conseil:'Recrutement cadres supérieurs'},
-                    {nom:'Dixon Appointments',secteur:'Admin / Office',site:'dixon.com.au',conseil:'Spécialisé postes administratifs'},
-                    {nom:'DFP Recruitment',secteur:'Multi',site:'dfprecruitment.com.au',conseil:'Agence australienne reconnue'},
-                    {nom:'TMS Consulting',secteur:'IT',site:'tmsconsulting.com.au',conseil:'Tech et consulting IT'},
-                    {nom:'Aurec',secteur:'Finance',site:'aurec.com.au',conseil:'Finance et comptabilité'}
-                ],
-                'États-Unis': [
-                    {nom:'LinkedIn USA',secteur:'Tous',site:'linkedin.com',conseil:'Réseau N°1 USA — obligatoire'},
-                    {nom:'Indeed USA',secteur:'Général',site:'indeed.com',conseil:'Volume d\'offres très élevé'},
-                    {nom:'Glassdoor',secteur:'Tous',site:'glassdoor.com',conseil:'Vérifiez culture entreprise'},
-                    {nom:'ZipRecruiter',secteur:'Multi',site:'ziprecruiter.com',conseil:'Algorithme matching efficace'},
-                    {nom:'Monster USA',secteur:'Général',site:'monster.com',conseil:'Base CV très consultée'},
-                    {nom:'Robert Half USA',secteur:'Finance / Admin',site:'roberthalf.com',conseil:'Leader recrutement spécialisé'},
-                    {nom:'Dice',secteur:'IT / Tech',site:'dice.com',conseil:'Spécialisé profils tech'},
-                    {nom:'CareerBuilder',secteur:'Général',site:'careerbuilder.com',conseil:'Grande base données CV'},
-                    {nom:'Hired',secteur:'Tech / Startups',site:'hired.com',conseil:'Tech companies & startups'},
-                    {nom:'AngelList Talent',secteur:'Startups',site:'angel.co/jobs',conseil:'Startups et scale-ups'},
-                    {nom:'Ladders',secteur:'Cadres 100k+',site:'theladders.com',conseil:'Postes salaires élevés'},
-                    {nom:'Idealist',secteur:'Non-profit',site:'idealist.org',conseil:'Secteur associatif'},
-                    {nom:'Flexjobs',secteur:'Télétravail',site:'flexjobs.com',conseil:'Remote & flexible jobs'},
-                    {nom:'We Work Remotely',secteur:'Télétravail',site:'weworkremotely.com',conseil:'100% remote positions'},
-                    {nom:'Korn Ferry',secteur:'Direction',site:'kornferry.com',conseil:'Executive search'},
-                    {nom:'Spencer Stuart',secteur:'C-Level',site:'spencerstuart.com',conseil:'Postes direction générale'},
-                    {nom:'Heidrick & Struggles',secteur:'Leadership',site:'heidrick.com',conseil:'Leadership recrutement'},
-                    {nom:'Toptal',secteur:'Freelance Tech',site:'toptal.com',conseil:'Top 3% freelancers tech'},
-                    {nom:'Upwork',secteur:'Freelance',site:'upwork.com',conseil:'Freelance international'},
-                    {nom:'SimplyHired',secteur:'Agrégateur',site:'simplyhired.com',conseil:'Regroupe toutes les offres'}
-                ]
-            };
-            return db[pays] || db['Canada'];
-        }
-
-        async function downloadPDF(html, filename) {
-            const el = document.createElement('div');
-            el.innerHTML = html;
-            el.style.cssText = 'position:absolute;left:-9999px;top:0;width:820px;background:white;';
-            document.body.appendChild(el);
-            await html2pdf().set({
-                margin: 8,
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).from(el).save();
-            document.body.removeChild(el);
-        }
+        document.getElementById('popup').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
     </script>
+
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
 </body>
 </html>
