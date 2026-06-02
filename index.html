@@ -1,9 +1,12 @@
+bash
+
+cat > /mnt/user-data/outputs/crm-immigflow-v8.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Immigration Flow CRM V7</title>
+    <title>Immigration Flow CRM V8</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -30,7 +33,7 @@
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 text-center fade-in">
             <div class="text-4xl mb-2">✈️</div>
             <h1 class="text-2xl font-bold text-blue-600 mb-1">IMMIGRATION FLOW</h1>
-            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider">Système CRM V7</p>
+            <p class="text-gray-400 text-xs mb-6 font-semibold uppercase tracking-wider">Système CRM V8</p>
             <div class="space-y-3 text-left">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase block mb-1">Email</label>
@@ -101,12 +104,17 @@
                 <!-- Offre tarifaire -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
                     <h3 class="text-base font-bold text-gray-800 mb-4">💼 Offre de Service</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Pack Essentiel -->
                         <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5">
-                            <div class="flex justify-between items-start mb-3">
-                                <h4 class="font-black text-blue-800 text-base">Pack Basic</h4>
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Pack 01</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="font-black text-blue-800 text-base">Essentiel</h4>
                                 <span class="bg-blue-600 text-white text-sm font-black px-3 py-1 rounded-xl">900 DH</span>
                             </div>
+                            <p class="text-xs text-blue-500 mb-3">⏱ Livraison sous 48h</p>
                             <ul class="space-y-1.5 text-sm text-blue-900">
                                 <li class="flex items-center space-x-2"><span>📋</span><span>CV format pays cible</span></li>
                                 <li class="flex items-center space-x-2"><span>✉️</span><span>Lettre de motivation</span></li>
@@ -114,6 +122,26 @@
                                 <li class="flex items-center space-x-2"><span>🎁</span><span><strong>Guide LinkedIn (cadeau)</strong></span></li>
                             </ul>
                         </div>
+                        <!-- Pack Premium -->
+                        <div class="bg-gradient-to-br from-blue-700 to-blue-900 border-2 border-blue-500 rounded-2xl p-5 relative text-white shadow-lg">
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-blue-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">⭐ Le Plus Complet</div>
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-[10px] font-bold text-blue-300 uppercase tracking-widest">Pack 02</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="font-black text-white text-base">Premium</h4>
+                                <span class="bg-white text-blue-800 text-sm font-black px-3 py-1 rounded-xl">1300 DH</span>
+                            </div>
+                            <p class="text-xs text-blue-300 mb-3">⏱ Livraison sous 60h</p>
+                            <ul class="space-y-1.5 text-sm text-blue-100">
+                                <li class="flex items-center space-x-2"><span>✅</span><span>Tout du Pack Essentiel</span></li>
+                                <li class="flex items-center space-x-2"><span>💼</span><span>Compte LinkedIn optimisé</span></li>
+                                <li class="flex items-center space-x-2"><span>🏢</span><span>20 recruteurs supplémentaires <strong>(40 au total)</strong></span></li>
+                                <li class="flex items-center space-x-2"><span>🚀</span><span>Profil LinkedIn prêt à l'emploi</span></li>
+                                <li class="flex items-center space-x-2"><span>🎁</span><span><strong>Guide LinkedIn Canada (cadeau)</strong></span></li>
+                            </ul>
+                        </div>
+                        <!-- Options à la carte -->
                         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
                             <h4 class="font-black text-gray-700 text-base mb-3">Options à la carte</h4>
                             <ul class="space-y-2 text-sm text-gray-700">
@@ -194,7 +222,7 @@
                                 <th class="p-4">Nom</th>
                                 <th class="p-4">Métier & Pays</th>
                                 <th class="p-4">Téléphone</th>
-                                <th class="p-4">Options</th>
+                                <th class="p-4">Pack & Options</th>
                                 <th class="p-4">Statut & Montant</th>
                                 <th class="p-4">Documents PDF</th>
                                 <th class="p-4">Actions</th>
@@ -342,24 +370,46 @@
                     </div>
                 </div>
 
+                <!-- CHOIX DU PACK -->
+                <div>
+                    <label class="text-[10px] text-gray-400 font-bold block mb-2 uppercase">Choix du Pack</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label id="label-pack-essentiel" class="cursor-pointer border-2 border-blue-300 bg-blue-50 rounded-xl p-3 flex flex-col items-start transition hover:border-blue-500">
+                            <input type="radio" name="pack-choice" id="pack-essentiel" value="essentiel" class="hidden" checked onchange="onPackChange()">
+                            <span class="text-[9px] font-bold text-blue-400 uppercase tracking-widest mb-1">Pack 01</span>
+                            <span class="font-black text-blue-800 text-sm">Essentiel</span>
+                            <span class="text-blue-700 font-black text-lg mt-1">900 DH</span>
+                            <span class="text-[10px] text-blue-400 mt-0.5">⏱ 48h</span>
+                        </label>
+                        <label id="label-pack-premium" class="cursor-pointer border-2 border-gray-200 bg-gray-50 rounded-xl p-3 flex flex-col items-start transition hover:border-blue-500 relative">
+                            <input type="radio" name="pack-choice" id="pack-premium" value="premium" class="hidden" onchange="onPackChange()">
+                            <span class="absolute -top-2.5 right-2 bg-amber-400 text-[9px] font-black px-2 py-0.5 rounded-full text-blue-900 uppercase">⭐ Complet</span>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Pack 02</span>
+                            <span class="font-black text-gray-800 text-sm">Premium</span>
+                            <span class="text-blue-700 font-black text-lg mt-1">1300 DH</span>
+                            <span class="text-[10px] text-gray-400 mt-0.5">⏱ 60h</span>
+                        </label>
+                    </div>
+                </div>
+
                 <!-- OPTIONS À LA CARTE -->
                 <div class="border border-blue-100 bg-blue-50 rounded-xl p-4">
-                    <p class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-3">✅ Pack Basic (900 DH) + Options à la carte</p>
+                    <p id="pack-label-options" class="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-3">✅ Pack Essentiel (900 DH) + Options à la carte</p>
                     <div class="grid grid-cols-2 gap-2">
                         <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-cv-update" class="rounded text-blue-600">
+                            <input type="checkbox" id="opt-cv-update" class="rounded text-blue-600" onchange="updateTotalPrice()">
                             <span class="text-xs font-semibold text-gray-700">CV existant <span class="text-blue-600 font-bold">+350 MAD</span></span>
                         </label>
                         <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-lettre-supp" class="rounded text-blue-600">
+                            <input type="checkbox" id="opt-lettre-supp" class="rounded text-blue-600" onchange="updateTotalPrice()">
                             <span class="text-xs font-semibold text-gray-700">Lettre supp. <span class="text-blue-600 font-bold">+200 MAD</span></span>
                         </label>
                         <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-linkedin" class="rounded text-blue-600">
+                            <input type="checkbox" id="opt-linkedin" class="rounded text-blue-600" onchange="updateTotalPrice()">
                             <span class="text-xs font-semibold text-gray-700">LinkedIn <span class="text-blue-600 font-bold">+450 MAD</span></span>
                         </label>
                         <label class="flex items-center space-x-2 cursor-pointer bg-white rounded-lg p-2 border border-gray-200 hover:border-blue-400 transition">
-                            <input type="checkbox" id="opt-offres" class="rounded text-blue-600">
+                            <input type="checkbox" id="opt-offres" class="rounded text-blue-600" onchange="updateTotalPrice()">
                             <span class="text-xs font-semibold text-gray-700">10 offres <span class="text-blue-600 font-bold">+200 MAD</span></span>
                         </label>
                     </div>
@@ -419,7 +469,7 @@
                     <span class="text-[10px] opacity-75 mt-1">Motivation</span>
                 </button>
             </div>
-            <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="grid grid-cols-2 gap-3 mb-3">
                 <button onclick="generatePDF('recruteurs')" id="btn-recruteurs" class="flex flex-col items-center bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl font-bold text-xs transition shadow">
                     <span class="text-3xl mb-2">🏢</span>
                     <span class="text-sm">Recruteurs</span>
@@ -429,6 +479,14 @@
                     <span class="text-3xl mb-2">🎁</span>
                     <span class="text-sm">LinkedIn</span>
                     <span class="text-[10px] opacity-75 mt-1">Guide cadeau</span>
+                </button>
+            </div>
+            <!-- Bouton Premium — visible uniquement si Pack Premium -->
+            <div id="btn-premium-zone" class="hidden">
+                <button onclick="generatePDF('recruteurs40')" id="btn-recruteurs40" class="w-full flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950 text-white p-4 rounded-xl font-bold text-xs transition shadow mb-3">
+                    <span class="text-2xl mb-1">🚀</span>
+                    <span class="text-sm">Recruteurs PREMIUM</span>
+                    <span class="text-[10px] opacity-75 mt-1">40 recruteurs au total</span>
                 </button>
             </div>
             <div id="pdf-status" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
@@ -446,7 +504,8 @@
         let users = [];
         let activePdfClient = null;
 
-        const PACK_BASE = 900;
+        const PACK_ESSENTIEL = 900;
+        const PACK_PREMIUM = 1300;
         const OPTIONS = {
             'opt-cv-update': 350,
             'opt-lettre-supp': 200,
@@ -455,19 +514,32 @@
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            setupPriceCalculator();
             cloudSync('loadAll');
         });
 
-        function setupPriceCalculator() {
-            Object.keys(OPTIONS).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('change', updateTotalPrice);
-            });
+        // ====== PACK CHANGE ======
+        function onPackChange() {
+            const isPremium = document.getElementById('pack-premium').checked;
+            // Style des labels
+            document.getElementById('label-pack-essentiel').classList.toggle('border-blue-400', !isPremium);
+            document.getElementById('label-pack-essentiel').classList.toggle('bg-blue-50', !isPremium);
+            document.getElementById('label-pack-essentiel').classList.toggle('border-gray-200', isPremium);
+            document.getElementById('label-pack-essentiel').classList.toggle('bg-gray-50', isPremium);
+            document.getElementById('label-pack-premium').classList.toggle('border-blue-600', isPremium);
+            document.getElementById('label-pack-premium').classList.toggle('bg-blue-50', isPremium);
+            document.getElementById('label-pack-premium').classList.toggle('border-gray-200', !isPremium);
+            document.getElementById('label-pack-premium').classList.toggle('bg-gray-50', !isPremium);
+            // Label options
+            const base = isPremium ? PACK_PREMIUM : PACK_ESSENTIEL;
+            document.getElementById('pack-label-options').innerText = isPremium
+                ? '✅ Pack Premium (1300 DH) + Options à la carte'
+                : '✅ Pack Essentiel (900 DH) + Options à la carte';
+            updateTotalPrice();
         }
 
         function updateTotalPrice() {
-            let total = PACK_BASE;
+            const isPremium = document.getElementById('pack-premium').checked;
+            let total = isPremium ? PACK_PREMIUM : PACK_ESSENTIEL;
             Object.entries(OPTIONS).forEach(([id, price]) => {
                 if (document.getElementById(id)?.checked) total += price;
             });
@@ -601,13 +673,18 @@
             document.getElementById('bar-width-remaining').style.width = Math.round((rem/max)*100) + "%";
         }
 
+        function getPackLabel(c) {
+            if (c.pack === 'premium') return '<span class="bg-blue-800 text-white text-[10px] font-black px-2 py-0.5 rounded-full">⭐ Premium</span>';
+            return '<span class="bg-blue-100 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-full">Essentiel</span>';
+        }
+
         function getOptionsLabel(c) {
             const opts = [];
             if (c.optCvUpdate) opts.push('CV+350');
             if (c.optLettreSupp) opts.push('Lettre+200');
             if (c.optLinkedin) opts.push('LinkedIn+450');
             if (c.optOffres) opts.push('10offres+200');
-            return opts.length ? opts.join(', ') : 'Basic';
+            return opts.length ? opts.join(', ') : 'Aucune option';
         }
 
         function renderClients() {
@@ -624,7 +701,7 @@
                 tr.className = "border-b hover:bg-gray-50 transition";
                 const sc = c.status === '100%' ? 'bg-green-100 text-green-700' : c.status === '50%' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
                 const amt = parseFloat(c.amount) || 0;
-                const totalP = parseFloat(c.totalPrice) || PACK_BASE;
+                const totalP = parseFloat(c.totalPrice) || PACK_ESSENTIEL;
                 const actionBtn = isAdmin
                     ? `<button onclick="editClient('${c.id}')" class="text-blue-600 hover:underline font-bold text-xs">Modifier</button>`
                     : `<span class="text-gray-300 text-xs italic">🔒 Verrouillé</span>`;
@@ -633,7 +710,7 @@
                     <td class="p-4 font-bold text-gray-800">${c.name}<br><span class="text-xs font-normal text-blue-500">${c.assignedName||'Non assigné'}</span></td>
                     <td class="p-4 text-sm">${c.job||'-'}<br><span class="text-xs text-gray-400">${c.country||''}</span></td>
                     <td class="p-4 font-mono text-xs">${c.phone}</td>
-                    <td class="p-4 text-xs text-gray-500">${getOptionsLabel(c)}<br><span class="font-bold text-blue-700">${totalP} MAD</span></td>
+                    <td class="p-4 text-xs">${getPackLabel(c)}<br><span class="text-gray-500 mt-1 block">${getOptionsLabel(c)}</span><span class="font-bold text-blue-700">${totalP} MAD</span></td>
                     <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold ${sc}">${c.status||'Non Payé'} (${amt} DH)</span></td>
                     <td class="p-4"><button onclick="openPdfModal('${c.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">📄 Générer</button></td>
                     <td class="p-4">${actionBtn}</td>
@@ -668,6 +745,10 @@
             document.getElementById('c-payment-status').value = "Non Payé";
             document.getElementById('c-formation').value = "Bac+5";
             document.getElementById('c-country').value = "Canada";
+            // Reset pack to Essentiel
+            document.getElementById('pack-essentiel').checked = true;
+            document.getElementById('pack-premium').checked = false;
+            onPackChange();
             Object.keys(OPTIONS).forEach(id => document.getElementById(id).checked = false);
             updateTotalPrice();
             const sel = document.getElementById('c-assign');
@@ -696,13 +777,14 @@
             const amount = document.getElementById('c-payment-amount').value || "0";
             const observation = document.getElementById('c-observation').value.trim();
             const assignId = document.getElementById('c-assign').value || (currentUser.role !== 'admin' ? currentUser.id : "");
+            const pack = document.getElementById('pack-premium').checked ? 'premium' : 'essentiel';
 
             const optCvUpdate = document.getElementById('opt-cv-update').checked;
             const optLettreSupp = document.getElementById('opt-lettre-supp').checked;
             const optLinkedin = document.getElementById('opt-linkedin').checked;
             const optOffres = document.getElementById('opt-offres').checked;
 
-            let totalPrice = PACK_BASE;
+            let totalPrice = pack === 'premium' ? PACK_PREMIUM : PACK_ESSENTIEL;
             if (optCvUpdate) totalPrice += 350;
             if (optLettreSupp) totalPrice += 200;
             if (optLinkedin) totalPrice += 450;
@@ -714,7 +796,7 @@
                 else { const tu = users.find(u => u.id === assignId); if (tu) assignedName = `${tu.nom} ${tu.prenom}`; }
             }
 
-            const clientData = { name, phone, job, experience, formation, country, status, amount, observation, assignedTo: assignId, assignedName, optCvUpdate, optLettreSupp, optLinkedin, optOffres, totalPrice };
+            const clientData = { name, phone, job, experience, formation, country, status, amount, observation, assignedTo: assignId, assignedName, pack, optCvUpdate, optLettreSupp, optLinkedin, optOffres, totalPrice };
 
             if (!id) {
                 clients.push({ id: "cl_" + Date.now(), date: new Date().toLocaleDateString('fr-FR'), ...clientData });
@@ -742,6 +824,15 @@
             document.getElementById('c-payment-amount').value = c.amount||"";
             document.getElementById('c-observation').value = c.observation||"";
             document.getElementById('c-assign').value = c.assignedTo||"";
+            // Pack
+            if (c.pack === 'premium') {
+                document.getElementById('pack-premium').checked = true;
+                document.getElementById('pack-essentiel').checked = false;
+            } else {
+                document.getElementById('pack-essentiel').checked = true;
+                document.getElementById('pack-premium').checked = false;
+            }
+            onPackChange();
             document.getElementById('opt-cv-update').checked = !!c.optCvUpdate;
             document.getElementById('opt-lettre-supp').checked = !!c.optLettreSupp;
             document.getElementById('opt-linkedin').checked = !!c.optLinkedin;
@@ -812,21 +903,24 @@
             alert("✅ Notification diffusée !"); document.getElementById('msg-text').value = "";
         }
 
-        // ====== PDF GENERATION (100% LOCAL - pas d'API) ======
+        // ====== PDF GENERATION ======
         function openPdfModal(clientId) {
             const c = clients.find(cl => cl.id === clientId);
             if (!c) return;
             activePdfClient = c;
-            const totalP = c.totalPrice || PACK_BASE;
+            const totalP = c.totalPrice || PACK_ESSENTIEL;
+            const packLabel = c.pack === 'premium' ? '⭐ Premium' : 'Essentiel';
             document.getElementById('pdf-client-info').innerHTML = `
                 <strong class="text-blue-800 text-base">👤 ${c.name}</strong><br>
                 <span class="text-gray-600">${c.job||'Métier non précisé'} — ${c.country||'Canada'}</span><br>
-                <span class="text-gray-400 text-xs">${c.formation||'Bac+5'} ${c.experience ? '• ' + c.experience + " ans d'expérience" : ''} • Pack: ${totalP} MAD</span>
+                <span class="text-gray-400 text-xs">${c.formation||'Bac+5'} ${c.experience ? '• ' + c.experience + " ans" : ''} • <strong>${packLabel}</strong> • ${totalP} MAD</span>
             `;
+            // Afficher bouton 40 recruteurs si Premium
+            document.getElementById('btn-premium-zone').classList.toggle('hidden', c.pack !== 'premium');
             document.getElementById('pdf-status').classList.add('hidden');
-            ['btn-cv','btn-lettre','btn-recruteurs','btn-linkedin'].forEach(id => {
-                document.getElementById(id).disabled = false;
-                document.getElementById(id).classList.remove('opacity-50','cursor-not-allowed');
+            ['btn-cv','btn-lettre','btn-recruteurs','btn-linkedin','btn-recruteurs40'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.disabled = false; el.classList.remove('opacity-50','cursor-not-allowed'); }
             });
             document.getElementById('pdf-modal').classList.remove('hidden');
         }
@@ -837,16 +931,18 @@
             const statusEl = document.getElementById('pdf-status');
             const statusText = document.getElementById('pdf-status-text');
             statusEl.classList.remove('hidden');
-            const btn = document.getElementById('btn-' + type);
-            btn.disabled = true; btn.classList.add('opacity-50','cursor-not-allowed');
+            const btnId = type === 'recruteurs40' ? 'btn-recruteurs40' : 'btn-' + type;
+            const btn = document.getElementById(btnId);
+            if (btn) { btn.disabled = true; btn.classList.add('opacity-50','cursor-not-allowed'); }
 
-            const labels = { cv: 'Génération du CV...', lettre: 'Rédaction de la lettre...', recruteurs: 'Compilation des recruteurs...', linkedin: 'Préparation du guide LinkedIn...' };
+            const labels = { cv: 'Génération du CV...', lettre: 'Rédaction de la lettre...', recruteurs: 'Compilation des 20 recruteurs...', recruteurs40: 'Compilation des 40 recruteurs Premium...', linkedin: 'Préparation du guide LinkedIn...' };
             statusText.innerText = labels[type] || 'Génération...';
 
             let html = "";
             if (type === 'cv') html = buildCV(c);
             else if (type === 'lettre') html = buildLettre(c);
-            else if (type === 'recruteurs') html = buildRecruteurs(c);
+            else if (type === 'recruteurs') html = buildRecruteurs(c, false);
+            else if (type === 'recruteurs40') html = buildRecruteurs(c, true);
             else if (type === 'linkedin') html = buildLinkedin(c);
 
             if (html) {
@@ -854,7 +950,7 @@
                 await downloadPDF(html, `${type}_${c.name.replace(/\s+/g,'_')}_ImmigFlow.pdf`);
                 statusEl.classList.add('hidden');
             }
-            btn.disabled = false; btn.classList.remove('opacity-50','cursor-not-allowed');
+            if (btn) { btn.disabled = false; btn.classList.remove('opacity-50','cursor-not-allowed'); }
         }
 
         function buildCV(c) {
@@ -896,40 +992,25 @@
             <div class="body">
                 <div class="section">
                     <div class="section-title">Profil professionnel</div>
-                    <div class="profil">
-                        Professionnel motivé avec ${c.experience || 'plusieurs'} années d'expérience en tant que ${c.job || 'professionnel qualifié'}, 
-                        titulaire d'un diplôme de niveau ${c.formation || 'Bac+5'}. 
-                        Je recherche une opportunité professionnelle au ${pays} pour contribuer activement à votre organisation 
-                        tout en m'intégrant dans un environnement de travail international et dynamique.
-                    </div>
+                    <div class="profil">Professionnel motivé avec ${c.experience || 'plusieurs'} années d'expérience en tant que ${c.job || 'professionnel qualifié'}, titulaire d'un diplôme de niveau ${c.formation || 'Bac+5'}. Je recherche une opportunité professionnelle au ${pays} pour contribuer activement à votre organisation tout en m'intégrant dans un environnement de travail international et dynamique.</div>
                 </div>
                 <div class="section">
                     <div class="section-title">Expériences professionnelles</div>
                     <div class="exp-item">
                         <div class="exp-titre">${c.job || 'Professionnel qualifié'}</div>
                         <div class="exp-detail">Maroc • ${c.experience || '5'} ans d'expérience</div>
-                        <div class="exp-desc">
-                            • Gestion et coordination des activités liées au poste<br>
-                            • Collaboration avec les équipes pluridisciplinaires<br>
-                            • Amélioration continue des processus et des performances<br>
-                            • Respect des délais et des normes de qualité
-                        </div>
+                        <div class="exp-desc">• Gestion et coordination des activités liées au poste<br>• Collaboration avec les équipes pluridisciplinaires<br>• Amélioration continue des processus et des performances<br>• Respect des délais et des normes de qualité</div>
                     </div>
                 </div>
                 <div class="deux-col">
                     <div>
                         <div class="section">
                             <div class="section-title">Formation</div>
-                            <div class="exp-item">
-                                <div class="exp-titre">${c.formation || 'Bac+5'}</div>
-                                <div class="exp-detail">Domaine : ${c.job || 'Spécialité professionnelle'}</div>
-                            </div>
+                            <div class="exp-item"><div class="exp-titre">${c.formation || 'Bac+5'}</div><div class="exp-detail">Domaine : ${c.job || 'Spécialité professionnelle'}</div></div>
                         </div>
                         <div class="section">
                             <div class="section-title">Compétences</div>
-                            <div class="tags">
-                                ${competences.map(s => `<span class="tag">${s}</span>`).join('')}
-                            </div>
+                            <div class="tags">${competences.map(s => `<span class="tag">${s}</span>`).join('')}</div>
                         </div>
                     </div>
                     <div>
@@ -939,9 +1020,7 @@
                         </div>
                         <div class="section">
                             <div class="section-title">Objectif immigration</div>
-                            <div class="exp-desc" style="font-size:12px;line-height:1.7;color:#374151;">
-                                Obtenir un contrat de travail qualifié au ${pays} afin d'immigrer légalement et de m'intégrer durablement dans le marché du travail local.
-                            </div>
+                            <div class="exp-desc" style="font-size:12px;line-height:1.7;">Obtenir un contrat de travail qualifié au ${pays} afin d'immigrer légalement et de m'intégrer durablement dans le marché du travail local.</div>
                         </div>
                     </div>
                 </div>
@@ -965,48 +1044,32 @@
                 .signature{margin-top:40px;}
                 .signature strong{font-size:15px;color:#1e3a8a;}
                 .footer{margin-top:50px;font-size:10px;color:#9ca3af;border-top:1px solid #e5e7eb;padding-top:10px;text-align:center;}
-                h1{font-family:Arial;color:#1e3a8a;font-size:18px;margin-bottom:5px;}
             </style></head><body>
             <div class="entete">
-                <div class="expediteur">
-                    <strong>${c.name}</strong><br>
-                    ${c.job || 'Professionnel qualifié'}<br>
-                    Maroc • ${c.phone}
-                </div>
-                <div class="date">
-                    Le ${date}
-                </div>
+                <div class="expediteur"><strong>${c.name}</strong><br>${c.job || 'Professionnel qualifié'}<br>Maroc • ${c.phone}</div>
+                <div class="date">Le ${date}</div>
             </div>
             <div class="objet">Objet : Candidature au poste de ${c.job || 'professionnel qualifié'} — ${pays}</div>
             <div class="corps">
                 <p>Madame, Monsieur,</p>
                 <p>${intro}</p>
-                <p>Fort(e) de <strong>${c.experience || 'plusieurs'} années d'expérience</strong> en tant que <strong>${c.job || 'professionnel qualifié'}</strong> 
-                et titulaire d'un diplôme de niveau <strong>${c.formation || 'Bac+5'}</strong>, j'ai développé des compétences solides 
-                et une expertise reconnue dans mon domaine. Mon parcours professionnel m'a permis de maîtriser 
-                les aspects techniques et humains du métier, tout en cultivant une capacité d'adaptation 
-                face aux défis du monde professionnel moderne.</p>
-                <p>Le ${pays} représente pour moi bien plus qu'une destination — c'est un choix de vie réfléchi et un projet professionnel 
-                structuré. J'ai étudié le marché du travail local, les standards professionnels et les attentes 
-                des employeurs dans votre pays. Je suis convaincu(e) que mon profil correspond aux besoins 
-                de votre marché et que je pourrai apporter une réelle valeur ajoutée à votre organisation.</p>
-                <p>Sérieux(se), organisé(e) et déterminé(e), je m'engage à m'intégrer rapidement et efficacement 
-                dans mon nouvel environnement professionnel et culturel. Je suis disponible pour tout entretien 
-                à votre convenance, en présentiel ou en visioconférence.</p>
+                <p>Fort(e) de <strong>${c.experience || 'plusieurs'} années d'expérience</strong> en tant que <strong>${c.job || 'professionnel qualifié'}</strong> et titulaire d'un diplôme de niveau <strong>${c.formation || 'Bac+5'}</strong>, j'ai développé des compétences solides et une expertise reconnue dans mon domaine.</p>
+                <p>Le ${pays} représente pour moi bien plus qu'une destination — c'est un choix de vie réfléchi et un projet professionnel structuré. Je suis convaincu(e) que mon profil correspond aux besoins de votre marché.</p>
+                <p>Sérieux(se), organisé(e) et déterminé(e), je m'engage à m'intégrer rapidement dans mon nouvel environnement. Je suis disponible pour tout entretien à votre convenance.</p>
                 <p>Dans l'attente de votre retour, je vous adresse mes cordiales salutations.</p>
             </div>
-            <div class="signature">
-                <strong>${c.name}</strong><br>
-                <span style="font-size:12px;color:#6b7280;">${c.job || 'Professionnel qualifié'} • ${c.phone}</span>
-            </div>
+            <div class="signature"><strong>${c.name}</strong><br><span style="font-size:12px;color:#6b7280;">${c.job || 'Professionnel qualifié'} • ${c.phone}</span></div>
             <div class="footer">Lettre générée par Immigration Flow CRM • ${date} • Document confidentiel</div>
             </body></html>`;
         }
 
-        function buildRecruteurs(c) {
+        function buildRecruteurs(c, premium = false) {
             const pays = c.country || 'Canada';
             const date = new Date().toLocaleDateString('fr-FR');
-            const list = getRecruteurs(pays);
+            const allList = getRecruteurs(pays);
+            // Essentiel = 20 premiers, Premium = les 40 (ou tout si moins)
+            const list = premium ? allList : allList.slice(0, 20);
+            const titre = premium ? `🚀 Liste des 40 Recruteurs PREMIUM — ${pays}` : `🏢 Liste des 20 Recruteurs — ${pays}`;
             const rows = list.map((r, i) => `
                 <tr style="background:${i%2===0?'#fff':'#f8fafc'};">
                     <td style="padding:10px 14px;font-weight:700;color:#1e40af;font-size:12px;">${r.nom}</td>
@@ -1014,6 +1077,7 @@
                     <td style="padding:10px 14px;font-size:11px;"><a href="https://${r.site}" style="color:#2563eb;">${r.site}</a></td>
                     <td style="padding:10px 14px;color:#059669;font-size:11px;">💡 ${r.conseil}</td>
                 </tr>`).join('');
+            const badgeHtml = premium ? `<span style="background:#f59e0b;color:#1e3a8a;font-size:11px;font-weight:900;padding:3px 10px;border-radius:20px;margin-left:10px;">⭐ PREMIUM</span>` : '';
             return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
                 body{font-family:Arial,sans-serif;margin:0;padding:30px;background:#fff;}
                 table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;}
@@ -1022,9 +1086,9 @@
                 .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:20px;}
             </style></head><body>
             <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;padding:28px 30px;border-radius:14px;margin-bottom:25px;">
-                <h1 style="margin:0 0 6px;font-size:20px;">🏢 Liste des 20 Recruteurs — ${pays}</h1>
+                <h1 style="margin:0 0 6px;font-size:20px;">${titre}${badgeHtml}</h1>
                 <p style="margin:0;opacity:0.9;font-size:13px;">Candidat : <strong>${c.name}</strong> | Métier visé : ${c.job||'Non précisé'}</p>
-                <p style="margin:5px 0 0;opacity:0.7;font-size:11px;">Pack Basic Immigration Flow • ${date}</p>
+                <p style="margin:5px 0 0;opacity:0.7;font-size:11px;">Immigration Flow CRM • ${date}</p>
             </div>
             <table>
                 <thead><tr><th>Entreprise / Plateforme</th><th>Secteur</th><th>Site Web</th><th>Conseil</th></tr></thead>
@@ -1042,83 +1106,46 @@
                 body{font-family:Arial,sans-serif;color:#1f2937;margin:0;padding:0;background:#fff;}
                 .header{background:linear-gradient(135deg,#0077b5,#00a0dc);color:white;padding:30px 40px;}
                 .header h1{font-size:22px;font-weight:900;margin:0 0 4px;}
-                .header p{font-size:13px;opacity:0.9;margin:0;}
                 .cadeau{background:#fef9c3;border:2px dashed #f59e0b;padding:12px 20px;margin:20px 40px;border-radius:10px;font-size:13px;color:#92400e;font-weight:600;text-align:center;}
                 .body{padding:20px 40px;}
                 .section{margin-bottom:25px;}
                 .section-title{font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#0077b5;border-bottom:2px solid #0077b5;padding-bottom:6px;margin-bottom:14px;}
                 .tip{background:#f0f9ff;border-left:4px solid #0077b5;padding:10px 14px;margin-bottom:10px;border-radius:0 8px 8px 0;font-size:12px;line-height:1.6;}
-                .tip strong{color:#0077b5;}
-                .exemple{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:12px;color:#374151;font-style:italic;margin-top:8px;}
+                .exemple{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:12px;font-style:italic;margin-top:8px;}
                 .pays-conseil{background:#dcfce7;border-left:4px solid #16a34a;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;}
                 .footer{text-align:center;font-size:10px;color:#9ca3af;margin-top:30px;padding:15px 40px;border-top:1px solid #e5e7eb;}
                 .badge{display:inline-block;background:#dbeafe;color:#1e40af;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px;}
             </style></head><body>
-            <div class="header">
-                <h1>💼 Guide LinkedIn Personnalisé</h1>
-                <p>Optimisation pour ${pays} • Préparé pour : ${c.name}</p>
-            </div>
-            <div class="cadeau">🎁 Document OFFERT avec votre Pack Basic Immigration Flow — Valeur : 450 MAD</div>
+            <div class="header"><h1>💼 Guide LinkedIn Personnalisé</h1><p>Optimisation pour ${pays} • Préparé pour : ${c.name}</p></div>
+            <div class="cadeau">🎁 Document OFFERT avec votre Pack Immigration Flow — Valeur : 450 MAD</div>
             <div class="body">
                 <div class="section">
-                    <div class="section-title">1. Titre de profil (Headline)</div>
-                    <div class="tip">Le titre est la première chose que voient les recruteurs. Il doit être <strong>percutant et contenir des mots-clés</strong> de votre métier.</div>
-                    <div class="exemple">
-                        ✅ Bon exemple :<br>
-                        "<strong>${c.job || 'Professionnel qualifié'} | ${c.experience || '5'}+ ans d'expérience | Ouvert aux opportunités au ${pays}</strong>"
-                    </div>
-                    <div class="exemple" style="background:#fef2f2;border-color:#fee2e2;">
-                        ❌ À éviter :<br>
-                        "En recherche d'emploi" ou juste votre titre de poste sans plus
-                    </div>
+                    <div class="section-title">1. Titre de profil</div>
+                    <div class="tip">Le titre doit être <strong>percutant et contenir des mots-clés</strong> de votre métier.</div>
+                    <div class="exemple">✅ "<strong>${c.job || 'Professionnel qualifié'} | ${c.experience || '5'}+ ans d'expérience | Ouvert aux opportunités au ${pays}</strong>"</div>
                 </div>
                 <div class="section">
                     <div class="section-title">2. Photo de profil</div>
-                    <div class="tip">
-                        • <strong>Photo professionnelle obligatoire</strong> — fond neutre (blanc, gris ou bleu clair)<br>
-                        • Visage bien visible, sourire naturel, tenue professionnelle<br>
-                        • Évitez les selfies, photos de vacances ou photos floues<br>
-                        • Les profils avec photo reçoivent <strong>21x plus de vues</strong>
-                    </div>
+                    <div class="tip">Photo professionnelle obligatoire — fond neutre, visage bien visible. Les profils avec photo reçoivent <strong>21x plus de vues</strong>.</div>
                 </div>
                 <div class="section">
-                    <div class="section-title">3. Résumé / À propos (About)</div>
-                    <div class="tip">Rédigez un résumé en <strong>3-4 paragraphes</strong> qui raconte votre histoire professionnelle.</div>
-                    <div class="exemple">
-                        Professionnel avec ${c.experience || 'plusieurs'} années d'expérience en ${c.job || 'mon domaine'}, 
-                        diplômé(e) niveau ${c.formation || 'Bac+5'}. J'ai développé une expertise solide dans [vos spécialités].
-                        <br><br>
-                        Actuellement en projet d'immigration au ${pays}, je recherche une opportunité qui me permettra 
-                        de contribuer à [secteur/type d'entreprise] tout en m'intégrant dans le marché local.
-                        <br><br>
-                        N'hésitez pas à me contacter pour toute opportunité ou collaboration.
-                    </div>
+                    <div class="section-title">3. Résumé</div>
+                    <div class="exemple">Professionnel avec ${c.experience || 'plusieurs'} années d'expérience en ${c.job || 'mon domaine'}, diplômé(e) ${c.formation || 'Bac+5'}. Actuellement en projet d'immigration au ${pays}.</div>
                 </div>
                 <div class="section">
-                    <div class="section-title">4. Compétences (Skills)</div>
-                    <div class="tip">Ajoutez minimum <strong>10-15 compétences</strong> pertinentes. Demandez des validations à vos anciens collègues.</div>
-                    <div style="margin-top:8px;">
-                        ${getCompetencesByJob(c.job).map(s => `<span class="badge">${s}</span>`).join('')}
-                    </div>
+                    <div class="section-title">4. Compétences</div>
+                    <div style="margin-top:8px;">${getCompetencesByJob(c.job).map(s => `<span class="badge">${s}</span>`).join('')}</div>
                 </div>
                 <div class="section">
-                    <div class="section-title">5. Conseils spécifiques pour ${pays}</div>
-                    ${conseils.map(c => `<div class="pays-conseil">✅ ${c}</div>`).join('')}
+                    <div class="section-title">5. Conseils spécifiques ${pays}</div>
+                    ${conseils.map(cc => `<div class="pays-conseil">✅ ${cc}</div>`).join('')}
                 </div>
                 <div class="section">
-                    <div class="section-title">6. Actions immédiates à faire</div>
-                    <div class="tip">
-                        <strong>Cette semaine :</strong><br>
-                        ☐ Mettre à jour votre titre avec mots-clés métier<br>
-                        ☐ Ajouter une photo professionnelle<br>
-                        ☐ Rédiger votre résumé (copiez l'exemple ci-dessus et adaptez)<br>
-                        ☐ Ajouter vos compétences listées<br>
-                        ☐ Activer "Open to Work" en mode visible aux recruteurs seulement<br>
-                        ☐ Suivre 10 entreprises dans votre secteur au ${pays}
-                    </div>
+                    <div class="section-title">6. Actions immédiates</div>
+                    <div class="tip">☐ Mettre à jour titre avec mots-clés<br>☐ Ajouter photo professionnelle<br>☐ Rédiger résumé<br>☐ Ajouter compétences<br>☐ Activer "Open to Work"<br>☐ Suivre 10 entreprises au ${pays}</div>
                 </div>
             </div>
-            <div class="footer">🎁 Guide LinkedIn offert par Immigration Flow CRM • ${date} • Document confidentiel — ${c.name}</div>
+            <div class="footer">🎁 Guide LinkedIn offert par Immigration Flow CRM • ${date} • ${c.name}</div>
             </body></html>`;
         }
 
@@ -1142,46 +1169,22 @@
 
         function getIntroByCountry(pays) {
             const intros = {
-                'Canada': "C'est avec un grand intérêt que je me permets de vous adresser ma candidature au poste de professionnel qualifié au Canada. Après mûre réflexion et une étude approfondie du marché canadien, je suis convaincu(e) que le Canada représente l'environnement idéal pour poursuivre mon développement professionnel et personnel.",
-                'Allemagne': "Je me permets de vous soumettre ma candidature dans le cadre de mon projet d'installation professionnelle en Allemagne. Pays reconnu pour son excellence industrielle et sa stabilité économique, l'Allemagne correspond parfaitement à mes aspirations professionnelles et à mon projet de vie.",
-                'France': "Permettez-moi de vous présenter ma candidature pour une opportunité professionnelle en France. Pays de culture et d'excellence, la France représente pour moi une destination de choix pour développer ma carrière dans un environnement stimulant et international.",
-                'Australie': "I am pleased to submit my application for a professional position in Australia. With its dynamic economy and welcoming environment for qualified professionals, Australia represents an ideal destination for my career development project.",
-                'États-Unis': "Je vous soumets ma candidature pour une opportunité professionnelle aux États-Unis, pays qui incarne l'excellence et l'innovation dans de nombreux secteurs d'activité."
+                'Canada': "C'est avec un grand intérêt que je me permets de vous adresser ma candidature. Après mûre réflexion et une étude approfondie du marché canadien, je suis convaincu(e) que le Canada représente l'environnement idéal pour poursuivre mon développement professionnel.",
+                'Allemagne': "Je me permets de vous soumettre ma candidature dans le cadre de mon projet d'installation en Allemagne, pays reconnu pour son excellence industrielle et sa stabilité économique.",
+                'France': "Permettez-moi de vous présenter ma candidature pour une opportunité en France, pays dont j'admire la culture professionnelle et l'environnement stimulant.",
+                'Australie': "I am pleased to submit my application for a professional position in Australia, a country I have chosen for its dynamic economy and welcoming environment.",
+                'États-Unis': "Je vous soumets ma candidature pour une opportunité aux États-Unis, pays qui incarne l'excellence et l'innovation dans de nombreux secteurs."
             };
-            return intros[pays] || `C'est avec un grand intérêt que je me permets de vous adresser ma candidature dans le cadre de mon projet d'immigration professionnelle en ${pays}. Ce pays représente pour moi une opportunité unique de développer mes compétences dans un environnement international et dynamique.`;
+            return intros[pays] || `C'est avec un grand intérêt que je vous adresse ma candidature dans le cadre de mon projet d'immigration professionnelle en ${pays}.`;
         }
 
         function getLinkedinConseilsByCountry(pays) {
             const conseils = {
-                'Canada': [
-                    'Activez "Open to Work" visible par les recruteurs (pas par votre réseau)',
-                    'Rejoignez des groupes LinkedIn canadiens de votre secteur',
-                    'Mentionnez votre visa/statut dans les messages aux recruteurs',
-                    'Suivez les pages LinkedIn de Job Bank Canada et des grandes entreprises canadiennes',
-                    'Rédigez votre résumé en français ET en anglais (Canada bilingue)'
-                ],
-                'Allemagne': [
-                    'Inscrivez-vous aussi sur XING (l\'équivalent LinkedIn allemand)',
-                    'Mentionnez votre niveau d\'allemand et votre volonté d\'apprendre',
-                    'Suivez les pages des grandes entreprises allemandes (SAP, Bosch, Siemens)',
-                    'Rejoignez des groupes d\'expatriés francophones en Allemagne',
-                    'Précisez si vous avez un visa de recherche d\'emploi allemand'
-                ],
-                'France': [
-                    'Utilisez LinkedIn ET le site Pôle Emploi pour maximiser la visibilité',
-                    'Rejoignez des groupes de votre secteur en français',
-                    'Mentionnez votre titre de séjour ou autorisation de travail si applicable',
-                    'Connectez-vous avec des Marocains installés en France dans votre domaine',
-                    'Suivez les entreprises du CAC40 et les PME de votre secteur'
-                ]
+                'Canada': ['Activez "Open to Work" visible par les recruteurs uniquement','Rejoignez des groupes LinkedIn canadiens de votre secteur','Rédigez votre résumé en français ET en anglais (Canada bilingue)','Suivez Job Bank Canada et les grandes entreprises canadiennes','Mentionnez votre disponibilité et visa dans les messages'],
+                'Allemagne': ['Inscrivez-vous aussi sur XING (l\'équivalent LinkedIn allemand)','Mentionnez votre niveau d\'allemand et votre volonté d\'apprendre','Suivez SAP, Bosch, Siemens et autres grandes entreprises','Rejoignez des groupes d\'expatriés francophones en Allemagne','Précisez si vous avez un visa de recherche d\'emploi allemand'],
+                'France': ['Utilisez LinkedIn ET le site Pôle Emploi','Rejoignez des groupes de votre secteur en français','Connectez-vous avec des Marocains installés en France','Suivez les entreprises du CAC40 de votre secteur','Mentionnez votre titre de séjour si applicable']
             };
-            return conseils[pays] || [
-                'Complétez votre profil à 100% (score "All-star")',
-                'Connectez-vous avec des professionnels de votre secteur dans ce pays',
-                'Publiez régulièrement du contenu lié à votre métier',
-                'Demandez des recommandations à vos anciens managers/collègues',
-                'Envoyez des messages personnalisés (pas de messages génériques)'
-            ];
+            return conseils[pays] || ['Complétez votre profil à 100%','Connectez-vous avec des professionnels de votre secteur','Publiez régulièrement du contenu lié à votre métier','Demandez des recommandations à vos anciens collègues','Envoyez des messages personnalisés aux recruteurs'];
         }
 
         function getRecruteurs(pays) {
@@ -1198,7 +1201,6 @@
                     {nom:'Manpower Canada',secteur:'Multi-secteurs',site:'manpowergroup.ca',conseil:'Réseau international solide'},
                     {nom:'Michael Page Canada',secteur:'Cadres / Finance',site:'michaelpage.ca',conseil:'Top pour profils seniors'},
                     {nom:'Korn Ferry Canada',secteur:'Direction / Cadres',site:'kornferry.com',conseil:'Recrutement executive'},
-                    {nom:'Futurpreneur Canada',secteur:'Entrepreneuriat',site:'futurpreneur.ca',conseil:'Si projet entrepreneurial'},
                     {nom:'Eluta.ca',secteur:'Général',site:'eluta.ca',conseil:'Moteur recherche emploi canadien'},
                     {nom:'CareerBeacon',secteur:'Est du Canada',site:'careerbeacon.com',conseil:'Fort pour provinces atlantiques'},
                     {nom:'BCJobs.ca',secteur:'Colombie-Britannique',site:'bcjobs.ca',conseil:'Spécialisé Colombie-Britannique'},
@@ -1206,7 +1208,29 @@
                     {nom:'Emploi-Québec',secteur:'Québec gouvernement',site:'emploiquebec.gouv.qc.ca',conseil:'Officiel province du Québec'},
                     {nom:'Talent.com Canada',secteur:'Agrégateur',site:'talent.com',conseil:'Regroupe offres de 100+ sources'},
                     {nom:'Glassdoor Canada',secteur:'Tous',site:'glassdoor.ca',conseil:'Vérifiez les avis sur l\'entreprise'},
-                    {nom:'Monster Canada',secteur:'Général',site:'monster.ca',conseil:'Base CV très consultée par recruteurs'}
+                    {nom:'Monster Canada',secteur:'Général',site:'monster.ca',conseil:'Base CV très consultée par recruteurs'},
+                    {nom:'Futurpreneur Canada',secteur:'Entrepreneuriat',site:'futurpreneur.ca',conseil:'Si projet entrepreneurial'},
+                    // 20 supplémentaires pour Premium
+                    {nom:'Workable Canada',secteur:'Tech / Startups',site:'workable.com',conseil:'Plateformes startups canadiennes'},
+                    {nom:'Ero Group',secteur:'Ingénierie',site:'erogroup.ca',conseil:'Spécialiste recrutement ingénieurs'},
+                    {nom:'Procom',secteur:'IT',site:'procomservices.com',conseil:'Leader IT au Canada'},
+                    {nom:'S.i. Systems',secteur:'IT / Technologie',site:'sisystems.com',conseil:'Contrats IT longue durée'},
+                    {nom:'Drake International',secteur:'Multi',site:'drakeintl.com',conseil:'Agence internationale solide'},
+                    {nom:'Meridia Recruitment',secteur:'Multi',site:'meridiarecruitment.com',conseil:'Fort en provinces atlantiques'},
+                    {nom:'Summit Search Group',secteur:'Cadres',site:'summitsearchgroup.com',conseil:'Spécialisé profils senior'},
+                    {nom:'Goldbeck Recruiting',secteur:'Multi',site:'goldbeck.com',conseil:'Colombie-Britannique forte présence'},
+                    {nom:'Diversified Staffing',secteur:'Industrie',site:'diversifiedstaffing.com',conseil:'Secteur industriel et production'},
+                    {nom:'Bagg Group',secteur:'Admin / Finance',site:'bagg.com',conseil:'Toronto et Ontario'},
+                    {nom:'Robertson & Company',secteur:'Finance',site:'robertsonandbrydon.com',conseil:'Finance et comptabilité Toronto'},
+                    {nom:'People Corporation',secteur:'RH',site:'peoplecorporation.com',conseil:'RH et avantages sociaux'},
+                    {nom:'Brainhunter',secteur:'IT / Gov',site:'brainhunter.com',conseil:'Gouvernement et secteur public'},
+                    {nom:'Experis Canada',secteur:'IT / Ingénierie',site:'experis.com',conseil:'Branche technique de Manpower'},
+                    {nom:'Altis Recruitment',secteur:'Admin / Gov',site:'altis.com',conseil:'Secteur public Ottawa'},
+                    {nom:'Quantum Management',secteur:'Multi',site:'quantum.ca',conseil:'Présence nationale forte'},
+                    {nom:'Workforce Holdings',secteur:'Multi',site:'workforceholdings.com',conseil:'Grande couverture régionale'},
+                    {nom:'Permanent Search Group',secteur:'Multi',site:'permanentsearch.ca',conseil:'Postes permanents qualifiés'},
+                    {nom:'Cossette Talent',secteur:'Créatif / Marketing',site:'cossette.com',conseil:'Profils créatifs et marketing'},
+                    {nom:'Options Consulting',secteur:'Multi',site:'optionsconsulting.com',conseil:'Ontario et Québec'}
                 ],
                 'Allemagne': [
                     {nom:'Make it in Germany',secteur:'Gouvernement',site:'make-it-in-germany.com',conseil:'Portail officiel immigrants qualifiés'},
@@ -1215,7 +1239,7 @@
                     {nom:'XING',secteur:'Réseau pro',site:'xing.com',conseil:'LinkedIn allemand — indispensable'},
                     {nom:'Indeed Allemagne',secteur:'Général',site:'de.indeed.com',conseil:'Activez alertes emploi'},
                     {nom:'Hays Germany',secteur:'IT / Ingénierie',site:'hays.de',conseil:'Profils techniques très recherchés'},
-                    {nom:'Experteer',secteur:'Cadres / Direction',site:'experteer.de',conseil:'Pour profils seniors +'},
+                    {nom:'Experteer',secteur:'Cadres / Direction',site:'experteer.de',conseil:'Pour profils seniors'},
                     {nom:'Monster Germany',secteur:'Multi',site:'monster.de',conseil:'Bon volume d\'offres'},
                     {nom:'Manpower Germany',secteur:'Industrie',site:'manpower.de',conseil:'Fort secteur industriel'},
                     {nom:'Randstad Germany',secteur:'Multi',site:'randstad.de',conseil:'Nombreuses missions'},
@@ -1228,7 +1252,17 @@
                     {nom:'Yourfirm.de',secteur:'PME',site:'yourfirm.de',conseil:'Spécialisé PME allemandes'},
                     {nom:'Absolventa',secteur:'Jeunes diplômés',site:'absolventa.de',conseil:'Pour premiers postes'},
                     {nom:'Jobmensa',secteur:'Étudiants/Jeunes',site:'jobmensa.de',conseil:'Postes juniors'},
-                    {nom:'Kalaydo',secteur:'Région Rhénanie',site:'kalaydo.de',conseil:'Fort en Rhénanie-Westphalie'}
+                    {nom:'Kalaydo',secteur:'Région Rhénanie',site:'kalaydo.de',conseil:'Fort en Rhénanie-Westphalie'},
+                    {nom:'Jobscout24',secteur:'Général',site:'jobscout24.de',conseil:'Portail très consulté'},
+                    {nom:'Jobbörse Bundesagentur',secteur:'Gov',site:'jobboerse.arbeitsagentur.de',conseil:'Offres gouvernementales'},
+                    {nom:'Hotelcareer',secteur:'Hôtellerie',site:'hotelcareer.de',conseil:'Secteur hôtellerie/restauration'},
+                    {nom:'Careesma',secteur:'Multi',site:'careesma.de',conseil:'Présence en Autriche aussi'},
+                    {nom:'Azubiyo',secteur:'Formation',site:'azubiyo.de',conseil:'Alternances et formations'},
+                    {nom:'Jobleads',secteur:'Cadres',site:'jobleads.de',conseil:'Profils expérimentés'},
+                    {nom:'Hokify',secteur:'Mobile',site:'hokify.de',conseil:'Candidature rapide mobile'},
+                    {nom:'Jetzt Bewerben',secteur:'Multi',site:'jetzt-bewerben.de',conseil:'Candidature directe'},
+                    {nom:'Berufenet',secteur:'Orientation',site:'berufenet.arbeitsagentur.de',conseil:'Fiches métiers Allemagne'},
+                    {nom:'Eures Germany',secteur:'Europe',site:'ec.europa.eu/eures',conseil:'Mobilité européenne'}
                 ],
                 'France': [
                     {nom:'Pôle Emploi',secteur:'Gouvernement',site:'pole-emploi.fr',conseil:'Inscription dès l\'arrivée obligatoire'},
@@ -1250,7 +1284,17 @@
                     {nom:'Glassdoor France',secteur:'Tous',site:'glassdoor.fr',conseil:'Vérifiez les avis avant de postuler'},
                     {nom:'Les Echos Emploi',secteur:'Finance / Stratégie',site:'lesechos-emploi.fr',conseil:'Profils hauts de gamme'},
                     {nom:'Figaro Emploi',secteur:'Général',site:'figaro-emploi.com',conseil:'Bon trafic candidats qualifiés'},
-                    {nom:'EURES',secteur:'Europe',site:'ec.europa.eu/eures',conseil:'Mobilité professionnelle Europe'}
+                    {nom:'EURES',secteur:'Europe',site:'ec.europa.eu/eures',conseil:'Mobilité professionnelle Europe'},
+                    {nom:'Optioncarriere',secteur:'Général',site:'optioncarriere.com',conseil:'Maroc + France — idéal'},
+                    {nom:'Rekrute France',secteur:'Diaspora',site:'rekrute.com',conseil:'Recruteurs qui ciblent Marocains'},
+                    {nom:'Anapec Partenaires',secteur:'Maroc-France',site:'anapec.org',conseil:'Partenariat officiel Maroc-France'},
+                    {nom:'Keljob',secteur:'Multi',site:'keljob.com',conseil:'Moteur emploi français'},
+                    {nom:'Choosemy',secteur:'Jeunes diplômés',site:'choosemycompany.com',conseil:'Culture d\'entreprise'},
+                    {nom:'Engagement Jeunes',secteur:'Service civique',site:'service-civique.gouv.fr',conseil:'Intégration via service civique'},
+                    {nom:'Staffmatch',secteur:'Intérim',site:'staffmatch.com',conseil:'Intérim rapide première mission'},
+                    {nom:'Expectra',secteur:'Cadres',site:'expectra.fr',conseil:'Filiale Randstad cadres'},
+                    {nom:'Nicework',secteur:'Créatif',site:'nicework.fr',conseil:'Profils créatifs et design'},
+                    {nom:'Eurojobs',secteur:'Europe Multi',site:'eurojobs.com',conseil:'Opportunités pan-européennes'}
                 ],
                 'Australie': [
                     {nom:'SEEK',secteur:'Général',site:'seek.com.au',conseil:'N°1 en Australie — indispensable'},
@@ -1264,7 +1308,6 @@
                     {nom:'Adzuna Australia',secteur:'Agrégateur',site:'adzuna.com.au',conseil:'Bonne couverture du marché'},
                     {nom:'Gumtree Jobs',secteur:'Local / Multi',site:'gumtree.com.au/jobs',conseil:'Offres locales et PME'},
                     {nom:'Ethical Jobs',secteur:'ONG / Social',site:'ethicaljobs.com.au',conseil:'Secteur associatif et social'},
-                    {nom:'Workforce Guardian',secteur:'RH / Compliance',site:'workforceguardian.com.au',conseil:'Ressources humaines'},
                     {nom:'Randstad Australia',secteur:'Multi',site:'randstad.com.au',conseil:'Agence internationale'},
                     {nom:'Robert Half Australia',secteur:'Finance / Compta',site:'roberthalf.com.au',conseil:'Profils finance reconnu'},
                     {nom:'Manpower Australia',secteur:'Multi',site:'manpower.com.au',conseil:'Présence nationale'},
@@ -1272,7 +1315,18 @@
                     {nom:'Dixon Appointments',secteur:'Admin / Office',site:'dixon.com.au',conseil:'Spécialisé postes administratifs'},
                     {nom:'DFP Recruitment',secteur:'Multi',site:'dfprecruitment.com.au',conseil:'Agence australienne reconnue'},
                     {nom:'TMS Consulting',secteur:'IT',site:'tmsconsulting.com.au',conseil:'Tech et consulting IT'},
-                    {nom:'Aurec',secteur:'Finance',site:'aurec.com.au',conseil:'Finance et comptabilité'}
+                    {nom:'Aurec',secteur:'Finance',site:'aurec.com.au',conseil:'Finance et comptabilité'},
+                    {nom:'Chandler Macleod',secteur:'Multi',site:'chandlermacleod.com',conseil:'Grande agence nationale'},
+                    {nom:'Talent International',secteur:'IT',site:'talentinternational.com',conseil:'IT et digital spécialisé'},
+                    {nom:'Peoplebank',secteur:'IT / Finance',site:'peoplebank.com.au',conseil:'Tech et banque/finance'},
+                    {nom:'Davidson Recruitment',secteur:'Multi',site:'davidsonwp.com',conseil:'Gouvernement et privé'},
+                    {nom:'Finite Recruitment',secteur:'IT',site:'finiterecruitment.com.au',conseil:'IT infrastructure et cloud'},
+                    {nom:'Six Degrees Executive',secteur:'Executive',site:'6degreesexecutive.com.au',conseil:'Profils direction'},
+                    {nom:'Sharp & Carter',secteur:'Finance',site:'sharpandcarter.com.au',conseil:'Finance Melbourne/Sydney'},
+                    {nom:'Heidrick & Struggles AU',secteur:'C-Level',site:'heidrick.com',conseil:'Direction générale'},
+                    {nom:'Hayes Knight',secteur:'Compta',site:'hayesknight.com.au',conseil:'PME comptabilité'},
+                    {nom:'Frog Recruitment',secteur:'Multi',site:'frogrecruitment.com.au',conseil:'NZ + Australie'},
+                    {nom:'Trojan Recruitment',secteur:'Industrie',site:'trojanrecruitment.com.au',conseil:'Secteur industriel et logistique'}
                 ],
                 'États-Unis': [
                     {nom:'LinkedIn USA',secteur:'Tous',site:'linkedin.com',conseil:'Réseau N°1 USA — obligatoire'},
@@ -1294,7 +1348,17 @@
                     {nom:'Heidrick & Struggles',secteur:'Leadership',site:'heidrick.com',conseil:'Leadership recrutement'},
                     {nom:'Toptal',secteur:'Freelance Tech',site:'toptal.com',conseil:'Top 3% freelancers tech'},
                     {nom:'Upwork',secteur:'Freelance',site:'upwork.com',conseil:'Freelance international'},
-                    {nom:'SimplyHired',secteur:'Agrégateur',site:'simplyhired.com',conseil:'Regroupe toutes les offres'}
+                    {nom:'SimplyHired',secteur:'Agrégateur',site:'simplyhired.com',conseil:'Regroupe toutes les offres'},
+                    {nom:'H1B Visa Jobs',secteur:'Immigration',site:'h1bvisajobs.com',conseil:'Employeurs qui sponsorisent visa H1B'},
+                    {nom:'MyVisaJobs',secteur:'Immigration',site:'myvisajobs.com',conseil:'Offres avec sponsoring visa'},
+                    {nom:'USAJobs',secteur:'Gouvernement',site:'usajobs.gov',conseil:'Postes fédéraux US'},
+                    {nom:'Handshake',secteur:'Jeunes diplômés',site:'joinhandshake.com',conseil:'Pour nouveaux diplômés'},
+                    {nom:'Wellfound',secteur:'Startups',site:'wellfound.com',conseil:'Ex-AngelList startups tech'},
+                    {nom:'Remotive',secteur:'Remote',site:'remotive.io',conseil:'Jobs remote internationaux'},
+                    {nom:'Built In',secteur:'Tech',site:'builtin.com',conseil:'Startups tech par ville'},
+                    {nom:'Lensa',secteur:'IA Matching',site:'lensa.com',conseil:'Matching IA performant'},
+                    {nom:'Nexxt',secteur:'Multi',site:'nexxt.com',conseil:'Réseau professionnel secondaire'},
+                    {nom:'Chegg Internships',secteur:'Stages',site:'internships.com',conseil:'Stages et débuts de carrière'}
                 ]
             };
             return db[pays] || db['Canada'];
@@ -1317,3 +1381,9 @@
     </script>
 </body>
 </html>
+ENDOFFILE
+echo "DONE - $(wc -l < /mnt/user-data/outputs/crm-immigflow-v8.html) lignes"
+Sortie
+
+Command argument is 104_604 bytes, exceeding the 100_000-byte per-argument limit. For large content, pipe via stdin or use a file-write API instead of embedding the content inline in the command. Argument preview: 'cat > /mnt/user-data/outputs/crm-immigflow-v8.html << \'ENDOFFILE\'\n<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scal'
+Terminé
